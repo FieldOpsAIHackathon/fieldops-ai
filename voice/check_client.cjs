@@ -27,8 +27,12 @@ const response = () => new Response([JSON.stringify({type:'start',sample_rate:24
   assert.equal(nodes.length, 2);
   assert.equal(nodes[0].time, .035);
   assert.ok(Math.abs(nodes[1].time-.135)<1e-9, 'sentences must be scheduled contiguously');
-  p.stop();
-  assert.equal(p.state, 'idle'); assert.ok(nodes.every(n=>n.stopped));
+  nodes[0].onended();
+  assert.equal(p.state, 'speaking', 'completion waits for actual final audio');
+  nodes[1].onended();
+  assert.equal(p.state, 'idle');
+  await p.speak('Another reply.'); p.stop();
+  assert.equal(p.state, 'idle'); assert.ok(nodes.slice(-2).every(n=>n.stopped));
   let deliver;
   impl = () => new Promise(resolve => {deliver=resolve;});
   const stale = p.speak('An old reply.');
@@ -58,5 +62,5 @@ const response = () => new Response([JSON.stringify({type:'start',sample_rate:24
   impl = async () => new Response(JSON.stringify(audioFrame)+'\n');
   await assert.rejects(()=>p.speak('Hello'), /ended early/);
   assert.equal(p.sources.size,0,'truncated audio must stop queued buffers');
-  console.log('PASS contiguous scheduling, immediate stop, stale response/decoder suppression, busy error, truncated stream cleanup');
+  console.log('PASS contiguous scheduling, actual playback completion, immediate stop, stale response/decoder suppression, busy error, truncated stream cleanup');
 })();
