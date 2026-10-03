@@ -45,11 +45,11 @@ def season_days() -> list:
 
 
 def current_day() -> date:
-    """The replay clock: the day the replay last reached, else the end of the season."""
+    """The replay clock: the day a replay last reached, else today's real date."""
     try:
         return date.fromisoformat(json.loads(STATE.read_text())["as_of"])
     except (OSError, ValueError, KeyError):
-        return season_days()[-1]
+        return date.today()
 
 
 def set_current_day(day: date) -> None:
