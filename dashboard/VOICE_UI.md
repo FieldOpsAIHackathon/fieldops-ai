@@ -51,3 +51,5 @@ Document events are also available: `fieldops:voice-adapter` (`detail.adapter`),
 context }`. Prefer the adapter callbacks to keep stale turns scoped correctly.
 Stop/close cancels the session; late callbacks are ignored. The first Escape closes
 voice; a subsequent Escape leaves the 3D view. No dashboard action sends alerts.
+
+The finished GB10 TTS client is loaded before intelligence.js. **Hear answer** plays the latest response through that client, including answers entered in optional chat or opened from a block. **Stop** and closing the panel cancel playback. The UI stays speaking until the client reports actual audio completion. The service is speech output only; microphone input requires supported browser-local recognition or a registered adapter.

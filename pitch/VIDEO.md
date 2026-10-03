@@ -21,3 +21,7 @@ within 90 seconds by shortening the pause after the reply.
 The flight and aerial captures are simulated. Trap imagery, daily observations, and
 the timing model retain their separate labels. End on the timing decision; browsing
 the survey and asking the assistant do not send a phone alert.
+
+Voice output is connected to the GB10 Kokoro service. If browser-local microphone input is unavailable, choose **Type instead**, ask the same question, then select **Hear answer**. Stop cancels playback.
+
+Ordinary season replay sends no phone notifications. The separate phone-alert demo must be explicitly opened with `notify=1` in its URL; keep it off while recording this drone walkthrough.
