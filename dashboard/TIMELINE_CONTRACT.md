@@ -55,7 +55,8 @@ AGENTS.md that matters.
         "block-c": {
           "status": "accumulating",
           "biofix_date": "2026-05-12",
-          "dd_since_biofix": 0
+          "dd_since_biofix": 0,
+          "projected_open": "2026-06-06"
         }
       },
       "events": [
@@ -84,6 +85,11 @@ AGENTS.md that matters.
     threshold), `spray_window` (open), `window_closed` (past close threshold).
   - `biofix_date` is `null` until set, then the `YYYY-MM-DD` it was set.
   - `dd_since_biofix` is a float, 0 until the day after biofix.
+  - `projected_open` is optional. When present it is `null` or a `YYYY-MM-DD` estimate of the day
+    the spray window will open, strictly after `date`, and non-null only while `status` is
+    `accumulating`. Absent or `null` means no estimate (the sample timeline omits it; the page then
+    falls back to its own rate-based guess). It is an estimate, not a forecast: show it as
+    "around" a date, never with a weekday.
 - `events` lists what changed that day (empty list most days). `type` is one of `biofix`,
   `spray_window_open`, `spray_window_close`. `title` is short enough for a toast; `message` is
   one or two grower-facing sentences. Order within a day is the order they fired.
@@ -102,6 +108,12 @@ AGENTS.md that matters.
 - **Spray window:** opens on the first day `dd_since_biofix >= spray_open_dd` (status
   `spray_window`, event `spray_window_open`), closes on the first day it reaches `spray_close_dd`
   (status `window_closed`, event `spray_window_close`).
+- **Estimate (`projected_open`):** while a block is `accumulating`, add each later day's average
+  temperatures for that calendar date (`data/climate_normals.csv`, the 2016-2025 average for the
+  farm) through the same degree-day formula until `spray_open_dd - dd_since_biofix` is used up. It
+  uses only earlier years, so it never sees the days it is estimating, and it needs no network.
+  Against the real window-open date it was 1.5 days off on average when biofix was confirmed (worst
+  3) with real 2026 temperatures; the old last-week-rate guess was off by 11.5 days on average.
 - Base 50 F, upper 88 F, biofix at first sustained catch, and first treatment around 250 DD after
   biofix follow the UC IPM codling moth model. Treat the exact numbers as demo values; verify before
   presenting them as agronomic advice.

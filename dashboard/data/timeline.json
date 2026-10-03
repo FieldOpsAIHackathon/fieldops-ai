@@ -133,32 +133,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -200,32 +206,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -267,32 +279,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -334,32 +352,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -401,32 +425,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -468,32 +498,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -535,32 +571,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -602,32 +644,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -669,32 +717,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -736,32 +790,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -803,32 +863,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -870,32 +936,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -937,32 +1009,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -1004,32 +1082,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -1071,32 +1155,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -1138,32 +1228,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -1205,32 +1301,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -1272,32 +1374,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -1339,32 +1447,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -1406,32 +1520,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -1473,32 +1593,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -1540,32 +1666,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -1607,32 +1739,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -1674,32 +1812,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -1741,32 +1885,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 8.0
+     "dd_since_biofix": 8.0,
+     "projected_open": "2026-05-31"
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": [
@@ -1815,32 +1965,38 @@
     "block-a": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 14.5
+     "dd_since_biofix": 14.5,
+     "projected_open": "2026-05-31"
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -1882,32 +2038,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 5.5
+     "dd_since_biofix": 5.5,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 20.0
+     "dd_since_biofix": 20.0,
+     "projected_open": "2026-05-31"
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": [
@@ -1956,32 +2118,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 11.5
+     "dd_since_biofix": 11.5,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 26.0
+     "dd_since_biofix": 26.0,
+     "projected_open": "2026-06-01"
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -2023,32 +2191,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 20.0
+     "dd_since_biofix": 20.0,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 34.5
+     "dd_since_biofix": 34.5,
+     "projected_open": "2026-05-31"
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -2090,32 +2264,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 29.5
+     "dd_since_biofix": 29.5,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 9.5
+     "dd_since_biofix": 9.5,
+     "projected_open": "2026-06-03"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 44.0
+     "dd_since_biofix": 44.0,
+     "projected_open": "2026-05-31"
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": [
@@ -2164,32 +2344,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 39.0
+     "dd_since_biofix": 39.0,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 19.0
+     "dd_since_biofix": 19.0,
+     "projected_open": "2026-06-03"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 53.5
+     "dd_since_biofix": 53.5,
+     "projected_open": "2026-06-01"
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -2231,32 +2417,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 47.5
+     "dd_since_biofix": 47.5,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 27.5
+     "dd_since_biofix": 27.5,
+     "projected_open": "2026-06-03"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 62.0
+     "dd_since_biofix": 62.0,
+     "projected_open": "2026-06-01"
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -2298,32 +2490,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 56.5
+     "dd_since_biofix": 56.5,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 36.5
+     "dd_since_biofix": 36.5,
+     "projected_open": "2026-06-03"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 71.0
+     "dd_since_biofix": 71.0,
+     "projected_open": "2026-06-01"
     },
     "block-d": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 9.0
+     "dd_since_biofix": 9.0,
+     "projected_open": "2026-06-05"
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": [
@@ -2372,32 +2570,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 68.5
+     "dd_since_biofix": 68.5,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 48.5
+     "dd_since_biofix": 48.5,
+     "projected_open": "2026-06-03"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 83.0
+     "dd_since_biofix": 83.0,
+     "projected_open": "2026-06-01"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 12.0
+     "dd_since_biofix": 12.0,
+     "projected_open": "2026-06-06"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 21.0
+     "dd_since_biofix": 21.0,
+     "projected_open": "2026-06-05"
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": [
@@ -2446,32 +2650,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 79.0
+     "dd_since_biofix": 79.0,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 59.0
+     "dd_since_biofix": 59.0,
+     "projected_open": "2026-06-03"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 93.5
+     "dd_since_biofix": 93.5,
+     "projected_open": "2026-06-01"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 22.5
+     "dd_since_biofix": 22.5,
+     "projected_open": "2026-06-06"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 31.5
+     "dd_since_biofix": 31.5,
+     "projected_open": "2026-06-05"
     },
     "block-f": {
      "status": "watching",
      "biofix_date": null,
-     "dd_since_biofix": 0.0
+     "dd_since_biofix": 0.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -2513,32 +2723,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 89.0
+     "dd_since_biofix": 89.0,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 69.0
+     "dd_since_biofix": 69.0,
+     "projected_open": "2026-06-03"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 103.5
+     "dd_since_biofix": 103.5,
+     "projected_open": "2026-06-01"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 32.5
+     "dd_since_biofix": 32.5,
+     "projected_open": "2026-06-06"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 41.5
+     "dd_since_biofix": 41.5,
+     "projected_open": "2026-06-05"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 10.0
+     "dd_since_biofix": 10.0,
+     "projected_open": "2026-06-07"
     }
    },
    "events": [
@@ -2587,32 +2803,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 100.0
+     "dd_since_biofix": 100.0,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 80.0
+     "dd_since_biofix": 80.0,
+     "projected_open": "2026-06-03"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 114.5
+     "dd_since_biofix": 114.5,
+     "projected_open": "2026-06-01"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 43.5
+     "dd_since_biofix": 43.5,
+     "projected_open": "2026-06-06"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 52.5
+     "dd_since_biofix": 52.5,
+     "projected_open": "2026-06-05"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 21.0
+     "dd_since_biofix": 21.0,
+     "projected_open": "2026-06-07"
     }
    },
    "events": []
@@ -2654,32 +2876,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 109.0
+     "dd_since_biofix": 109.0,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 89.0
+     "dd_since_biofix": 89.0,
+     "projected_open": "2026-06-04"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 123.5
+     "dd_since_biofix": 123.5,
+     "projected_open": "2026-06-01"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 52.5
+     "dd_since_biofix": 52.5,
+     "projected_open": "2026-06-06"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 61.5
+     "dd_since_biofix": 61.5,
+     "projected_open": "2026-06-05"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 30.0
+     "dd_since_biofix": 30.0,
+     "projected_open": "2026-06-07"
     }
    },
    "events": []
@@ -2721,32 +2949,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 117.0
+     "dd_since_biofix": 117.0,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 97.0
+     "dd_since_biofix": 97.0,
+     "projected_open": "2026-06-04"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 131.5
+     "dd_since_biofix": 131.5,
+     "projected_open": "2026-06-01"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 60.5
+     "dd_since_biofix": 60.5,
+     "projected_open": "2026-06-06"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 69.5
+     "dd_since_biofix": 69.5,
+     "projected_open": "2026-06-06"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 38.0
+     "dd_since_biofix": 38.0,
+     "projected_open": "2026-06-08"
     }
    },
    "events": []
@@ -2788,32 +3022,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 126.5
+     "dd_since_biofix": 126.5,
+     "projected_open": "2026-06-02"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 106.5
+     "dd_since_biofix": 106.5,
+     "projected_open": "2026-06-04"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 141.0
+     "dd_since_biofix": 141.0,
+     "projected_open": "2026-06-01"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 70.0
+     "dd_since_biofix": 70.0,
+     "projected_open": "2026-06-06"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 79.0
+     "dd_since_biofix": 79.0,
+     "projected_open": "2026-06-06"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 47.5
+     "dd_since_biofix": 47.5,
+     "projected_open": "2026-06-08"
     }
    },
    "events": []
@@ -2855,32 +3095,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 135.0
+     "dd_since_biofix": 135.0,
+     "projected_open": "2026-06-03"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 115.0
+     "dd_since_biofix": 115.0,
+     "projected_open": "2026-06-04"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 149.5
+     "dd_since_biofix": 149.5,
+     "projected_open": "2026-06-02"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 78.5
+     "dd_since_biofix": 78.5,
+     "projected_open": "2026-06-06"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 87.5
+     "dd_since_biofix": 87.5,
+     "projected_open": "2026-06-06"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 56.0
+     "dd_since_biofix": 56.0,
+     "projected_open": "2026-06-08"
     }
    },
    "events": []
@@ -2922,32 +3168,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 143.0
+     "dd_since_biofix": 143.0,
+     "projected_open": "2026-06-03"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 123.0
+     "dd_since_biofix": 123.0,
+     "projected_open": "2026-06-05"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 157.5
+     "dd_since_biofix": 157.5,
+     "projected_open": "2026-06-02"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 86.5
+     "dd_since_biofix": 86.5,
+     "projected_open": "2026-06-07"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 95.5
+     "dd_since_biofix": 95.5,
+     "projected_open": "2026-06-06"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 64.0
+     "dd_since_biofix": 64.0,
+     "projected_open": "2026-06-08"
     }
    },
    "events": []
@@ -2989,32 +3241,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 150.5
+     "dd_since_biofix": 150.5,
+     "projected_open": "2026-06-04"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 130.5
+     "dd_since_biofix": 130.5,
+     "projected_open": "2026-06-05"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 165.0
+     "dd_since_biofix": 165.0,
+     "projected_open": "2026-06-03"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 94.0
+     "dd_since_biofix": 94.0,
+     "projected_open": "2026-06-07"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 103.0
+     "dd_since_biofix": 103.0,
+     "projected_open": "2026-06-07"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 71.5
+     "dd_since_biofix": 71.5,
+     "projected_open": "2026-06-09"
     }
    },
    "events": []
@@ -3056,32 +3314,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 157.5
+     "dd_since_biofix": 157.5,
+     "projected_open": "2026-06-05"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 137.5
+     "dd_since_biofix": 137.5,
+     "projected_open": "2026-06-06"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 172.0
+     "dd_since_biofix": 172.0,
+     "projected_open": "2026-06-04"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 101.0
+     "dd_since_biofix": 101.0,
+     "projected_open": "2026-06-08"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 110.0
+     "dd_since_biofix": 110.0,
+     "projected_open": "2026-06-07"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 78.5
+     "dd_since_biofix": 78.5,
+     "projected_open": "2026-06-09"
     }
    },
    "events": []
@@ -3123,32 +3387,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 166.5
+     "dd_since_biofix": 166.5,
+     "projected_open": "2026-06-05"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 146.5
+     "dd_since_biofix": 146.5,
+     "projected_open": "2026-06-06"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 181.0
+     "dd_since_biofix": 181.0,
+     "projected_open": "2026-06-04"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 110.0
+     "dd_since_biofix": 110.0,
+     "projected_open": "2026-06-08"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 119.0
+     "dd_since_biofix": 119.0,
+     "projected_open": "2026-06-08"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 87.5
+     "dd_since_biofix": 87.5,
+     "projected_open": "2026-06-10"
     }
    },
    "events": []
@@ -3190,32 +3460,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 177.5
+     "dd_since_biofix": 177.5,
+     "projected_open": "2026-06-05"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 157.5
+     "dd_since_biofix": 157.5,
+     "projected_open": "2026-06-06"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 192.0
+     "dd_since_biofix": 192.0,
+     "projected_open": "2026-06-04"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 121.0
+     "dd_since_biofix": 121.0,
+     "projected_open": "2026-06-08"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 130.0
+     "dd_since_biofix": 130.0,
+     "projected_open": "2026-06-08"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 98.5
+     "dd_since_biofix": 98.5,
+     "projected_open": "2026-06-10"
     }
    },
    "events": []
@@ -3257,32 +3533,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 189.5
+     "dd_since_biofix": 189.5,
+     "projected_open": "2026-06-05"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 169.5
+     "dd_since_biofix": 169.5,
+     "projected_open": "2026-06-06"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 204.0
+     "dd_since_biofix": 204.0,
+     "projected_open": "2026-06-04"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 133.0
+     "dd_since_biofix": 133.0,
+     "projected_open": "2026-06-08"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 142.0
+     "dd_since_biofix": 142.0,
+     "projected_open": "2026-06-08"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 110.5
+     "dd_since_biofix": 110.5,
+     "projected_open": "2026-06-10"
     }
    },
    "events": []
@@ -3324,32 +3606,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 201.5
+     "dd_since_biofix": 201.5,
+     "projected_open": "2026-06-05"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 181.5
+     "dd_since_biofix": 181.5,
+     "projected_open": "2026-06-06"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 216.0
+     "dd_since_biofix": 216.0,
+     "projected_open": "2026-06-04"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 145.0
+     "dd_since_biofix": 145.0,
+     "projected_open": "2026-06-08"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 154.0
+     "dd_since_biofix": 154.0,
+     "projected_open": "2026-06-08"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 122.5
+     "dd_since_biofix": 122.5,
+     "projected_open": "2026-06-10"
     }
    },
    "events": []
@@ -3391,32 +3679,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 217.0
+     "dd_since_biofix": 217.0,
+     "projected_open": "2026-06-05"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 197.0
+     "dd_since_biofix": 197.0,
+     "projected_open": "2026-06-06"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 231.5
+     "dd_since_biofix": 231.5,
+     "projected_open": "2026-06-04"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 160.5
+     "dd_since_biofix": 160.5,
+     "projected_open": "2026-06-08"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 169.5
+     "dd_since_biofix": 169.5,
+     "projected_open": "2026-06-08"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 138.0
+     "dd_since_biofix": 138.0,
+     "projected_open": "2026-06-10"
     }
    },
    "events": []
@@ -3458,32 +3752,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 229.5
+     "dd_since_biofix": 229.5,
+     "projected_open": "2026-06-05"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 209.5
+     "dd_since_biofix": 209.5,
+     "projected_open": "2026-06-06"
     },
     "block-c": {
      "status": "accumulating",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 244.0
+     "dd_since_biofix": 244.0,
+     "projected_open": "2026-06-04"
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 173.0
+     "dd_since_biofix": 173.0,
+     "projected_open": "2026-06-08"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 182.0
+     "dd_since_biofix": 182.0,
+     "projected_open": "2026-06-08"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 150.5
+     "dd_since_biofix": 150.5,
+     "projected_open": "2026-06-10"
     }
    },
    "events": []
@@ -3525,32 +3825,38 @@
     "block-a": {
      "status": "accumulating",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 246.5
+     "dd_since_biofix": 246.5,
+     "projected_open": "2026-06-05"
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 226.5
+     "dd_since_biofix": 226.5,
+     "projected_open": "2026-06-06"
     },
     "block-c": {
      "status": "spray_window",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 261.0
+     "dd_since_biofix": 261.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 190.0
+     "dd_since_biofix": 190.0,
+     "projected_open": "2026-06-08"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 199.0
+     "dd_since_biofix": 199.0,
+     "projected_open": "2026-06-08"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 167.5
+     "dd_since_biofix": 167.5,
+     "projected_open": "2026-06-09"
     }
    },
    "events": [
@@ -3599,32 +3905,38 @@
     "block-a": {
      "status": "spray_window",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 259.0
+     "dd_since_biofix": 259.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "accumulating",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 239.0
+     "dd_since_biofix": 239.0,
+     "projected_open": "2026-06-06"
     },
     "block-c": {
      "status": "spray_window",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 273.5
+     "dd_since_biofix": 273.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 202.5
+     "dd_since_biofix": 202.5,
+     "projected_open": "2026-06-08"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 211.5
+     "dd_since_biofix": 211.5,
+     "projected_open": "2026-06-08"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 180.0
+     "dd_since_biofix": 180.0,
+     "projected_open": "2026-06-10"
     }
    },
    "events": [
@@ -3673,32 +3985,38 @@
     "block-a": {
      "status": "spray_window",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 275.5
+     "dd_since_biofix": 275.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "spray_window",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 255.5
+     "dd_since_biofix": 255.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "spray_window",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 290.0
+     "dd_since_biofix": 290.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 219.0
+     "dd_since_biofix": 219.0,
+     "projected_open": "2026-06-08"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 228.0
+     "dd_since_biofix": 228.0,
+     "projected_open": "2026-06-08"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 196.5
+     "dd_since_biofix": 196.5,
+     "projected_open": "2026-06-10"
     }
    },
    "events": [
@@ -3747,32 +4065,38 @@
     "block-a": {
      "status": "spray_window",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 293.0
+     "dd_since_biofix": 293.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "spray_window",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 273.0
+     "dd_since_biofix": 273.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "spray_window",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 307.5
+     "dd_since_biofix": 307.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 236.5
+     "dd_since_biofix": 236.5,
+     "projected_open": "2026-06-08"
     },
     "block-e": {
      "status": "accumulating",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 245.5
+     "dd_since_biofix": 245.5,
+     "projected_open": "2026-06-08"
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 214.0
+     "dd_since_biofix": 214.0,
+     "projected_open": "2026-06-10"
     }
    },
    "events": []
@@ -3814,32 +4138,38 @@
     "block-a": {
      "status": "spray_window",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 302.0
+     "dd_since_biofix": 302.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "spray_window",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 282.0
+     "dd_since_biofix": 282.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "spray_window",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 316.5
+     "dd_since_biofix": 316.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "accumulating",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 245.5
+     "dd_since_biofix": 245.5,
+     "projected_open": "2026-06-09"
     },
     "block-e": {
      "status": "spray_window",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 254.5
+     "dd_since_biofix": 254.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 223.0
+     "dd_since_biofix": 223.0,
+     "projected_open": "2026-06-10"
     }
    },
    "events": [
@@ -3888,32 +4218,38 @@
     "block-a": {
      "status": "spray_window",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 315.0
+     "dd_since_biofix": 315.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "spray_window",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 295.0
+     "dd_since_biofix": 295.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "spray_window",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 329.5
+     "dd_since_biofix": 329.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "spray_window",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 258.5
+     "dd_since_biofix": 258.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "spray_window",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 267.5
+     "dd_since_biofix": 267.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "accumulating",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 236.0
+     "dd_since_biofix": 236.0,
+     "projected_open": "2026-06-10"
     }
    },
    "events": [
@@ -3962,32 +4298,38 @@
     "block-a": {
      "status": "spray_window",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 334.5
+     "dd_since_biofix": 334.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "spray_window",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 314.5
+     "dd_since_biofix": 314.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "spray_window",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 349.0
+     "dd_since_biofix": 349.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "spray_window",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 278.0
+     "dd_since_biofix": 278.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "spray_window",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 287.0
+     "dd_since_biofix": 287.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "spray_window",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 255.5
+     "dd_since_biofix": 255.5,
+     "projected_open": null
     }
    },
    "events": [
@@ -4036,32 +4378,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 359.5
+     "dd_since_biofix": 359.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "spray_window",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 339.5
+     "dd_since_biofix": 339.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 374.0
+     "dd_since_biofix": 374.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "spray_window",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 303.0
+     "dd_since_biofix": 303.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "spray_window",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 312.0
+     "dd_since_biofix": 312.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "spray_window",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 280.5
+     "dd_since_biofix": 280.5,
+     "projected_open": null
     }
    },
    "events": [
@@ -4116,32 +4464,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 381.0
+     "dd_since_biofix": 381.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 361.0
+     "dd_since_biofix": 361.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 395.5
+     "dd_since_biofix": 395.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "spray_window",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 324.5
+     "dd_since_biofix": 324.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "spray_window",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 333.5
+     "dd_since_biofix": 333.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "spray_window",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 302.0
+     "dd_since_biofix": 302.0,
+     "projected_open": null
     }
    },
    "events": [
@@ -4190,32 +4544,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 397.5
+     "dd_since_biofix": 397.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 377.5
+     "dd_since_biofix": 377.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 412.0
+     "dd_since_biofix": 412.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "spray_window",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 341.0
+     "dd_since_biofix": 341.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 350.0
+     "dd_since_biofix": 350.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "spray_window",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 318.5
+     "dd_since_biofix": 318.5,
+     "projected_open": null
     }
    },
    "events": [
@@ -4264,32 +4624,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 414.5
+     "dd_since_biofix": 414.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 394.5
+     "dd_since_biofix": 394.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 429.0
+     "dd_since_biofix": 429.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 358.0
+     "dd_since_biofix": 358.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 367.0
+     "dd_since_biofix": 367.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "spray_window",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 335.5
+     "dd_since_biofix": 335.5,
+     "projected_open": null
     }
    },
    "events": [
@@ -4338,32 +4704,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 424.5
+     "dd_since_biofix": 424.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 404.5
+     "dd_since_biofix": 404.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 439.0
+     "dd_since_biofix": 439.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 368.0
+     "dd_since_biofix": 368.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 377.0
+     "dd_since_biofix": 377.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "spray_window",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 345.5
+     "dd_since_biofix": 345.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -4405,32 +4777,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 436.5
+     "dd_since_biofix": 436.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 416.5
+     "dd_since_biofix": 416.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 451.0
+     "dd_since_biofix": 451.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 380.0
+     "dd_since_biofix": 380.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 389.0
+     "dd_since_biofix": 389.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 357.5
+     "dd_since_biofix": 357.5,
+     "projected_open": null
     }
    },
    "events": [
@@ -4479,32 +4857,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 453.5
+     "dd_since_biofix": 453.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 433.5
+     "dd_since_biofix": 433.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 468.0
+     "dd_since_biofix": 468.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 397.0
+     "dd_since_biofix": 397.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 406.0
+     "dd_since_biofix": 406.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 374.5
+     "dd_since_biofix": 374.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -4546,32 +4930,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 475.0
+     "dd_since_biofix": 475.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 455.0
+     "dd_since_biofix": 455.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 489.5
+     "dd_since_biofix": 489.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 418.5
+     "dd_since_biofix": 418.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 427.5
+     "dd_since_biofix": 427.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 396.0
+     "dd_since_biofix": 396.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -4613,32 +5003,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 490.5
+     "dd_since_biofix": 490.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 470.5
+     "dd_since_biofix": 470.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 505.0
+     "dd_since_biofix": 505.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 434.0
+     "dd_since_biofix": 434.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 443.0
+     "dd_since_biofix": 443.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 411.5
+     "dd_since_biofix": 411.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -4680,32 +5076,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 508.0
+     "dd_since_biofix": 508.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 488.0
+     "dd_since_biofix": 488.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 522.5
+     "dd_since_biofix": 522.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 451.5
+     "dd_since_biofix": 451.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 460.5
+     "dd_since_biofix": 460.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 429.0
+     "dd_since_biofix": 429.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -4747,32 +5149,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 525.5
+     "dd_since_biofix": 525.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 505.5
+     "dd_since_biofix": 505.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 540.0
+     "dd_since_biofix": 540.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 469.0
+     "dd_since_biofix": 469.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 478.0
+     "dd_since_biofix": 478.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 446.5
+     "dd_since_biofix": 446.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -4814,32 +5222,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 547.0
+     "dd_since_biofix": 547.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 527.0
+     "dd_since_biofix": 527.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 561.5
+     "dd_since_biofix": 561.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 490.5
+     "dd_since_biofix": 490.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 499.5
+     "dd_since_biofix": 499.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 468.0
+     "dd_since_biofix": 468.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -4881,32 +5295,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 568.0
+     "dd_since_biofix": 568.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 548.0
+     "dd_since_biofix": 548.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 582.5
+     "dd_since_biofix": 582.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 511.5
+     "dd_since_biofix": 511.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 520.5
+     "dd_since_biofix": 520.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 489.0
+     "dd_since_biofix": 489.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -4948,32 +5368,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 587.5
+     "dd_since_biofix": 587.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 567.5
+     "dd_since_biofix": 567.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 602.0
+     "dd_since_biofix": 602.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 531.0
+     "dd_since_biofix": 531.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 540.0
+     "dd_since_biofix": 540.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 508.5
+     "dd_since_biofix": 508.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -5015,32 +5441,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 608.0
+     "dd_since_biofix": 608.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 588.0
+     "dd_since_biofix": 588.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 622.5
+     "dd_since_biofix": 622.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 551.5
+     "dd_since_biofix": 551.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 560.5
+     "dd_since_biofix": 560.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 529.0
+     "dd_since_biofix": 529.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -5082,32 +5514,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 626.0
+     "dd_since_biofix": 626.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 606.0
+     "dd_since_biofix": 606.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 640.5
+     "dd_since_biofix": 640.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 569.5
+     "dd_since_biofix": 569.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 578.5
+     "dd_since_biofix": 578.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 547.0
+     "dd_since_biofix": 547.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -5149,32 +5587,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 645.5
+     "dd_since_biofix": 645.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 625.5
+     "dd_since_biofix": 625.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 660.0
+     "dd_since_biofix": 660.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 589.0
+     "dd_since_biofix": 589.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 598.0
+     "dd_since_biofix": 598.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 566.5
+     "dd_since_biofix": 566.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -5216,32 +5660,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 663.5
+     "dd_since_biofix": 663.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 643.5
+     "dd_since_biofix": 643.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 678.0
+     "dd_since_biofix": 678.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 607.0
+     "dd_since_biofix": 607.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 616.0
+     "dd_since_biofix": 616.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 584.5
+     "dd_since_biofix": 584.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -5283,32 +5733,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 679.0
+     "dd_since_biofix": 679.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 659.0
+     "dd_since_biofix": 659.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 693.5
+     "dd_since_biofix": 693.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 622.5
+     "dd_since_biofix": 622.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 631.5
+     "dd_since_biofix": 631.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 600.0
+     "dd_since_biofix": 600.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -5350,32 +5806,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 692.0
+     "dd_since_biofix": 692.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 672.0
+     "dd_since_biofix": 672.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 706.5
+     "dd_since_biofix": 706.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 635.5
+     "dd_since_biofix": 635.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 644.5
+     "dd_since_biofix": 644.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 613.0
+     "dd_since_biofix": 613.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -5417,32 +5879,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 714.5
+     "dd_since_biofix": 714.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 694.5
+     "dd_since_biofix": 694.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 729.0
+     "dd_since_biofix": 729.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 658.0
+     "dd_since_biofix": 658.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 667.0
+     "dd_since_biofix": 667.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 635.5
+     "dd_since_biofix": 635.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -5484,32 +5952,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 738.5
+     "dd_since_biofix": 738.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 718.5
+     "dd_since_biofix": 718.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 753.0
+     "dd_since_biofix": 753.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 682.0
+     "dd_since_biofix": 682.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 691.0
+     "dd_since_biofix": 691.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 659.5
+     "dd_since_biofix": 659.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -5551,32 +6025,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 759.5
+     "dd_since_biofix": 759.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 739.5
+     "dd_since_biofix": 739.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 774.0
+     "dd_since_biofix": 774.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 703.0
+     "dd_since_biofix": 703.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 712.0
+     "dd_since_biofix": 712.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 680.5
+     "dd_since_biofix": 680.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -5618,32 +6098,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 781.0
+     "dd_since_biofix": 781.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 761.0
+     "dd_since_biofix": 761.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 795.5
+     "dd_since_biofix": 795.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 724.5
+     "dd_since_biofix": 724.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 733.5
+     "dd_since_biofix": 733.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 702.0
+     "dd_since_biofix": 702.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -5685,32 +6171,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 805.5
+     "dd_since_biofix": 805.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 785.5
+     "dd_since_biofix": 785.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 820.0
+     "dd_since_biofix": 820.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 749.0
+     "dd_since_biofix": 749.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 758.0
+     "dd_since_biofix": 758.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 726.5
+     "dd_since_biofix": 726.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -5752,32 +6244,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 824.5
+     "dd_since_biofix": 824.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 804.5
+     "dd_since_biofix": 804.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 839.0
+     "dd_since_biofix": 839.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 768.0
+     "dd_since_biofix": 768.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 777.0
+     "dd_since_biofix": 777.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 745.5
+     "dd_since_biofix": 745.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -5819,32 +6317,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 847.0
+     "dd_since_biofix": 847.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 827.0
+     "dd_since_biofix": 827.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 861.5
+     "dd_since_biofix": 861.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 790.5
+     "dd_since_biofix": 790.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 799.5
+     "dd_since_biofix": 799.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 768.0
+     "dd_since_biofix": 768.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -5886,32 +6390,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 866.5
+     "dd_since_biofix": 866.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 846.5
+     "dd_since_biofix": 846.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 881.0
+     "dd_since_biofix": 881.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 810.0
+     "dd_since_biofix": 810.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 819.0
+     "dd_since_biofix": 819.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 787.5
+     "dd_since_biofix": 787.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -5953,32 +6463,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 894.0
+     "dd_since_biofix": 894.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 874.0
+     "dd_since_biofix": 874.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 908.5
+     "dd_since_biofix": 908.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 837.5
+     "dd_since_biofix": 837.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 846.5
+     "dd_since_biofix": 846.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 815.0
+     "dd_since_biofix": 815.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -6020,32 +6536,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 920.5
+     "dd_since_biofix": 920.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 900.5
+     "dd_since_biofix": 900.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 935.0
+     "dd_since_biofix": 935.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 864.0
+     "dd_since_biofix": 864.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 873.0
+     "dd_since_biofix": 873.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 841.5
+     "dd_since_biofix": 841.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -6087,32 +6609,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 949.5
+     "dd_since_biofix": 949.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 929.5
+     "dd_since_biofix": 929.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 964.0
+     "dd_since_biofix": 964.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 893.0
+     "dd_since_biofix": 893.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 902.0
+     "dd_since_biofix": 902.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 870.5
+     "dd_since_biofix": 870.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -6154,32 +6682,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 978.0
+     "dd_since_biofix": 978.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 958.0
+     "dd_since_biofix": 958.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 992.5
+     "dd_since_biofix": 992.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 921.5
+     "dd_since_biofix": 921.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 930.5
+     "dd_since_biofix": 930.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 899.0
+     "dd_since_biofix": 899.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -6221,32 +6755,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1005.5
+     "dd_since_biofix": 1005.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 985.5
+     "dd_since_biofix": 985.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1020.0
+     "dd_since_biofix": 1020.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 949.0
+     "dd_since_biofix": 949.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 958.0
+     "dd_since_biofix": 958.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 926.5
+     "dd_since_biofix": 926.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -6288,32 +6828,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1025.0
+     "dd_since_biofix": 1025.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1005.0
+     "dd_since_biofix": 1005.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1039.5
+     "dd_since_biofix": 1039.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 968.5
+     "dd_since_biofix": 968.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 977.5
+     "dd_since_biofix": 977.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 946.0
+     "dd_since_biofix": 946.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -6355,32 +6901,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1047.5
+     "dd_since_biofix": 1047.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1027.5
+     "dd_since_biofix": 1027.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1062.0
+     "dd_since_biofix": 1062.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 991.0
+     "dd_since_biofix": 991.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1000.0
+     "dd_since_biofix": 1000.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 968.5
+     "dd_since_biofix": 968.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -6422,32 +6974,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1072.5
+     "dd_since_biofix": 1072.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1052.5
+     "dd_since_biofix": 1052.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1087.0
+     "dd_since_biofix": 1087.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1016.0
+     "dd_since_biofix": 1016.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1025.0
+     "dd_since_biofix": 1025.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 993.5
+     "dd_since_biofix": 993.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -6489,32 +7047,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1092.5
+     "dd_since_biofix": 1092.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1072.5
+     "dd_since_biofix": 1072.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1107.0
+     "dd_since_biofix": 1107.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1036.0
+     "dd_since_biofix": 1036.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1045.0
+     "dd_since_biofix": 1045.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1013.5
+     "dd_since_biofix": 1013.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -6556,32 +7120,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1116.0
+     "dd_since_biofix": 1116.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1096.0
+     "dd_since_biofix": 1096.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1130.5
+     "dd_since_biofix": 1130.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1059.5
+     "dd_since_biofix": 1059.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1068.5
+     "dd_since_biofix": 1068.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1037.0
+     "dd_since_biofix": 1037.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -6623,32 +7193,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1140.0
+     "dd_since_biofix": 1140.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1120.0
+     "dd_since_biofix": 1120.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1154.5
+     "dd_since_biofix": 1154.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1083.5
+     "dd_since_biofix": 1083.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1092.5
+     "dd_since_biofix": 1092.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1061.0
+     "dd_since_biofix": 1061.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -6690,32 +7266,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1163.0
+     "dd_since_biofix": 1163.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1143.0
+     "dd_since_biofix": 1143.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1177.5
+     "dd_since_biofix": 1177.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1106.5
+     "dd_since_biofix": 1106.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1115.5
+     "dd_since_biofix": 1115.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1084.0
+     "dd_since_biofix": 1084.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -6757,32 +7339,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1187.0
+     "dd_since_biofix": 1187.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1167.0
+     "dd_since_biofix": 1167.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1201.5
+     "dd_since_biofix": 1201.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1130.5
+     "dd_since_biofix": 1130.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1139.5
+     "dd_since_biofix": 1139.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1108.0
+     "dd_since_biofix": 1108.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -6824,32 +7412,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1213.0
+     "dd_since_biofix": 1213.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1193.0
+     "dd_since_biofix": 1193.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1227.5
+     "dd_since_biofix": 1227.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1156.5
+     "dd_since_biofix": 1156.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1165.5
+     "dd_since_biofix": 1165.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1134.0
+     "dd_since_biofix": 1134.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -6891,32 +7485,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1235.5
+     "dd_since_biofix": 1235.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1215.5
+     "dd_since_biofix": 1215.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1250.0
+     "dd_since_biofix": 1250.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1179.0
+     "dd_since_biofix": 1179.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1188.0
+     "dd_since_biofix": 1188.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1156.5
+     "dd_since_biofix": 1156.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -6958,32 +7558,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1260.0
+     "dd_since_biofix": 1260.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1240.0
+     "dd_since_biofix": 1240.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1274.5
+     "dd_since_biofix": 1274.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1203.5
+     "dd_since_biofix": 1203.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1212.5
+     "dd_since_biofix": 1212.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1181.0
+     "dd_since_biofix": 1181.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -7025,32 +7631,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1284.5
+     "dd_since_biofix": 1284.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1264.5
+     "dd_since_biofix": 1264.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1299.0
+     "dd_since_biofix": 1299.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1228.0
+     "dd_since_biofix": 1228.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1237.0
+     "dd_since_biofix": 1237.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1205.5
+     "dd_since_biofix": 1205.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -7092,32 +7704,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1306.5
+     "dd_since_biofix": 1306.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1286.5
+     "dd_since_biofix": 1286.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1321.0
+     "dd_since_biofix": 1321.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1250.0
+     "dd_since_biofix": 1250.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1259.0
+     "dd_since_biofix": 1259.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1227.5
+     "dd_since_biofix": 1227.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -7159,32 +7777,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1328.5
+     "dd_since_biofix": 1328.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1308.5
+     "dd_since_biofix": 1308.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1343.0
+     "dd_since_biofix": 1343.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1272.0
+     "dd_since_biofix": 1272.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1281.0
+     "dd_since_biofix": 1281.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1249.5
+     "dd_since_biofix": 1249.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -7226,32 +7850,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1346.5
+     "dd_since_biofix": 1346.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1326.5
+     "dd_since_biofix": 1326.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1361.0
+     "dd_since_biofix": 1361.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1290.0
+     "dd_since_biofix": 1290.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1299.0
+     "dd_since_biofix": 1299.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1267.5
+     "dd_since_biofix": 1267.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -7293,32 +7923,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1370.5
+     "dd_since_biofix": 1370.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1350.5
+     "dd_since_biofix": 1350.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1385.0
+     "dd_since_biofix": 1385.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1314.0
+     "dd_since_biofix": 1314.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1323.0
+     "dd_since_biofix": 1323.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1291.5
+     "dd_since_biofix": 1291.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -7360,32 +7996,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1388.0
+     "dd_since_biofix": 1388.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1368.0
+     "dd_since_biofix": 1368.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1402.5
+     "dd_since_biofix": 1402.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1331.5
+     "dd_since_biofix": 1331.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1340.5
+     "dd_since_biofix": 1340.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1309.0
+     "dd_since_biofix": 1309.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -7427,32 +8069,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1410.5
+     "dd_since_biofix": 1410.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1390.5
+     "dd_since_biofix": 1390.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1425.0
+     "dd_since_biofix": 1425.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1354.0
+     "dd_since_biofix": 1354.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1363.0
+     "dd_since_biofix": 1363.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1331.5
+     "dd_since_biofix": 1331.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -7494,32 +8142,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1435.5
+     "dd_since_biofix": 1435.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1415.5
+     "dd_since_biofix": 1415.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1450.0
+     "dd_since_biofix": 1450.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1379.0
+     "dd_since_biofix": 1379.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1388.0
+     "dd_since_biofix": 1388.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1356.5
+     "dd_since_biofix": 1356.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -7561,32 +8215,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1458.0
+     "dd_since_biofix": 1458.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1438.0
+     "dd_since_biofix": 1438.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1472.5
+     "dd_since_biofix": 1472.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1401.5
+     "dd_since_biofix": 1401.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1410.5
+     "dd_since_biofix": 1410.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1379.0
+     "dd_since_biofix": 1379.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -7628,32 +8288,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1484.5
+     "dd_since_biofix": 1484.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1464.5
+     "dd_since_biofix": 1464.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1499.0
+     "dd_since_biofix": 1499.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1428.0
+     "dd_since_biofix": 1428.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1437.0
+     "dd_since_biofix": 1437.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1405.5
+     "dd_since_biofix": 1405.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -7695,32 +8361,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1506.0
+     "dd_since_biofix": 1506.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1486.0
+     "dd_since_biofix": 1486.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1520.5
+     "dd_since_biofix": 1520.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1449.5
+     "dd_since_biofix": 1449.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1458.5
+     "dd_since_biofix": 1458.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1427.0
+     "dd_since_biofix": 1427.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -7762,32 +8434,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1529.5
+     "dd_since_biofix": 1529.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1509.5
+     "dd_since_biofix": 1509.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1544.0
+     "dd_since_biofix": 1544.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1473.0
+     "dd_since_biofix": 1473.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1482.0
+     "dd_since_biofix": 1482.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1450.5
+     "dd_since_biofix": 1450.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -7829,32 +8507,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1552.0
+     "dd_since_biofix": 1552.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1532.0
+     "dd_since_biofix": 1532.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1566.5
+     "dd_since_biofix": 1566.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1495.5
+     "dd_since_biofix": 1495.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1504.5
+     "dd_since_biofix": 1504.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1473.0
+     "dd_since_biofix": 1473.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -7896,32 +8580,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1575.0
+     "dd_since_biofix": 1575.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1555.0
+     "dd_since_biofix": 1555.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1589.5
+     "dd_since_biofix": 1589.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1518.5
+     "dd_since_biofix": 1518.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1527.5
+     "dd_since_biofix": 1527.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1496.0
+     "dd_since_biofix": 1496.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -7963,32 +8653,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1596.0
+     "dd_since_biofix": 1596.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1576.0
+     "dd_since_biofix": 1576.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1610.5
+     "dd_since_biofix": 1610.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1539.5
+     "dd_since_biofix": 1539.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1548.5
+     "dd_since_biofix": 1548.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1517.0
+     "dd_since_biofix": 1517.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -8030,32 +8726,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1619.0
+     "dd_since_biofix": 1619.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1599.0
+     "dd_since_biofix": 1599.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1633.5
+     "dd_since_biofix": 1633.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1562.5
+     "dd_since_biofix": 1562.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1571.5
+     "dd_since_biofix": 1571.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1540.0
+     "dd_since_biofix": 1540.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -8097,32 +8799,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1640.0
+     "dd_since_biofix": 1640.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1620.0
+     "dd_since_biofix": 1620.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1654.5
+     "dd_since_biofix": 1654.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1583.5
+     "dd_since_biofix": 1583.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1592.5
+     "dd_since_biofix": 1592.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1561.0
+     "dd_since_biofix": 1561.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -8164,32 +8872,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1659.5
+     "dd_since_biofix": 1659.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1639.5
+     "dd_since_biofix": 1639.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1674.0
+     "dd_since_biofix": 1674.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1603.0
+     "dd_since_biofix": 1603.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1612.0
+     "dd_since_biofix": 1612.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1580.5
+     "dd_since_biofix": 1580.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -8231,32 +8945,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1676.5
+     "dd_since_biofix": 1676.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1656.5
+     "dd_since_biofix": 1656.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1691.0
+     "dd_since_biofix": 1691.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1620.0
+     "dd_since_biofix": 1620.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1629.0
+     "dd_since_biofix": 1629.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1597.5
+     "dd_since_biofix": 1597.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -8298,32 +9018,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1697.5
+     "dd_since_biofix": 1697.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1677.5
+     "dd_since_biofix": 1677.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1712.0
+     "dd_since_biofix": 1712.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1641.0
+     "dd_since_biofix": 1641.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1650.0
+     "dd_since_biofix": 1650.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1618.5
+     "dd_since_biofix": 1618.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -8365,32 +9091,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1722.5
+     "dd_since_biofix": 1722.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1702.5
+     "dd_since_biofix": 1702.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1737.0
+     "dd_since_biofix": 1737.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1666.0
+     "dd_since_biofix": 1666.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1675.0
+     "dd_since_biofix": 1675.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1643.5
+     "dd_since_biofix": 1643.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -8432,32 +9164,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1742.5
+     "dd_since_biofix": 1742.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1722.5
+     "dd_since_biofix": 1722.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1757.0
+     "dd_since_biofix": 1757.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1686.0
+     "dd_since_biofix": 1686.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1695.0
+     "dd_since_biofix": 1695.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1663.5
+     "dd_since_biofix": 1663.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -8499,32 +9237,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1761.0
+     "dd_since_biofix": 1761.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1741.0
+     "dd_since_biofix": 1741.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1775.5
+     "dd_since_biofix": 1775.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1704.5
+     "dd_since_biofix": 1704.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1713.5
+     "dd_since_biofix": 1713.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1682.0
+     "dd_since_biofix": 1682.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -8566,32 +9310,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1779.5
+     "dd_since_biofix": 1779.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1759.5
+     "dd_since_biofix": 1759.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1794.0
+     "dd_since_biofix": 1794.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1723.0
+     "dd_since_biofix": 1723.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1732.0
+     "dd_since_biofix": 1732.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1700.5
+     "dd_since_biofix": 1700.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -8633,32 +9383,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1805.0
+     "dd_since_biofix": 1805.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1785.0
+     "dd_since_biofix": 1785.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1819.5
+     "dd_since_biofix": 1819.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1748.5
+     "dd_since_biofix": 1748.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1757.5
+     "dd_since_biofix": 1757.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1726.0
+     "dd_since_biofix": 1726.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -8700,32 +9456,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1829.5
+     "dd_since_biofix": 1829.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1809.5
+     "dd_since_biofix": 1809.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1844.0
+     "dd_since_biofix": 1844.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1773.0
+     "dd_since_biofix": 1773.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1782.0
+     "dd_since_biofix": 1782.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1750.5
+     "dd_since_biofix": 1750.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -8767,32 +9529,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1850.5
+     "dd_since_biofix": 1850.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1830.5
+     "dd_since_biofix": 1830.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1865.0
+     "dd_since_biofix": 1865.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1794.0
+     "dd_since_biofix": 1794.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1803.0
+     "dd_since_biofix": 1803.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1771.5
+     "dd_since_biofix": 1771.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -8834,32 +9602,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1869.5
+     "dd_since_biofix": 1869.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1849.5
+     "dd_since_biofix": 1849.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1884.0
+     "dd_since_biofix": 1884.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1813.0
+     "dd_since_biofix": 1813.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1822.0
+     "dd_since_biofix": 1822.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1790.5
+     "dd_since_biofix": 1790.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -8901,32 +9675,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1883.0
+     "dd_since_biofix": 1883.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1863.0
+     "dd_since_biofix": 1863.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1897.5
+     "dd_since_biofix": 1897.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1826.5
+     "dd_since_biofix": 1826.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1835.5
+     "dd_since_biofix": 1835.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1804.0
+     "dd_since_biofix": 1804.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -8968,32 +9748,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1902.5
+     "dd_since_biofix": 1902.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1882.5
+     "dd_since_biofix": 1882.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1917.0
+     "dd_since_biofix": 1917.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1846.0
+     "dd_since_biofix": 1846.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1855.0
+     "dd_since_biofix": 1855.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1823.5
+     "dd_since_biofix": 1823.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -9035,32 +9821,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1921.5
+     "dd_since_biofix": 1921.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1901.5
+     "dd_since_biofix": 1901.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1936.0
+     "dd_since_biofix": 1936.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1865.0
+     "dd_since_biofix": 1865.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1874.0
+     "dd_since_biofix": 1874.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1842.5
+     "dd_since_biofix": 1842.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -9102,32 +9894,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1942.5
+     "dd_since_biofix": 1942.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1922.5
+     "dd_since_biofix": 1922.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1957.0
+     "dd_since_biofix": 1957.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1886.0
+     "dd_since_biofix": 1886.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1895.0
+     "dd_since_biofix": 1895.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1863.5
+     "dd_since_biofix": 1863.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -9169,32 +9967,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1962.5
+     "dd_since_biofix": 1962.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1942.5
+     "dd_since_biofix": 1942.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1977.0
+     "dd_since_biofix": 1977.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1906.0
+     "dd_since_biofix": 1906.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1915.0
+     "dd_since_biofix": 1915.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1883.5
+     "dd_since_biofix": 1883.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -9236,32 +10040,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1980.0
+     "dd_since_biofix": 1980.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1960.0
+     "dd_since_biofix": 1960.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 1994.5
+     "dd_since_biofix": 1994.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1923.5
+     "dd_since_biofix": 1923.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1932.5
+     "dd_since_biofix": 1932.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1901.0
+     "dd_since_biofix": 1901.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -9303,32 +10113,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 1998.0
+     "dd_since_biofix": 1998.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1978.0
+     "dd_since_biofix": 1978.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 2012.5
+     "dd_since_biofix": 2012.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1941.5
+     "dd_since_biofix": 1941.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1950.5
+     "dd_since_biofix": 1950.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1919.0
+     "dd_since_biofix": 1919.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -9370,32 +10186,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 2010.5
+     "dd_since_biofix": 2010.5,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 1990.5
+     "dd_since_biofix": 1990.5,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 2025.0
+     "dd_since_biofix": 2025.0,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1954.0
+     "dd_since_biofix": 1954.0,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1963.0
+     "dd_since_biofix": 1963.0,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1931.5
+     "dd_since_biofix": 1931.5,
+     "projected_open": null
     }
    },
    "events": []
@@ -9437,32 +10259,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 2027.0
+     "dd_since_biofix": 2027.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 2007.0
+     "dd_since_biofix": 2007.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 2041.5
+     "dd_since_biofix": 2041.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1970.5
+     "dd_since_biofix": 1970.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1979.5
+     "dd_since_biofix": 1979.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1948.0
+     "dd_since_biofix": 1948.0,
+     "projected_open": null
     }
    },
    "events": []
@@ -9504,32 +10332,38 @@
     "block-a": {
      "status": "window_closed",
      "biofix_date": "2026-05-10",
-     "dd_since_biofix": 2041.0
+     "dd_since_biofix": 2041.0,
+     "projected_open": null
     },
     "block-b": {
      "status": "window_closed",
      "biofix_date": "2026-05-13",
-     "dd_since_biofix": 2021.0
+     "dd_since_biofix": 2021.0,
+     "projected_open": null
     },
     "block-c": {
      "status": "window_closed",
      "biofix_date": "2026-05-08",
-     "dd_since_biofix": 2055.5
+     "dd_since_biofix": 2055.5,
+     "projected_open": null
     },
     "block-d": {
      "status": "window_closed",
      "biofix_date": "2026-05-17",
-     "dd_since_biofix": 1984.5
+     "dd_since_biofix": 1984.5,
+     "projected_open": null
     },
     "block-e": {
      "status": "window_closed",
      "biofix_date": "2026-05-16",
-     "dd_since_biofix": 1993.5
+     "dd_since_biofix": 1993.5,
+     "projected_open": null
     },
     "block-f": {
      "status": "window_closed",
      "biofix_date": "2026-05-19",
-     "dd_since_biofix": 1962.0
+     "dd_since_biofix": 1962.0,
+     "projected_open": null
     }
    },
    "events": []
