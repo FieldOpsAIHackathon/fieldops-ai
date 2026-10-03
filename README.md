@@ -41,6 +41,10 @@ The counting is the party trick. The decision is the product.
                                                            phrases it, answers questions
 ```
 
+That's the live path. The season replay is deliberately simpler and file-based —
+`data/season.csv → decide → timeline.json → dashboard` — with no database in it, so the demo is
+byte-identical on any machine and has no state to go stale between runs.
+
 Two deliberate splits:
 
 - **The decision is plain Python, not a model.** Biofix and degree-day math are deterministic and
@@ -58,24 +62,29 @@ business. You can unplug the network cable and FieldOps keeps working.
 
 **Under construction during the hackathon.**
 
-Working: season data and the decision engine. `fieldops/season.py` generates a season,
-`fieldops/store.py` loads it into SQLite, and `fieldops/decide.py` finds biofix, accumulates
-degree-days and calls the spray window. There's a synthetic trap-image generator with ground-truth
-counts (`fieldops/synth_traps.py`), the pitch deck (`pitch/index.html`), the season replay
-dashboard (`dashboard/index.html`) and the presenter runbook (`pitch/DEMO.md`).
+Working end to end: season data, the decision engine, the replay dashboard, and the alert.
+`fieldops/season.py` generates a season, `fieldops/decide.py` finds biofix, accumulates
+degree-days and calls the spray window, and `--replay` writes the timeline the dashboard plays.
+`fieldops/agent.py` turns an event into a sentence for the grower and `fieldops/alert.py` sends it
+to a phone. Also here: a synthetic trap-image generator with ground-truth counts
+(`fieldops/synth_traps.py`), the deck (`pitch/index.html`) and the presenter runbook
+(`pitch/DEMO.md`).
 
-The replay timeline the dashboard plays comes from `python -m fieldops.decide --replay`, which
-writes `dashboard/data/timeline.json` and its JS twin; the dashboard prefers it over the committed
-sample. Still to come: the live vision layer, and the agent and phone alert (including how the
-dashboard triggers the buzz). See [PLAN.md](PLAN.md) for the order of work and the open decisions.
+Still to come: the live vision layer (`ingest.py`, `vision.py`), and the hook that lets the
+dashboard trigger the buzz mid-replay. No local model has been confirmed to load on the GB10 yet —
+run `python -m fieldops.check_models` first; until then the agent runs on its template fallback.
+See [PLAN.md](PLAN.md) for the order of work and the open decisions.
 
 ```bash
+python -m fieldops.check_models                  # do the local LLM and VLM load? run this first
 python -m fieldops.season                        # regenerate data/season.csv
-python -m fieldops.store --load data/season.csv  # load into SQLite
 python -m fieldops.decide                        # self-test, then print each block's milestones
 python -m fieldops.decide --replay               # ...and write the dashboard timeline
+python -m fieldops.agent                         # phrase Block C's spray alert (--send to buzz)
 open dashboard/index.html                        # the replay, straight from disk, no server
 open pitch/index.html                            # the deck; arrow keys to advance
+
+python -m fieldops.store --load data/season.csv  # optional: counts into SQLite, for live counting
 ```
 
 ## Repo map
