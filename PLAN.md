@@ -58,12 +58,14 @@ Phases are written as hours from kickoff (**H+0**), not wall-clock, so they surv
 rule and output shape, and the real timeline matches `sample_timeline.json` field for field.
 What is still open:
 
-**Not started.** `ingest.py` and `vision.py` do not exist — the live counting path is still
-entirely unbuilt. It is also still cut-able.
+**Vision landed, on YOLO26 rather than the VLM.** `fieldops/vision.py` counts trap photos with a
+YOLO26s detector trained on synthetic cards; Telegram photos reach it through the OpenClaw agent
+and `POST /count`. On 200 phone-style photos it is exact on 189/200 codling-moth counts (MAE 0.07).
+That is a best case: real photos of printed cards are the true test. Full write-up:
+[fieldops/yolo/README.md](fieldops/yolo/README.md). There is no `ingest.py`: Telegram is the camera.
 
-**Unverified.** Nobody has run `python -m fieldops.check_models` on the GB10, so no local model has
-been confirmed to load. Everything in `agent.py` currently runs on its template fallback. Do this
-first: it gates the agent wording and the whole vision phase.
+**Models confirmed on the GB10.** Qwen3.6-35B-A3B (NVFP4) serves on vLLM at `127.0.0.1:8000`, and
+the agent and OpenClaw both use it. YOLO26s runs in the `local/fieldops-yolo` container.
 
 **The dashboard-to-phone trigger is built** (`POST /trigger` on `fieldops.api`). Start
 `python -m fieldops.api` before the demo; if it is not running, the banners still show and the
@@ -315,18 +317,18 @@ happy to read aloud.
 
 Owner: A. Independently valuable, cut-able without killing the demo.
 
-- [ ] `ingest.py`: grab a webcam frame every few seconds, or watch a folder. Tag with trap ID and
-      timestamp. Simulate several traps from one camera — there is no trap network today.
-- [ ] `vision.py`: prompt the local VLM to count and name insects in the frame and return JSON.
-      Zero training. Only consider a trained YOLO detector if someone already knows YOLO *and*
-      everything above is done.
-- [ ] **Validate the model's output before it reaches the store.** A VLM will return prose, a wrong
-      key, a float, or a species we've never heard of. Parse defensively, drop bad records, log them,
-      never crash the preview.
-- [ ] **Score against ground truth.** `data/traps/manifest.json` carries exact counts for the six
-      committed images — run the VLM over them and record how close it gets. This is free accuracy
-      evidence for the pitch, and it tells us early whether live counting is demo-worthy at all.
-- [ ] Live preview: boxes drawn on the frame, running count per species.
+- [x] Ingest: photos arrive over Telegram. The OpenClaw agent routes a trap photo to
+      `POST /count`; no webcam on the GB10 is needed.
+- [x] `vision.py`: **YOLO26s detector** instead of the VLM, trained on synthetic cards from
+      `synth_traps.py` with exact labels (gnats and debris as their own classes). Deterministic, and
+      outputs contract records only: boxes stay in the vision layer.
+- [x] **Score against ground truth.** v2 got 13/18 reference-card counts exact, and on 200
+      phone-style photos the MAE is 0.07 codling, 0.04 oriental fruit moth, 0.00 lanternfly
+      (`run.sh eval`, `run.sh phone-test`).
+- [x] **Overfitting check.** v1 swapped codling and oriental fruit moths on phone-style photos
+      (MAE 3.7); fine-tuning on phone-style renders fixed it. See `fieldops/yolo/README.md`.
+- [x] Boxes: every counted photo has a pest-only annotated copy in `data/vision/`.
+- [ ] Photograph printed cards with a real phone and send them to the bot: the real-camera number.
 - [ ] Print trap cards from `data/traps/` — a sparse one and a dense one (the `codling000` and
       `codling050` images), so the on-stage swap makes the count jump visibly. More can be generated
       with `python -m fieldops.synth_traps --counts ...`.
@@ -376,7 +378,7 @@ but the numbers.
 
 | Risk | Fallback |
 |---|---|
-| VLM miscounts badly or returns junk | Phase 3 is cut-able. The replay is the pitch; say live counting is in progress. |
+| Detector miscounts real photos (all training data is synthetic) | Phase 3 is cut-able. The replay is the pitch; show the phone-test numbers and call real-photo fine-tuning the next step. |
 | Model runtime won't load on the GB10 | Found at H+0:30 by design. Swap to a smaller local model immediately. |
 | Venue wifi blocks Telegram | Switch to SMS. Test both before the checkpoint, not during the pitch. |
 | Webcam focus/lighting makes cards unreadable on stage | Pre-record a 15-second screen capture of live counting; play it if the live path fails. |
