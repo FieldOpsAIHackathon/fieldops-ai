@@ -12,6 +12,11 @@ seconds, most of it the agent's turn.
                        reply: "50 codling moth, 12 oriental fruit moth"  ◀── counts + boxed image
 ```
 
+On a phone, a photo with its section name comes back as counts, that section's status and the
+boxed photo (17:47, October 3, the real Telegram bot):
+
+<img src="../../pitch/assets/telegram-trap-count.webp" alt="Telegram: a trap photo sent with 'Section C' returns the boxed photo, 27 codling moth, 7 oriental fruit moth, 0 spotted lanternfly, total 34, and Block C's degree-day status" width="320">
+
 ## The model
 
 - **YOLO26s** (Ultralytics 8.4), 10 M parameters, 960 px input. YOLO26 is NMS-free: it outputs
