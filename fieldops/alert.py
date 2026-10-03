@@ -6,7 +6,7 @@
 Credentials come from the environment, or from ~/.config/fieldops.env (KEY=VALUE lines),
 which lives outside the repo so the token is never committed:
     FIELDOPS_TELEGRAM_TOKEN=123456:ABC...
-    FIELDOPS_TELEGRAM_CHAT_ID=123456789
+    FIELDOPS_TELEGRAM_CHAT_ID=123456789,987654321   # one or more, comma-separated
 """
 import argparse
 import json
@@ -56,14 +56,19 @@ def send(text: str, dry_run: bool = False) -> bool:
         print(f"[alert not sent: {entry['reason']}] {text}")
         return False
 
-    body = urllib.parse.urlencode({"chat_id": chat, "text": text}).encode()
-    try:
-        with urllib.request.urlopen(f"https://api.telegram.org/bot{token}/sendMessage", body, timeout=10) as r:
-            entry["delivered"] = json.load(r).get("ok", False)
-    except Exception as e:  # offline, blocked, bad token: log it and keep the demo running
-        entry["delivered"], entry["reason"] = False, type(e).__name__
+    entry["delivered"], failures = False, []
+    for chat_id in [c.strip() for c in chat.split(",") if c.strip()]:
+        body = urllib.parse.urlencode({"chat_id": chat_id, "text": text}).encode()
+        try:
+            with urllib.request.urlopen(f"https://api.telegram.org/bot{token}/sendMessage", body, timeout=10) as r:
+                entry["delivered"] |= json.load(r).get("ok", False)
+        except Exception as e:  # offline, blocked, never pressed Start: log it and keep the demo running
+            failures.append(f"{chat_id}: {type(e).__name__}")
+    if failures:
+        entry["reason"] = "; ".join(failures)
     _log(entry)
-    print(f"[alert {'sent' if entry['delivered'] else 'FAILED: ' + entry.get('reason', '?')}] {text}")
+    status = "sent" if entry["delivered"] else "FAILED"
+    print(f"[alert {status}{' (' + entry['reason'] + ')' if failures else ''}] {text}")
     return entry["delivered"]
 
 
