@@ -1,0 +1,7 @@
+[Unit]
+Description=FieldOps: OpenClaw sandbox, YOLO vision service and tools API
+Wants=fieldops-sandbox.service fieldops-vision.service fieldops-api.service
+After=nemoclaw-openshell-gateway.service
+
+[Install]
+WantedBy=default.target
