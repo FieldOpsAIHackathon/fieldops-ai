@@ -30,7 +30,6 @@
     stop() {
       this.epoch++;
       this.controller?.abort();
-      clearTimeout(this.finishTimer);
       for (const source of this.sources) {
         source.onended = null;
         try { source.stop(); } catch (_) { /* already ended */ }
@@ -55,6 +54,7 @@
       const controller = this.controller;
       const started = performance.now();
       let firstAudio = true, nextTime = 0, receivedDone = false, rate = 24000;
+      const finishIfDone = () => { if (current() && receivedDone && this.sources.size === 0) this.update('idle'); };
       let idleTimer;
       const resetTimeout = () => {
         clearTimeout(idleTimer);
@@ -86,6 +86,7 @@
           if (event.type === 'done') {
             receivedDone = true;
             this.dispatchEvent(new CustomEvent('metrics', {detail: event}));
+            finishIfDone();
             return;
           }
           if (event.type !== 'audio') return;
@@ -107,7 +108,7 @@
           source.buffer = buffer;
           source.connect(this.context.destination);
           this.sources.add(source);
-          source.onended = () => { this.sources.delete(source); source.disconnect(); };
+          source.onended = () => { this.sources.delete(source); source.disconnect(); finishIfDone(); };
           nextTime = Math.max(nextTime, this.context.currentTime + .035);
           source.start(nextTime);
           nextTime += buffer.duration;
@@ -128,9 +129,7 @@
         }
         if (!receivedDone) throw new Error('The audio connection ended early. Please try again.');
         clearTimeout(idleTimer);
-        if (current()) this.finishTimer = setTimeout(() => {
-          if (current()) this.update('idle');
-        }, Math.max(0, nextTime - this.context.currentTime) * 1000 + 50);
+        finishIfDone();
       } catch (error) {
         if (!current()) return;
         const message = controller.signal.aborted ? 'Local voice timed out. Please try again.' : error.name === 'TypeError' ? 'Cannot reach the GB10 voice service. Text answers are still available.' : error.message;
