@@ -1,0 +1,57 @@
+FIELDOPS — THE RIGHT MOMENT
+Two-minute demo transcript / approved
+1920 × 1080 · 30 fps · 120 seconds
+
+0:00–0:12 | narrator
+An orchard can look healthy while the next harvest is already at risk. The difference is catching the right signal—and acting on it in time.
+Shot: Cinematic orchard aerial, camera moving between natural grassy rows; drone reveal. FieldOps title arrives over footage.
+On-screen label: Drone concept visualization
+
+0:12–0:26 | narrator
+Meet FieldOps: orchard intelligence on a Dell Pro Max with GB10. Our vision starts with a drone collecting visual samples: photographs of farm regions, connected to insect observations from sticky traps.
+Shot: Drone gimbal photographs two orchard regions; subtle capture brackets. Match cut into actual 3D farm and Start drone survey.
+On-screen label: Concept visualization → Simulated survey
+
+0:26–0:40 | narrator
+Here, the simulated survey covers six growing blocks. Rotate the farm, follow the flight, and open each virtual capture. The dashboard connects the landscape to eighteen traps and the season underneath.
+Shot: Real 3D orbit, Follow drone, capture sweep, Review captures, select Block C. Compress the 24-second simulation through purposeful cuts.
+On-screen label: Demo season · Simulated survey
+
+0:40–0:57 | narrator
+On June fourth, Block C stands out in red. Its traps recorded twenty-six codling moths. Its biological clock has reached two hundred sixty-one degree-days—inside the configured treatment window.
+Shot: Overview danger count → visible red Block C → 26 trap count and 261 DD → Weather & timing 250–350 DD window. Hold the key figures.
+On-screen label: Committed demo season · June 4
+
+0:57–1:12 | narrator
+Follow the evidence: labeled trap images, pest activity, and temperature history. Biofix starts the clock. Deterministic code determines the window. The counting is impressive. The decision is what matters.
+Shot: Trap lab with synthetic reference badge; Pest analytics flight curve and heatmap; Window planner. Use close framing so chart labels remain legible.
+On-screen label: Sample trap image · Demo season
+
+1:12–1:19 | narrator
+Ask why. The assistant explains the season facts, with speech generated locally on the GB10.
+Shot: Open Talk to FieldOps, Type instead, enter Why is Block C in danger?, return to voice and click Hear answer. Keep the actual input method visible.
+On-screen label: Local speech · Season facts
+
+1:19–1:32 | FieldOps / live GB10 Kokoro
+Block C: Spray window open. The authoritative timeline records biofix on May 8. Block C has 261.0 degree-days since that recorded start.
+Shot: Actual speaking orb and answer over the movable farm; no narrator or music competing with the reply.
+On-screen label: GB10-generated speech
+
+1:32–1:45 | narrator
+Here is the real Telegram workflow. Send a trap photo; FieldOps returns species counts, a marked-up image, and the block status. The next action reaches the grower.
+Shot: Use pitch/assets/telegram-trap-count.webp. Show submitted photo, then pan to actual boxes and 27 codling / 7 oriental fruit moth counts. Keep this labeled as a separate live photo example. A small simulated June 4 window-alert card may close the shot, explicitly labeled; never change the real screenshot numbers.
+On-screen label: Live photo example · separate from season replay
+
+1:45–1:55 | narrator
+NemoClaw, OpenClaw, and OpenShell support the local agent workflow. Inference and decisions stay on the farm; Telegram delivers the message.
+Shot: Simple architecture overlay: photo → GB10 / YOLO + decision engine + local agent → dashboard / phone. Return to farm hero.
+On-screen label: Local inference · Telegram requires connectivity
+
+1:55–2:00 | narrator
+FieldOps. Count the moths. Start the clock. Act at the right moment.
+Shot: Bold FieldOps lockup over farm, red Block C slowly recedes; end card holds cleanly.
+On-screen label: FieldOps
+
+PRODUCTION NOTE
+Drone concept footage and the in-app flight remain labeled simulations. The real Telegram screenshot shows a separate photo/state (27 + 7 pests, 150 DD), not the June 4 replay (26 codling, 261 DD). Preserve that distinction. Use the actual GB10 speech reply. Higgsfield and ElevenLabs are video-production tools, outside the local app runtime.
+Approved by Himanshu. Narration generated with ElevenLabs; assistant reply generated locally on GB10.
