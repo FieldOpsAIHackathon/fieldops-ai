@@ -69,6 +69,18 @@
     let title, paragraphs;
     if (/\b(send|notify|alert me|text me)\b/.test(q)) {
       title='No notification sent'; paragraphs=['This drawer reads the demo season and cannot send messages or operate the orchard. You can review the recorded decision here.',summary(ctx)];
+    } else if (/\b(drones?|surveys?|aerial|captures?)\b/.test(q)) {
+      let mission=null;
+      try{mission=window.FieldOps?.getSurveyState?.()||null;}catch{}
+      const captured=[...new Set((Array.isArray(mission?.captures)?mission.captures:[]).filter(blockId=>ctx.blocks.some(block=>block.id===blockId)))];
+      const states={idle:'Ready to start',ready:'Ready to start',running:'In progress',flying:'In progress',surveying:'In progress',paused:'Paused',complete:'Complete',completed:'Complete',finished:'Complete'};
+      title='Survey coverage, linked evidence';
+      paragraphs=[
+        'Drone survey is a simulated aerial tour of the orchard. Its virtual captures show spatial coverage. Insect counts come from the linked trap observations; the aerial previews do not count insects.',
+        mission?`${states[mission.status]||'Survey snapshot'}: ${n(captured.length)} of ${n(ctx.blocks.length)} blocks captured${captured.length?' — '+captured.map(blockId=>blockName(ctx,blockId)).join(', '):''}.`:`The Drone survey tab has ${n(ctx.blocks.length)} virtual aerial previews, one per block. Select Start drone survey in the 3D farm to follow the simulated capture sequence.`,
+        `${b.name}'s linked trap records show ${n(ctx.count(id,ctx.index,model))} ${pestName(ctx,model).toLowerCase()} on ${d(ctx.day.date)} across ${n(b.traps.length)} traps. Its recorded thermal clock is ${n(s.dd_since_biofix,1)} DD; the season model says ${labels[s.status].toLowerCase()}.`,
+        `The ${n(f.thresholds.spray_open_dd)}–${n(f.thresholds.spray_close_dd)} DD spray window comes from the codling-moth timing model. A virtual capture does not change that decision or send an alert.`
+      ];
     } else if (/\b(next|closest|following)\b/.test(q)) {
       title=f.next?`${f.next.name} is closest`:'No unopened window is accumulating';
       paragraphs=[f.next?`${f.next.name} has ${n(stateOf(ctx,f.next.id).dd_since_biofix,1)} DD since biofix. It needs ${n(Math.max(0,f.thresholds.spray_open_dd-stateOf(ctx,f.next.id).dd_since_biofix),1)} more DD to reach the ${n(f.thresholds.spray_open_dd)} DD opening threshold.`:'The selected snapshot has no block in the accumulating state. Blocks may still be waiting for biofix or have already entered or closed their window.',f.open.length?`${f.open.map(x=>x.name).join(', ')} ${f.open.length===1?'currently has':'currently have'} an open window.`:'No block has an open spray window on this date.',f.next?projectionExplanation(ctx,f.next.id):'This comparison uses accumulated heat through the selected date.'];
