@@ -224,6 +224,13 @@ data/*.db
 data/alerts.jsonl
 data/replay_state.json
 
+# YOLO weights and runs
+*.pt
+yolo-runs/
+
 # runtime state written by dashboard/tools/simulate_feed.py
 dashboard/data/live.json
 dashboard/data/live.tmp
+
+# vision lane output (photos, annotated copies, counts log)
+data/vision/

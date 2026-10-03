@@ -8,12 +8,15 @@ network. Inside the sandbox:
     curl -s "http://172.18.0.1:8765/counts?block=c&days=14"
     curl -s "http://172.18.0.1:8765/degree_days?block=c"
     curl -s -X POST http://172.18.0.1:8765/alert -d '{"text": "..."}'
+    curl -s --data-binary @photo.jpg "http://172.18.0.1:8765/count?trap_id=block-c-04"
 
 The dashboard on the host also POSTs {date, block_id, type} to /trigger when a banner fires; that route
 is not in the sandbox policy, so OpenClaw cannot reach it.
 """
 import json
 import threading
+import urllib.error
+import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
@@ -24,6 +27,8 @@ HOSTS = ("127.0.0.1", "172.18.0.1")  # loopback + the OpenShell docker bridge (h
 # A dashboard opened from disk sends Origin "null" (some browsers "file://"). Anything else is another site.
 PAGE_ORIGINS = {"null", "file://"}
 MAX_TRIGGER_BODY = 1024
+VISION_URL = "http://127.0.0.1:8767/count"  # fieldops.vision in the GPU container
+MAX_IMAGE_BODY = 15 * 1024 * 1024
 
 GET_ROUTES = {
     "/status": lambda q: agent.get_status(q.get("as_of")),
@@ -59,8 +64,10 @@ class Handler(BaseHTTPRequestHandler):
         origin = self.headers.get("Origin")
         if path == "/trigger":
             return self._trigger(origin)
+        if path == "/count":
+            return self._count(origin)
         if path != "/alert":
-            return self._reply(404, {"error": "only POST /alert"})
+            return self._reply(404, {"error": "only POST /alert or /count"})
         if origin is not None:  # browsers always send Origin, curl in the sandbox does not
             return self._reply(403, {"error": "/alert is not for browsers"})
         try:
@@ -70,6 +77,24 @@ class Handler(BaseHTTPRequestHandler):
         if not text or len(text) > 500:
             return self._reply(400, {"error": "text must be 1-500 characters"})
         self._reply(200, agent.send_alert(text))
+
+    def _count(self, origin) -> None:
+        """Pass a trap photo to the YOLO vision service and return its pest counts."""
+        if origin is not None:
+            return self._reply(403, {"error": "/count is not for browsers"})
+        length = int(self.headers.get("Content-Length", 0))
+        if not 0 < length <= MAX_IMAGE_BODY:
+            return self._reply(400, {"error": "send the image as the body, up to 15 MB"})
+        body = self.rfile.read(length)
+        url = VISION_URL + ("?" + urlparse(self.path).query if urlparse(self.path).query else "")
+        try:
+            req = urllib.request.Request(url, body, {"Content-Type": "application/octet-stream"})
+            with urllib.request.urlopen(req, timeout=60) as r:
+                self._reply(r.status, json.load(r))
+        except urllib.error.HTTPError as e:
+            self._reply(e.code, json.load(e))
+        except OSError:
+            self._reply(503, {"error": "vision service is not running (bash fieldops/yolo/run.sh serve)"})
 
     def _trigger(self, origin) -> None:
         """The dashboard names an event it just showed; the text comes from decide and the agent, never from here."""
