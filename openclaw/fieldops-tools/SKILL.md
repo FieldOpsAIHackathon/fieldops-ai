@@ -48,9 +48,13 @@ replay day.
 - **Degree-days** accumulate from biofix using daily highs/lows with lower/upper cutoffs
   (`dd_base_f`, `dd_upper_f`).
 - **Spray window** opens when degree-days since biofix reach `spray_open_dd` and closes at
-  `spray_close_dd`. `projected_open` is an estimate from the last week's warmth, not a forecast.
+  `spray_close_dd`. `projected_open` is an estimate for a block that has biofix but no open window
+  yet: today's degree-days plus the 2016–2025 average temperatures for each later date. It is
+  usually within a few days, never a forecast, so say "around" and use `projected_open_approx`
+  (it has no weekday on purpose).
 
 When asked "why" about spray timing: call `/degree_days` for that block, then answer in 2–4 short
 sentences quoting the biofix date, degree-days so far, the threshold, and the window date. Use the
-`*_weekday` fields for day names. These thresholds are demo values based on the UC IPM codling moth
+`*_weekday` fields for day names of things that already happened. These thresholds are demo values
+based on the UC IPM codling moth
 model, not agronomic advice.

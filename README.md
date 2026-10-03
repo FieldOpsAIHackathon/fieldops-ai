@@ -80,6 +80,7 @@ its template fallback. See [PLAN.md](PLAN.md) for the order of work and the open
 ```bash
 python -m fieldops.check_models                  # do the local LLM and VLM load? run this first
 python -m fieldops.season                        # regenerate data/season.csv
+python -m fieldops.weather --normals             # refetch the average temperatures behind the spray-date estimate (needs network)
 python -m fieldops.store --load data/season.csv  # build the store: counts + temperatures
 python -m fieldops.decide                        # self-test, then print each block's milestones
 python -m fieldops.decide --replay               # ...and write the dashboard timeline
