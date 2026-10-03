@@ -4,6 +4,8 @@
 
 Listens on 127.0.0.1 and on the sandbox bridge (host.openshell.internal), never on the venue
 network. Inside the sandbox:
+    curl -s http://172.18.0.1:8765/farm
+    curl -s "http://172.18.0.1:8765/block?block=c"
     curl -s http://172.18.0.1:8765/status
     curl -s "http://172.18.0.1:8765/counts?block=c&days=14"
     curl -s "http://172.18.0.1:8765/degree_days?block=c"
@@ -36,6 +38,9 @@ GET_ROUTES = {
                                          int(q.get("days", 14)), q.get("as_of")),
     "/degree_days": lambda q: agent.get_degree_days(q.get("block"), q.get("species", agent.DEFAULT_SPECIES),
                                                    q.get("as_of")),
+    "/farm": lambda q: agent.get_farm(q.get("as_of"), q.get("species", agent.DEFAULT_SPECIES)),
+    "/block": lambda q: agent.get_block_report(q.get("block"), q.get("as_of"),
+                                               q.get("species", agent.DEFAULT_SPECIES)),
 }
 
 
@@ -90,7 +95,14 @@ class Handler(BaseHTTPRequestHandler):
         try:
             req = urllib.request.Request(url, body, {"Content-Type": "application/octet-stream"})
             with urllib.request.urlopen(req, timeout=60) as r:
-                self._reply(r.status, json.load(r))
+                counted = json.load(r)
+            # A photo on its own is a number. Joined to the block's state it is a decision.
+            trap = parse_qs(urlparse(self.path).query).get("trap_id", [""])[0]
+            if trap:
+                report = agent.get_block_report(trap.rsplit("-", 1)[0])
+                if "error" not in report:
+                    counted["block_report"] = report
+            self._reply(200, counted)
         except urllib.error.HTTPError as e:
             self._reply(e.code, json.load(e))
         except OSError:

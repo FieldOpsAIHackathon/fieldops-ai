@@ -14,6 +14,8 @@ network_policies:
         protocol: rest
         enforcement: enforce
         rules:
+          - allow: { method: GET, path: "/farm" }
+          - allow: { method: GET, path: "/block" }
           - allow: { method: GET, path: "/status" }
           - allow: { method: GET, path: "/counts" }
           - allow: { method: GET, path: "/degree_days" }
