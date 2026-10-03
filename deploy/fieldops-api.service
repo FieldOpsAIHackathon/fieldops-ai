@@ -1,0 +1,15 @@
+[Unit]
+Description=FieldOps local agent and alert API
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=@ROOT@
+ExecStart=@PYTHON@ -m fieldops.api
+Environment=PYTHONUNBUFFERED=1
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=15
+
+[Install]
+WantedBy=default.target
