@@ -9,15 +9,18 @@ network. Inside the sandbox:
     curl -s "http://172.18.0.1:8765/degree_days?block=c"
     curl -s -X POST http://172.18.0.1:8765/alert -d '{"text": "..."}'
     curl -s --data-binary @photo.jpg "http://172.18.0.1:8765/count?trap_id=block-c-04"
+    curl -s -o boxes.jpg http://172.18.0.1:8765/vision/<annotated_file from /count>
 
 The dashboard on the host also POSTs {date, block_id, type} to /trigger when a banner fires; that route
 is not in the sandbox policy, so OpenClaw cannot reach it.
 """
 import json
+import re
 import threading
 import urllib.error
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from . import agent
@@ -29,6 +32,8 @@ PAGE_ORIGINS = {"null", "file://"}
 MAX_TRIGGER_BODY = 1024
 VISION_URL = "http://127.0.0.1:8767/count"  # fieldops.vision in the GPU container
 MAX_IMAGE_BODY = 15 * 1024 * 1024
+VISION_DIR = Path(__file__).resolve().parent.parent / "data" / "vision"
+ANNOTATED_NAME = re.compile(r"^[0-9T-]+Z_[A-Za-z0-9_-]{1,64}_boxes\.jpg$")  # only vision.py's boxed copies
 
 GET_ROUTES = {
     "/status": lambda q: agent.get_status(q.get("as_of")),
@@ -50,6 +55,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         url = urlparse(self.path)
+        if url.path.startswith("/vision/"):
+            return self._annotated(url.path[len("/vision/"):])
         route = GET_ROUTES.get(url.path)
         if not route:
             return self._reply(404, {"error": f"unknown path; try {sorted(GET_ROUTES)} or POST /alert"})
@@ -78,6 +85,18 @@ class Handler(BaseHTTPRequestHandler):
             return self._reply(400, {"error": "text must be 1-500 characters"})
         self._reply(200, agent.send_alert(text))
 
+    def _annotated(self, name: str) -> None:
+        """Serve one annotated trap photo written by fieldops.vision, so the agent can attach it."""
+        path = VISION_DIR / name
+        if not ANNOTATED_NAME.match(name) or not path.is_file():
+            return self._reply(404, {"error": "no such annotated image"})
+        body = path.read_bytes()
+        self.send_response(200)
+        self.send_header("Content-Type", "image/jpeg")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
     def _count(self, origin) -> None:
         """Pass a trap photo to the YOLO vision service and return its pest counts."""
         if origin is not None:
@@ -90,7 +109,11 @@ class Handler(BaseHTTPRequestHandler):
         try:
             req = urllib.request.Request(url, body, {"Content-Type": "application/octet-stream"})
             with urllib.request.urlopen(req, timeout=60) as r:
-                self._reply(r.status, json.load(r))
+                result = json.load(r)
+            if result.get("annotated_image"):
+                result["annotated_file"] = Path(result["annotated_image"]).name
+                result["annotated_url"] = f"/vision/{result['annotated_file']}"
+            self._reply(200, result)
         except urllib.error.HTTPError as e:
             self._reply(e.code, json.load(e))
         except OSError:
