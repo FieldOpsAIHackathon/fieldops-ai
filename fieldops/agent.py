@@ -106,7 +106,7 @@ def get_degree_days(block=None, species=DEFAULT_SPECIES, as_of=None) -> dict:
     for s in decide.evaluate(records, weather, end):
         if s["species"] == species and (block is None or s["block"] == block):
             s = dict(s)
-            for key in ("biofix_date", "confirmed_on", "opened_on", "closed_on"):
+            for key in ("biofix_date", "confirmed_on", "opened_on", "closed_on", "as_of"):
                 s[key + "_weekday"] = _weekday(s[key])
             s["projected_open_approx"] = _approx(s["projected_open"])
             blocks.append(s)
@@ -155,15 +155,17 @@ def get_farm(as_of=None, species=DEFAULT_SPECIES) -> dict:
 
     acting = [b for b in blocks if b["level"] == "act"]
     prepping = [b for b in blocks if b["level"] == "prepare"]
+    today = _weekday(full["as_of"])
     if acting:
         many = len(acting) > 1
-        head = f"{len(acting)} block{'s' if many else ''} {'need' if many else 'needs'} spraying " \
-               f"now: " + ", ".join(b["name"] for b in acting) + "."
+        head = f"{today}: {len(acting)} block{'s' if many else ''} " \
+               f"{'need' if many else 'needs'} spraying now — " \
+               + ", ".join(b["name"] for b in acting) + "."
     elif prepping:
-        head = "Nothing to spray today. Coming up within three days: " \
+        head = f"{today}: nothing to spray today. Coming up within three days — " \
                + ", ".join(b["name"] for b in prepping) + "."
     else:
-        head = "Nothing to spray today and nothing due in the next three days."
+        head = f"{today}: nothing to spray today and nothing due in the next three days."
 
     return {
         "as_of": full["as_of"],
@@ -250,14 +252,17 @@ ALERT_SYSTEM = (
 
 def _template(d: dict) -> str:
     block = f"block {d['block'].split('-')[-1].upper()}"
+    today = _weekday(d["as_of"])  # a grower reading this later needs to know which day it describes
     if d["event"] == "biofix_confirmed":
-        text = f"Biofix reached on {block}: codling moth flight confirmed, degree-day clock started."
+        text = f"{today}: biofix reached on {block}, codling moth flight confirmed and the " \
+               f"degree-day clock started."
         if d.get("projected_open"):
             text += f" Spray window expected to open around {_approx(d['projected_open'])}."
         return text
     if d["event"] == "spray_window_open":
-        return f"Spray window is open on {block}: {d['dd']:.0f} degree-days since biofix. Spray now."
-    return f"Spray window closed on {block} at {d['dd']:.0f} degree-days."
+        return f"{today}: spray window is open on {block} at {d['dd']:.0f} degree-days since " \
+               f"biofix. Spray now."
+    return f"{today}: spray window closed on {block} at {d['dd']:.0f} degree-days."
 
 
 def _numbers(text: str) -> set:
