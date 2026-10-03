@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design picks</title>
+<!--PICKER-DECISIONS-->
+<style>
+/* Fonts: one @font-face per file in fonts/. build.mjs replaces {{FONT_<file>}}. */
+@font-face { font-family: "Figtree"; src: url(data:font/woff2;base64,{{FONT_figtree}}) format("woff2"); font-weight: 400 800; font-display: block; }
+
+/* ============ picker chrome (engine; leave alone) ============ */
+:root { --pg:#E8E8E4; --panel:#F5F5F2; --ink:#1C1C1A; --ink2:#5D5D57; --rule:#D0D0CA; --sel:#1C1C1A; --onsel:#F5F5F2; --bezel:#0C0C0D; --chrome:#D6D6D1; --chromeDot:#B3B3AD; --chromeBar:#EDEDE9; color-scheme: light; }
+:root[data-theme="dark"] { --pg:#141414; --panel:#1D1D1C; --ink:#EDEDE9; --ink2:#A5A59E; --rule:#33332F; --sel:#EDEDE9; --onsel:#141414; --bezel:#050506; --chrome:#2A2A2C; --chromeDot:#5A5A5E; --chromeBar:#3A3A3D; color-scheme: dark; }
+/* Chrome rules never style mockups: element selectors are scoped to the chrome, since mockups may use h2, main and button. */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--pg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.layout { display: grid; grid-template-columns: 236px minmax(0, 1fr); min-height: 100vh; }
+.rail { position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 28px 18px 28px 24px; border-right: 1px solid var(--rule); }
+.rail h3 { font-size: 13px; font-weight: 600; color: var(--ink2); margin: 22px 0 8px; }
+.rail ol { list-style: none; margin: 0; padding: 0; }
+.rail li a { display: flex; align-items: center; gap: 10px; padding: 6px 8px; margin: 0 -8px; border-radius: 8px; text-decoration: none; font-size: 14px; color: inherit; }
+.rail li a:hover { background: var(--panel); }
+.rail .st { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--ink2); flex: none; display: grid; place-items: center; font-size: 10px; font-weight: 700; }
+.rail .st.on { background: var(--sel); border-color: var(--sel); color: var(--onsel); }
+.rail .st.rec { border-style: dashed; }
+.rail .pick { margin-left: auto; color: var(--ink2); font-size: 12px; text-align: right; }
+.progress { font-size: 14px; } .progress b { font-size: 28px; font-weight: 650; display: block; line-height: 1.1; }
+.bar { height: 4px; background: var(--rule); border-radius: 2px; margin: 10px 0 4px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--sel); width: 0; transition: width .3s; }
+.swatch { display: flex; gap: 6px; margin: 10px 0 26px; align-items: center; font-size: 12px; color: var(--ink2); }
+.swatch i { width: 18px; height: 18px; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 1px var(--rule); flex: none; }
+.layout > main { padding: 36px 44px 140px; min-width: 0; }
+.intro { max-width: 1120px; }
+.intro h1 { font-size: 40px; line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 14px; font-weight: 700; }
+.intro p { max-width: 68ch; margin: 0 0 12px; color: var(--ink2); font-size: 16px; }
+.steps { display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 18px 0 0; padding: 0; list-style: none; counter-reset: s; }
+.steps li { counter-increment: s; display: flex; gap: 10px; align-items: baseline; }
+.steps li::before { content: counter(s); font-weight: 700; width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--ink); display: inline-grid; place-items: center; font-size: 13px; flex: none; transform: translateY(-1px); }
+.found { margin: 28px 0 0; padding: 20px 24px; background: var(--panel); border-radius: 14px; }
+.found h2 { font-size: 17px; margin: 0 0 10px; }
+.found ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.controls { position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 12px 0; margin: 26px 0 0; background: var(--pg); border-bottom: 1px solid var(--rule); }
+.ctl { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink2); }
+.tog { display: inline-flex; border: 1px solid var(--rule); border-radius: 10px; padding: 3px; gap: 2px; }
+.tog button { border: 0; background: none; padding: 6px 12px; border-radius: 7px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink2); }
+.tog button[aria-pressed="true"] { background: var(--sel); color: var(--onsel); }
+.cbtn { border: 1px solid var(--rule); background: var(--panel); padding: 8px 14px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; }
+.cbtn.main { background: var(--sel); color: var(--onsel); border-color: var(--sel); }
+.grow { flex: 1; }
+.decision { padding: 52px 0 44px; border-bottom: 1px solid var(--rule); scroll-margin-top: 64px; }
+.dhead { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.dhead h2 { font-size: 28px; line-height: 1.15; margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+.dgroup { font-size: 13px; color: var(--ink2); }
+.ask { font-size: 16px; margin: 6px 0 0; max-width: 70ch; }
+.why { margin: 14px 0 22px; padding-left: 20px; color: var(--ink2); max-width: 90ch; display: grid; gap: 4px; }
+.why b { color: var(--ink); font-weight: 600; }
+.options { display: flex; flex-wrap: wrap; gap: 26px 22px; align-items: stretch; } /* equal-height options, so every Choose button lines up */
+.opt { display: flex; flex-direction: column; gap: 10px; }
+.opt.text { width: 300px; }
+.ohead { display: flex; align-items: center; gap: 8px; min-height: 26px; white-space: nowrap; }
+.ohead .oname { font-weight: 650; font-size: 16px; overflow: hidden; text-overflow: ellipsis; }
+.letter { min-width: 26px; height: 26px; padding: 0 6px; border-radius: 7px; border: 1.5px solid var(--ink); display: grid; place-items: center; font-weight: 700; font-size: 13px; flex: none; }
+.opt.now .letter { border-style: dashed; color: var(--ink2); border-color: var(--ink2); font-size: 11px; }
+.rec { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--ink2); color: var(--ink2); }
+.odesc { font-size: 14px; color: var(--ink2); margin: 0; min-height: 42px; }
+.nowcap { font-size: 12px; color: var(--ink2); margin: 0; }
+.choose { margin-top: auto; width: 100%; border: 1px solid var(--rule); background: var(--panel); border-radius: 10px; padding: 10px; font-weight: 650; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.choose:hover { border-color: var(--ink2); }
+.opt[data-chosen="true"] .choose { background: var(--sel); color: var(--onsel); border-color: var(--sel); }
+.opt[data-chosen="true"] .dev, .opt[data-chosen="true"] .tcard { outline: 3px solid var(--sel); outline-offset: 4px; }
+.play { align-self: flex-start; border: 1px solid var(--rule); background: none; border-radius: 8px; padding: 5px 12px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.note { margin-top: 20px; max-width: 640px; }
+.note label { font-size: 13px; color: var(--ink2); display: block; margin-bottom: 6px; }
+.note textarea { width: 100%; min-height: 44px; resize: vertical; background: var(--panel); color: var(--ink); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px; font: inherit; font-size: 14px; }
+.dev { position: relative; background: var(--bezel); display: block; cursor: zoom-in; box-shadow: 0 0 0 1px var(--rule), 0 14px 30px rgba(0,0,0,.18); }
+.dev.phone { border-radius: 34px; padding: 7px; } .dev.phone .vp { border-radius: 27px; }
+.dev.tablet { border-radius: 26px; padding: 10px; } .dev.tablet .vp { border-radius: 16px; }
+.dev.browser { border-radius: 10px; padding: 0; } .dev.browser .vp { border-radius: 0 0 10px 10px; }
+.dev.plain { border-radius: 12px; padding: 0; background: none; } .dev.plain .vp { border-radius: 12px; }
+.bchrome { height: 30px; display: flex; align-items: center; gap: 6px; padding: 0 12px; background: var(--chrome); border-radius: 10px 10px 0 0; }
+.bchrome i { width: 10px; height: 10px; border-radius: 50%; background: var(--chromeDot); }
+.bchrome span { flex: 1; height: 18px; margin-left: 10px; border-radius: 9px; background: var(--chromeBar); }
+.dev.browser { background: var(--chrome); }
+.vp { position: relative; overflow: hidden; }
+.nowimg { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.tcard { background: var(--panel); border-radius: 16px; padding: 18px; box-shadow: 0 0 0 1px var(--rule); }
+.tcard dl { margin: 0; display: grid; gap: 12px; } .tcard dt { font-size: 12px; color: var(--ink2); } .tcard dd { margin: 2px 0 0; font-size: 15px; font-weight: 550; }
+.review { padding: 52px 0 0; } .review h2 { font-size: 28px; margin: 0 0 8px; }
+.review table { border-collapse: collapse; width: 100%; max-width: 980px; margin: 18px 0 24px; font-size: 14px; }
+.review th, .review td { text-align: left; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.review th { font-size: 12px; color: var(--ink2); font-weight: 600; }
+.missing { color: var(--ink2); font-style: italic; }
+.savebar { display: flex; flex-wrap: wrap; gap: 12px; } .savebar .cbtn { padding: 12px 18px; font-size: 15px; }
+.status { font-size: 14px; color: var(--ink2); min-height: 22px; margin-top: 12px; }
+.lb { position: fixed; inset: 0; z-index: 50; background: #0B0B0C; display: none; align-items: center; justify-content: center; gap: 36px; padding: 24px; }
+.lb.open { display: flex; }
+.lb .side { width: 300px; color: #EDEDE9; display: grid; gap: 14px; }
+.lb .side h3 { margin: 0; font-size: 24px; line-height: 1.2; } .lb .side p { margin: 0; color: #C9C9C2; }
+.lb .side .choose { background: #EDEDE9; color: #141414; border-color: #EDEDE9; }
+.lb .side .ghost { background: none; color: #EDEDE9; border-color: #55554F; }
+.lb .dev { cursor: default; }
+.lb .side .lbnav { display: flex; gap: 8px; } .lb .side .lbnav .choose { flex: 1; }
+.lb .side .lbpos { font-size: 13px; color: #A5A59E; }
+body.shot .rail, body.shot .intro, body.shot .controls, body.shot .note, body.shot .review, body.shot .lb { display: none !important; }
+body.shot .layout { display: block; } body.shot .layout > main { padding: 8px 28px 28px; } body.shot .decision { padding: 12px 0 0; border: 0; }
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: 1fr; } .rail { display: none; } .layout > main { padding: 24px 16px 120px; } .intro h1 { font-size: 32px; }
+  .options { flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; } .opt { scroll-snap-align: start; flex: none; }
+  .lb { flex-direction: column; gap: 14px; overflow-y: auto; justify-content: flex-start; } .lb .side { width: 100%; max-width: 420px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } html { scroll-behavior: auto; } }
+
+/* ============ walkthrough (engine; leave alone) ============ */
+body.walk-open { overflow:hidden; touch-action:manipulation; }
+body.walk-open > .layout, body.walk-open > .lb { display:none; }
+.walk { -webkit-tap-highlight-color:transparent; position:fixed; inset:0; z-index:100; display:grid; grid-template-columns:260px minmax(0,1fr) 380px; background:var(--pg); color:var(--ink); font:14px/1.45 system-ui,sans-serif; }
+.walk :is(button,select):not(.scr *) { font:inherit; color:inherit; background:var(--panel); border:1px solid var(--rule); border-radius:8px; padding:7px 10px; cursor:pointer; }
+.walk h2:not(.scr *) { font-size:19px; margin:0 0 16px; } .walk h3:not(.scr *) { font-size:14px; margin:20px 0 8px; }
+.wleft, .wright { padding:20px; overflow:auto; } .wleft { border-right:1px solid var(--rule); } .wright { border-left:1px solid var(--rule); }
+.wlist { display:grid; gap:6px; } .wlist button { text-align:left; } .walk [aria-current="true"]:not(.scr *) { outline:3px solid #3D7BFF; outline-offset:1px; }
+.wcenter { min-width:0; display:flex; flex-direction:column; align-items:center; gap:12px; padding:16px; overflow:hidden; }
+.wtools { display:flex; flex-wrap:wrap; gap:6px; align-items:center; } .wtools label { display:flex; gap:5px; align-items:center; }
+.wstage { flex:1; min-height:0; width:100%; display:flex; align-items:center; justify-content:center; }
+.walk .dev { cursor:default; flex:none; } .wviewport { position:relative; overflow:hidden; } .wlayer { position:absolute; inset:0; }
+.whs { position:absolute; z-index:30; } .whints { position:absolute; inset:0; pointer-events:none; z-index:40; overflow:hidden; }
+.whint { position:absolute; outline:2px solid #3D7BFF; background:rgba(61,123,255,.22); border-radius:4px; }
+.wring { background:transparent; animation:wpulse 1.2s infinite; } .warrow { position:absolute; color:#3D7BFF; font:28px/1 system-ui; }
+@keyframes wpulse { 50% { box-shadow:0 0 0 7px rgba(61,123,255,.22); } }
+.wmap-scroll { overflow:auto; max-height:50vh; padding:5px; } .wmap { position:relative; } .wmap svg { position:absolute; inset:0; overflow:visible; }
+.wnode { position:absolute; width:100px; text-align:center; cursor:pointer; border:1px solid var(--rule); border-radius:8px; background:var(--panel); padding:6px; } .wmini { position:relative; width:64px; overflow:hidden; margin:0 auto 5px; pointer-events:none; }
+.wname { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-size:12px; line-height:1.3; }
+.wnode small { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--ink2); font-size:11px; }
+.wgroup { position:absolute; color:var(--ink2); white-space:nowrap; font-size:11px; } .wtabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+.wtour { background:#1D4ED8; color:#fff; border-radius:14px; padding:14px 16px; margin-top:12px; box-shadow:0 10px 30px rgba(0,0,0,.35); font:15px/1.45 system-ui,sans-serif; }
+.wtour p { margin:6px 0 12px; } .wtour footer { display:flex; gap:8px; }
+.walk .wtour button { background:transparent; color:#fff; border:1px solid rgba(255,255,255,.6); padding:7px 14px; }
+.walk .wtour [data-wa="collapse"] { border:0; padding:0; font-size:12px; font-weight:600; opacity:.85; text-align:left; letter-spacing:.01em; }
+.walk .wtour [data-wa="next"], .walk .wtour [data-wa="resume"] { background:#fff; color:#1D4ED8; border-color:#fff; font-weight:650; }
+.wveil { position:absolute; inset:0; z-index:60; background:rgba(0,0,0,.5); display:flex; justify-content:center; align-items:flex-end; }
+.wmenu { background:var(--pg); width:min(100%,600px); max-height:90%; overflow:auto; padding:20px; border-radius:20px 20px 0 0; } .wmenu .wtools { display:grid; }
+.wmap-overlay { position:absolute; inset:0; z-index:65; background:var(--pg); padding:20px; overflow:auto; } .wmap-overlay .wmap-scroll { max-height:none; }
+.wintro { position:absolute; z-index:55; bottom:24px; left:16px; right:16px; padding:18px; border-radius:14px; background:var(--panel); box-shadow:0 8px 40px #0008; }
+.wmap-button { display:none; } .wphone { display:block; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; } /* a long-press opens the menu; selecting text would swallow the next tap */ .wphone > .wleft, .wphone > .wright, .wphone .wcenter > .wtools, .wphone .whelp { display:none; }
+.wphone .wcenter, .wphone .wstage { position:absolute; inset:0; padding:0; display:block; }
+.wphone .dev { padding:0; border-radius:0; box-shadow:none; } .wphone .wviewport { border-radius:0; } .wphone .bchrome { display:none; }
+.wphone > .wtour { position:absolute; top:8px; left:12px; right:12px; z-index:50; margin:0; } .wphone > .wtour.wlow { top:auto; bottom:28px; } .wtour.wcollapsed p, .wtour.wcollapsed footer { display:none; }
+.wprobe { position:fixed; left:-100000px; top:0; visibility:hidden; pointer-events:none; }
+body.walk-shot { background:var(--wbg); } .walk.wshot { background:var(--wbg); }
+.walk.wshot * { animation:none !important; transition:none !important; }
+@media (max-width:1199px) { .walk:not(.wphone) { grid-template-columns:260px minmax(0,1fr); } .walk > .wright { display:none; } .wmap-button { display:inline-block; } }
+
+/* ============ mockup kit (screen authored in device units, scaled) ============ */
+.scr { position: absolute; left: 0; top: 0; transform-origin: 0 0; background: var(--bg); color: var(--ink); font-family: var(--fb); font-size: calc(15px * var(--ts)); line-height: 1.34; overflow: hidden; -webkit-font-smoothing: antialiased; text-align: left; }
+.scr * { box-sizing: border-box; } .scr svg { display: block; flex: none; }
+/* Zero-specificity resets so semantic elements (h1-h4, p, lists, button, table) behave like divs and any kit class wins. */
+:where(.scr) :where(h1,h2,h3,h4,p,ul,ol,figure,blockquote) { margin: 0; } :where(.scr) :where(ul,ol) { padding: 0; list-style: none; }
+:where(.scr) :where(button,input,select,textarea) { font: inherit; color: inherit; background: none; border: 0; padding: 0; } :where(.scr) :where(table) { border-collapse: collapse; }
+.sbar { position: absolute; top: 0; left: 0; right: 0; height: 40px; display: flex; align-items: center; padding: 0 22px 0 28px; font: 500 14px/1 var(--fb); color: var(--ink); z-index: 3; }
+.sbar .ic3 { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+.bd { position: absolute; top: 40px; left: 0; right: 0; bottom: 96px; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; }
+.bd::-webkit-scrollbar { display: none; } .bd.full { bottom: 0; } .bd.web { top: 0; }
+.gest { position: absolute; bottom: 7px; left: 50%; width: 110px; height: 4px; margin-left: -55px; border-radius: 2px; background: var(--ink); opacity: .5; z-index: 9; }
+.px { padding-left: 20px; padding-right: 20px; } .row { display: flex; align-items: center; } .col { display: flex; flex-direction: column; } .btw { justify-content: space-between; } .wrap { flex-wrap: wrap; }
+.g4 { gap: 4px; } .g6 { gap: 6px; } .g8 { gap: 8px; } .g10 { gap: 10px; } .g12 { gap: 12px; } .g16 { gap: 16px; } .g24 { gap: 24px; }
+.mt4 { margin-top: 4px; } .mt8 { margin-top: 8px; } .mt12 { margin-top: 12px; } .mt16 { margin-top: 16px; } .mt20 { margin-top: 20px; } .mt24 { margin-top: 24px; } .mt32 { margin-top: 32px; }
+.f1 { flex: 1; min-width: 0; } .pb { padding-bottom: 28px; }
+.fs11 { font-size: calc(11px * var(--ts)); } .fs12 { font-size: calc(12px * var(--ts)); } .fs13 { font-size: calc(13px * var(--ts)); } .fs14 { font-size: calc(14px * var(--ts)); } .fs15 { font-size: calc(15px * var(--ts)); } .fs16 { font-size: calc(16px * var(--ts)); } .fs18 { font-size: calc(18px * var(--ts)); } .fs20 { font-size: calc(20px * var(--ts)); } .fs24 { font-size: calc(24px * var(--ts)); } .fs28 { font-size: calc(28px * var(--ts)); } .fs36 { font-size: calc(36px * var(--ts)); } .fs44 { font-size: calc(44px * var(--ts)); } .fs56 { font-size: calc(56px * var(--ts)); } .fs72 { font-size: calc(72px * var(--ts)); }
+.fd { font-family: var(--fd); font-weight: var(--dw); letter-spacing: var(--dls); line-height: 1.15; }
+.w5 { font-weight: 500; } .w6 { font-weight: 600; } .w7 { font-weight: 700; }
+.mut { color: var(--muted); } .pc { color: var(--primary); } .num { font-variant-numeric: tabular-nums; } .lh { line-height: 1.45; }
+.ell { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .strike { text-decoration: line-through; color: var(--muted); }
+.lbl { font-size: calc(12px * var(--ts)); font-weight: 600; color: var(--muted); }
+.sec { font-family: var(--fd); font-weight: var(--dw); letter-spacing: var(--dls); font-size: calc(19px * var(--ts)); line-height: 1.2; }
+.card { background: var(--surface); border-radius: var(--rl); padding: 16px; } .card.two { background: var(--surface2); }
+.grp { background: var(--surface); border-radius: var(--rl); overflow: hidden; }
+.r { position: relative; display: flex; align-items: center; gap: 14px; padding: 13px 16px; min-height: 60px; }
+.grp > .r + .r::before { content: ""; position: absolute; top: 0; right: 0; left: var(--inset, 16px); height: 1px; background: var(--line); }
+.chips { display: flex; gap: 8px; overflow: hidden; }
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 6px 13px; border-radius: var(--rchip); border: 1px solid var(--line); font-size: calc(13px * var(--ts)); font-weight: 600; white-space: nowrap; flex: none; }
+.chip.on { background: var(--primarySoft); color: var(--onPrimarySoft); border-color: transparent; } .chip.info { background: var(--surface2); border-color: transparent; font-weight: 550; }
+.seg { display: flex; border: 1px solid var(--line); border-radius: var(--rchip); padding: 3px; gap: 2px; }
+.seg span { flex: 1; text-align: center; padding: 8px; border-radius: max(calc(var(--rchip) - 3px), 4px); font-size: calc(13px * var(--ts)); font-weight: 650; color: var(--muted); white-space: nowrap; }
+.seg .on { background: var(--primarySoft); color: var(--onPrimarySoft); }
+.btn { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 10px 18px; border-radius: var(--rbtn); font-weight: 650; font-size: calc(15px * var(--ts)); text-align: center; }
+.btn.pri { background: var(--primary); color: var(--onPrimary); } .btn.ton { background: var(--primarySoft); color: var(--onPrimarySoft); } .btn.out { border: 1px solid var(--line); }
+.btn.sm { min-height: 36px; padding: 6px 13px; font-size: calc(13px * var(--ts)); } .btn.txt { min-height: 36px; padding: 6px 4px; color: var(--primary); }
+.link { color: var(--primary); font-weight: 650; }
+.field { border: 1px solid var(--line); border-radius: var(--rm); padding: 10px 14px; background: var(--surface); }
+.badge { width: 40px; height: 40px; border-radius: var(--rm); display: grid; place-items: center; background: var(--primarySoft); color: var(--onPrimarySoft); flex: none; }
+.ck { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--muted); flex: none; display: grid; place-items: center; }
+.ck.done { background: var(--primary); border-color: var(--primary); color: var(--onPrimary); }
+.pt { font-size: calc(13px * var(--ts)); font-weight: 650; padding: 3px 9px; border-radius: 999px; background: var(--surface2); white-space: nowrap; }
+.track { background: var(--surface2); border-radius: 999px; overflow: hidden; display: flex; gap: 2px; } .track i { display: block; height: 100%; }
+.tabs { display: flex; border-bottom: 1px solid var(--line); } .tabs span { flex: 1; text-align: center; padding: 12px 4px; font-weight: 650; color: var(--muted); font-size: calc(14px * var(--ts)); } .tabs .on { color: var(--ink); box-shadow: inset 0 -3px 0 var(--primary); }
+.tile { background: var(--surface); border-radius: var(--rm); padding: 14px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: calc(13px * var(--ts)); font-weight: 600; text-align: center; }
+.sw { width: 44px; height: 26px; border-radius: 13px; background: var(--primary); position: relative; flex: none; } .sw::after { content: ""; position: absolute; right: 3px; top: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--onPrimary); }
+.sw.off { background: var(--surface2); box-shadow: inset 0 0 0 2px var(--muted); } .sw.off::after { right: auto; left: 4px; top: 4px; width: 18px; height: 18px; background: var(--muted); }
+.scrim { position: absolute; inset: 0; background: rgba(0,0,0,.52); z-index: 5; }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; top: var(--st, 56px); background: var(--bg); border-radius: 28px 28px 0 0; z-index: 6; display: flex; flex-direction: column; overflow: hidden; }
+.sheet .sb2 { flex: 1; overflow-y: auto; scrollbar-width: none; padding: 0 20px 36px; } .sheet .sb2::-webkit-scrollbar { display: none; }
+.sheet .hdl { width: 36px; height: 4px; border-radius: 2px; background: var(--muted); opacity: .5; margin: 10px auto 2px; flex: none; }
+.sheet .sfoot { padding: 12px 20px 30px; border-top: 1px solid var(--line); background: var(--bg); flex: none; }
+.snack { position: absolute; left: 12px; right: 12px; bottom: 108px; z-index: 7; background: var(--inverse); color: var(--onInverse); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; font-size: calc(14px * var(--ts)); box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+.snack .ua { color: var(--inversePrimary); font-weight: 700; margin-left: auto; }
+
+/* ============ project CSS (edit: components specific to this product) ============ */
+@font-face{font-family:Space;src:url('{{FONT_space}}')}@font-face{font-family:Manrope;src:url('{{FONT_manrope}}')}@font-face{font-family:Plex;src:url('{{FONT_plexsans}}')}
+.fx-app{min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:calc(13px * var(--ts));line-height:1.5;display:flex;position:relative}
+.fx-app *{box-sizing:border-box}.fx-app svg{display:block;max-width:100%}.fx-nav{width:210px;flex-shrink:0;padding:28px 18px;border-right:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;gap:28px}.fx-brand{display:flex;gap:11px;align-items:center;font-family:var(--fd);font-size:calc(23px * var(--ts));font-weight:700;letter-spacing:-1px}.fx-logo{width:31px;height:34px;display:grid;place-items:center;background:var(--primary);color:var(--onPrimary);clip-path:polygon(25% 0,100% 0,75% 45%,100% 45%,20% 100%,35% 55%,0 55%);font-size:0;flex-shrink:0}.fx-navlinks{display:flex;flex-direction:column;gap:8px}.fx-link{display:flex;align-items:center;gap:12px;color:var(--muted);padding:12px 13px;border-radius:8px;line-height:1.25}.fx-link.fx-active{color:var(--primary);background:var(--primarySoft);box-shadow:inset 3px 0 var(--primary)}.fx-link svg{flex-shrink:0}.fx-navfoot{margin-top:auto;font-size:calc(11px * var(--ts));color:var(--muted);border-top:1px solid var(--line);padding-top:18px}.fx-dot{display:inline-block;width:6px;height:6px;border-radius:100%;background:var(--primary);margin-right:7px}.fx-work{min-width:0;flex:1}.fx-top{min-height:70px;padding:16px 30px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;background:color-mix(in srgb,var(--surface) 65%,transparent)}.fx-top b{font-weight:600}.fx-muted{color:var(--muted)}.fx-spacer{flex:1}.fx-pill{padding:7px 13px;border:1px solid var(--line);border-radius:6px;white-space:nowrap;font-size:calc(11px * var(--ts));background:var(--surface)}.fx-content{padding:27px 30px 30px}.fx-title{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:22px}.fx-title h1{font:700 calc(34px * var(--ts))/1.12 var(--fd);letter-spacing:-1.5px;margin:0 0 6px}.fx-title p{color:var(--muted);margin:0}.fx-button{display:inline-flex;gap:9px;align-items:center;justify-content:center;background:var(--primary);color:var(--onPrimary);padding:11px 16px;border-radius:7px;font-weight:700;white-space:nowrap}.fx-button.fx-quiet{background:var(--surface2);color:var(--ink);border:1px solid var(--line)}.fx-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);background:var(--surface);border-radius:12px;margin-bottom:22px;overflow:hidden}.fx-kpi{padding:17px 21px;border-right:1px solid var(--line)}.fx-kpi:last-child{border:0}.fx-label{font-size:calc(11px * var(--ts));color:var(--muted);font-weight:500}.fx-number{font:600 calc(35px * var(--ts))/1.2 var(--fd);letter-spacing:-1px;margin:6px 0}.fx-number small{font:500 calc(13px * var(--ts)) var(--fb);letter-spacing:0;color:var(--muted)}.fx-small{font-size:calc(11px * var(--ts));color:var(--muted)}.fx-accent{color:var(--primary)}.fx-warn{color:var(--warn)}.fx-grid{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(0,1fr);gap:20px}.fx-grid.fx-equal{grid-template-columns:repeat(2,minmax(0,1fr))}.fx-card{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden;min-width:0}.fx-pad{padding:21px}.fx-cardhead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:19px 21px 0}.fx-card h2{font:600 calc(17px * var(--ts))/1.3 var(--fd);margin:0;letter-spacing:-.3px}.fx-card p{margin:9px 0 0;color:var(--muted)}.fx-map{position:relative;min-height:350px;background:radial-gradient(ellipse at 55% 60%,color-mix(in srgb,var(--primary) 12%,transparent),transparent 68%),var(--surface)}.fx-map svg{width:100%;height:350px}.fx-maplabel{position:absolute;bottom:15px;left:20px;right:20px;display:flex;justify-content:space-between;font-size:calc(10px * var(--ts));color:var(--muted)}.fx-map svg text{font-family:var(--fb);font-size:calc(12px * var(--ts))}.fx-map svg .fx-mapletter{font-family:var(--fd);font-size:calc(23px * var(--ts));font-weight:700}.fx-contour{fill:none;stroke:var(--primary);opacity:.07;stroke-width:1}.fx-alert{background:linear-gradient(135deg,color-mix(in srgb,var(--warn) 9%,var(--surface)),var(--surface));border-color:color-mix(in srgb,var(--warn) 35%,var(--line))}.fx-alert h2{font-size:calc(25px * var(--ts));line-height:1.15;margin:12px 0}.fx-alert .fx-number{font-size:calc(64px * var(--ts));margin:18px 0 10px}.fx-progress{height:5px;border-radius:9px;background:var(--surface2);margin:18px 0 9px;position:relative}.fx-progress i{display:block;height:100%;border-radius:9px;background:var(--primary)}.fx-progress.fx-amber i{background:var(--warn)}.fx-between{display:flex;justify-content:space-between;gap:10px;align-items:center}.fx-rule{border-top:1px solid var(--line);margin:18px 0}.fx-bottom{margin-top:20px}.fx-plot{width:100%;height:220px;overflow:visible}.fx-plot text{fill:var(--muted);font-family:var(--fb);font-size:calc(11px * var(--ts))}.fx-chartkey{display:flex;gap:22px;font-size:calc(11px * var(--ts));color:var(--muted);padding:16px 21px 0;flex-wrap:wrap}.fx-linekey{width:18px;border-top:2px solid var(--primary);display:inline-block;vertical-align:middle;margin-right:7px}.fx-linekey.fx-dashed{border-top:2px dashed var(--warn)}.fx-rows{padding:4px 21px 16px}.fx-row{padding:15px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px}.fx-row:last-child{border:0}.fx-letter{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--line);background:var(--surface2);border-radius:8px;font-family:var(--fd);font-weight:700;flex-shrink:0}.fx-tag{color:var(--warn);background:color-mix(in srgb,var(--warn) 10%,transparent);border:1px solid color-mix(in srgb,var(--warn) 20%,transparent);border-radius:5px;padding:4px 8px;font-size:calc(10px * var(--ts));white-space:nowrap}.fx-horizontal{flex-direction:column}.fx-horizontal .fx-nav{width:100%;flex-direction:row;align-items:center;padding:17px 30px;border-right:0;border-bottom:1px solid var(--line);gap:32px}.fx-horizontal .fx-navlinks{flex-direction:row;flex:1;gap:3px}.fx-horizontal .fx-link{padding:9px 10px;gap:7px}.fx-horizontal .fx-link svg{display:none}.fx-horizontal .fx-navfoot{display:none}.fx-horizontal .fx-top{min-height:54px}.fx-table{border-collapse:collapse;width:100%;font-size:calc(12px * var(--ts))}.fx-table th{text-align:left;color:var(--muted);font-weight:500;font-size:calc(10px * var(--ts));padding:14px 18px;border-bottom:1px solid var(--line);background:var(--surface2)}.fx-table td{padding:14px 18px;border-bottom:1px solid var(--line)}.fx-table tr:last-child td{border:0}.fx-table tr.fx-selected{background:var(--primarySoft)}.fx-strip{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}.fx-strip span{padding:6px 12px;border:1px solid var(--line);border-radius:5px;font-size:calc(11px * var(--ts));color:var(--muted)}.fx-strip .fx-picked{color:var(--primary);border-color:var(--primary);background:var(--primarySoft)}.fx-bars{display:flex;align-items:flex-end;height:90px;gap:4px;padding-top:10px}.fx-bars i{background:var(--primary);flex:1;min-height:2px;opacity:.65}.fx-matrix{display:grid;grid-template-columns:60px repeat(8,1fr);gap:7px;padding:24px 20px;align-items:center}.fx-cell{height:32px;background:color-mix(in srgb,var(--primary) calc(var(--heat)*1%),var(--surface2));border-radius:4px}.fx-orb{width:115px;height:115px;border-radius:50%;margin:12px auto 28px;background:radial-gradient(circle at 30% 25%,var(--onPrimarySoft),var(--primary) 8%,var(--primarySoft) 45%,var(--bg) 72%);box-shadow:0 0 65px color-mix(in srgb,var(--primary) 18%,transparent),inset -12px -10px 22px var(--surface);border:1px solid color-mix(in srgb,var(--primary) 40%,var(--line))}.fx-brief{font:600 calc(28px * var(--ts))/1.3 var(--fd);letter-spacing:-.7px}.fx-chat{margin:20px 0;border-left:2px solid var(--primary);padding:4px 0 4px 20px}.fx-chat p{font-size:calc(16px * var(--ts));line-height:1.65}.fx-question{padding:17px 20px;border:1px solid var(--line);border-radius:9px;background:var(--surface2);display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--muted);margin-top:22px}.fx-image{width:100%;height:265px;object-fit:cover;display:block;filter:saturate(.65)}.fx-imagewide{height:410px}.fx-tilegrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.fx-tilegrid .fx-number{font-size:calc(29px * var(--ts))}.fx-cinema{padding:48px;min-height:770px;background:radial-gradient(ellipse at 85% 25%,color-mix(in srgb,var(--primary) 16%,transparent),transparent 55%),var(--bg)}.fx-cinema h1{font:600 calc(60px * var(--ts))/1.04 var(--fd);letter-spacing:-3px;max-width:800px;margin:32px 0}.fx-cinema .fx-map svg{height:380px}.fx-chapters{display:flex;gap:28px;border-top:1px solid var(--line);padding-top:20px;margin-top:30px;color:var(--muted)}.fx-chapters b{color:var(--primary)}.fx-cinema .fx-grid{grid-template-columns:1.2fr 1fr}.fx-caption{padding:15px 20px;border-top:1px solid var(--line);font-size:calc(11px * var(--ts));color:var(--muted)}.fx-step{display:flex;gap:20px;margin:24px 0}.fx-step b{font:500 calc(23px * var(--ts)) var(--fd);color:var(--primary)}.fx-step p{margin:4px 0}.fx-ddlist{display:grid;gap:22px;padding:24px}.fx-ddrow{display:grid;grid-template-columns:70px 1fr 65px;gap:16px;align-items:center}.fx-ddrow .fx-progress{margin:0;height:10px}.fx-footer{display:flex;justify-content:space-between;margin-top:21px;font-size:calc(10px * var(--ts));color:var(--muted)}
+
+.fx-pill{display:inline-flex;align-items:center;gap:8px}
+@media(max-width:700px){
+.fx-app{flex-direction:column}.fx-nav,.fx-horizontal .fx-nav{width:100%;padding:18px;gap:14px;flex-direction:column;align-items:stretch;border-right:0;border-bottom:1px solid var(--line)}.fx-brand{font-size:calc(22px * var(--ts))}.fx-navlinks,.fx-horizontal .fx-navlinks{flex-direction:row;overflow:auto;gap:5px;max-width:100%}.fx-link,.fx-horizontal .fx-link{flex:none;padding:9px 10px;font-size:calc(11px * var(--ts));white-space:nowrap}.fx-link svg{display:none}.fx-navfoot{display:none}.fx-top{padding:12px 18px;flex-wrap:wrap;gap:9px;font-size:calc(11px * var(--ts))}.fx-top>.fx-letter,.fx-top>.fx-muted,.fx-top>.fx-spacer{display:none}.fx-content{padding:22px 18px}.fx-title{align-items:flex-start;flex-direction:column}.fx-title h1{font-size:calc(28px * var(--ts));letter-spacing:-1px}.fx-title p{font-size:calc(12px * var(--ts))}.fx-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.fx-kpi{padding:16px;border-bottom:1px solid var(--line)}.fx-number{font-size:calc(29px * var(--ts))}.fx-grid,.fx-grid.fx-equal,.fx-tilegrid,.fx-cinema .fx-grid{grid-template-columns:minmax(0,1fr)}.fx-map{min-height:235px}.fx-map svg{height:235px}.fx-maplabel{font-size:calc(9px * var(--ts));gap:15px}.fx-cardhead{flex-wrap:wrap}.fx-card{overflow:auto}.fx-table{min-width:570px}.fx-imagewide{height:290px}.fx-cinema{padding:24px;min-height:100vh}.fx-cinema h1{font-size:calc(39px * var(--ts));letter-spacing:-2px}.fx-cinema .fx-map svg{height:235px}.fx-chapters{flex-wrap:wrap;gap:15px;font-size:calc(11px * var(--ts))}.fx-footer{flex-wrap:wrap;gap:8px}.fx-between{flex-wrap:wrap}.fx-ddrow{grid-template-columns:60px 1fr 55px;gap:9px}.fx-matrix{grid-template-columns:25px repeat(8,minmax(0,1fr));gap:4px;padding:20px 12px}.fx-brief{font-size:calc(24px * var(--ts))}.fx-chat p{font-size:calc(14px * var(--ts))}.fx-plot{height:190px}.fx-image{object-fit:contain;background:var(--surface2)}
+}
+
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="rail" aria-label="Choices">
+    <div class="progress"><b id="progN"></b>chosen</div>
+    <div class="bar"><i id="progBar"></i></div>
+    <div class="swatch" id="swatch"></div>
+    <div id="railList"></div>
+  </nav>
+  <main>
+    <section class="intro" id="intro"></section>
+    <div class="controls" role="toolbar" aria-label="Preview settings">
+      <div class="ctl" id="modeCtl">Preview in <span class="tog" id="modeTog"><button data-v="dark">Dark</button><button data-v="light">Light</button></span></div>
+      <div class="ctl" id="tsCtl">Text size <span class="tog" id="tsTog"><button data-v="1">100%</button><button data-v="1.15">115%, your phone</button><button data-v="1.5">150%</button></span></div>
+      <span class="grow"></span>
+      <button class="cbtn" id="useRec">Use my recommendations for the rest</button>
+      <button class="cbtn main" id="saveTop">Save my picks</button>
+    </div>
+    <div id="decisions"></div>
+    <section class="review" id="review">
+      <h2>Your picks</h2>
+      <p style="color:var(--ink2);margin:0">Anything marked "recommended" was filled in by the button, not clicked. Change any row above before saving.</p>
+      <table><thead><tr><th>Choice</th><th>Your pick</th><th>Your note</th></tr></thead><tbody id="reviewBody"></tbody></table>
+      <div class="savebar"><button class="cbtn main" id="saveBtn">Save my picks</button><button class="cbtn" id="copyBtn">Copy as text</button></div>
+      <div class="status" id="status" role="status"></div>
+    </section>
+  </main>
+</div>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-labelledby="lbTitle">
+  <div id="lbDev"></div>
+  <div class="side"><h3 id="lbTitle"></h3><p id="lbDesc"></p><button class="choose" id="lbChoose"></button>
+    <div class="lbnav"><button class="choose ghost" id="lbPrev" aria-label="Previous option">Previous</button><button class="choose ghost" id="lbNext" aria-label="Next option">Next</button></div>
+    <p class="lbpos" id="lbPos"></p><button class="choose ghost" id="lbClose">Close</button></div>
+</div>
+
+<script id="kit">
+"use strict";
+/* Mockup kit: pure helpers, safe to call from project render functions. */
+const IMG = {{IMAGES_JSON}};
+const IC = {
+  plus:'<path d="M12 5v14M5 12h14"/>', check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>', close:'<path d="M6 6l12 12M18 6L6 18"/>',
+  chev:'<path d="M9.5 6l6 6-6 6"/>', chevd:'<path d="M6 9.5l6 6 6-6"/>', chevl:'<path d="M14.5 6l-6 6 6 6"/>', back:'<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  search:'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>', tune:'<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>',
+  home:'<path d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19z"/><path d="M9.5 20.5v-6h5v6"/>',
+  cal:'<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/>', clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  bell:'<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>', user:'<circle cx="12" cy="8.5" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/>',
+  people:'<circle cx="9" cy="9" r="3"/><circle cx="16.5" cy="10" r="2.5"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M14 14.8a4.5 4.5 0 0 1 6.5 4.2"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/>',
+  edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>', heart:'<path d="M12 19.5s-7.5-4.4-7.5-10A4.2 4.2 0 0 1 12 7a4.2 4.2 0 0 1 7.5 2.5c0 5.6-7.5 10-7.5 10z"/>',
+  star:'<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z"/>', bars:'<path d="M5 20v-9M12 20V5M19 20v-7"/>',
+  list:'<path d="M10 7h10M10 12h10M10 17h10"/><path d="M4 7l1.2 1.2L7.5 6M4 12l1.2 1.2L7.5 11M4 17l1.2 1.2L7.5 16"/>',
+  note:'<path d="M5 4.5h14A1.5 1.5 0 0 1 20.5 6v9a1.5 1.5 0 0 1-1.5 1.5h-9l-4.5 3.5v-3.5H5A1.5 1.5 0 0 1 3.5 15V6A1.5 1.5 0 0 1 5 4.5z"/>',
+  more:'<circle cx="12" cy="5.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="18.5" r="1.3" fill="currentColor"/>',
+  moreh:'<circle cx="5.5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="18.5" cy="12" r="1.3" fill="currentColor"/>',
+  lock:'<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>', info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.2"/>',
+  shield:'<path d="M12 3.5l7 2.5v5.5c0 4.5-3 8-7 9.5-4-1.5-7-5-7-9.5V6z"/>', undo:'<path d="M9 7L4.5 11.5 9 16"/><path d="M4.5 11.5H15a4.5 4.5 0 0 1 0 9h-2"/>',
+  refresh:'<path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5V9H15"/>', download:'<path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/>',
+  mail:'<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/>', menu:'<path d="M4 7h16M4 12h16M4 17h16"/>', grid:'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>'
+};
+/* Icons: 24px stroke glyphs. Add project glyphs with Object.assign(IC, {...}). */
+const ic = (n, s = 24, w = 1.8) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n] || ""}</svg>`;
+const K = {
+  /* Phone status bar. color overrides the text color (e.g. over a colored header). */
+  statusBar(color = "", time = "9:41") {
+    return `<div class="sbar" style="${color ? `color:${color}` : ""}"><span>${time}</span><span class="ic3"><svg width="16" height="14" viewBox="0 0 16 14" fill="currentColor"><rect x="0" y="9" width="3" height="5" rx="1"/><rect x="4.3" y="6" width="3" height="8" rx="1"/><rect x="8.6" y="3" width="3" height="11" rx="1"/><rect x="12.9" y="0" width="3" height="14" rx="1"/></svg><svg width="16" height="14" viewBox="0 0 24 20" fill="currentColor"><path d="M12 19.5L0 5.5a17 17 0 0 1 24 0z"/></svg><svg width="26" height="13" viewBox="0 0 26 13"><rect x=".75" y=".75" width="21.5" height="11.5" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".6"/><rect x="2.6" y="2.6" width="15" height="7.8" rx="1.8" fill="currentColor"/></svg></span></div>`;
+  },
+  /* Phone screen: status bar, scrollable body, optional bottom nav HTML, overlays. */
+  phone(body, { nav = "", over = "", pre = "", sbar = "", time } = {}) {
+    return pre + K.statusBar(sbar, time) + `<div class="bd ${nav ? "" : "full"}">${body}</div>` + nav + over + `<div class="gest"></div>`;
+  },
+  /* Web page / desktop app screen: one scrollable body, no status bar. */
+  web(body, { over = "" } = {}) { return `<div class="bd web full">${body}</div>${over}`; },
+  /* Bottom sheet over dimmed content. top = px from screen top. */
+  sheet(content, { top = 56, foot = "" } = {}) {
+    return `<div class="scrim"></div><div class="sheet" style="--st:${top}px"><div class="hdl"></div><div class="sb2">${content}</div>${foot ? `<div class="sfoot">${foot}</div>` : ""}</div>`;
+  },
+  esc: s => String(s).replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]))
+};
+</script>
+
+<script id="project">
+'use strict';
+const DATA = {"farm":{"name":"Nashoba Ridge Orchard","location":"Bolton, MA","season":2026,"crop":"apple","pest":"codling_moth","pest_name":"Codling moth"},"thresholds":{"biofix_min_count":2,"biofix_consecutive_checks":2,"dd_base_f":50,"dd_upper_f":88,"spray_open_dd":250,"spray_close_dd":350},"blocks":[{"id":"block-a","name":"Block A","variety":"Honeycrisp","acres":4.2,"traps":["block-a-01","block-a-02","block-a-03"],"col":0,"row":0},{"id":"block-b","name":"Block B","variety":"McIntosh","acres":5.6,"traps":["block-b-01","block-b-02","block-b-03"],"col":1,"row":0},{"id":"block-c","name":"Block C","variety":"Gala","acres":3.4,"traps":["block-c-01","block-c-02","block-c-03"],"col":2,"row":0},{"id":"block-d","name":"Block D","variety":"Cortland","acres":6.0,"traps":["block-d-01","block-d-02","block-d-03"],"col":0,"row":1},{"id":"block-e","name":"Block E","variety":"Macoun","acres":2.5,"traps":["block-e-01","block-e-02","block-e-03"],"col":1,"row":1},{"id":"block-f","name":"Block F","variety":"Fuji","acres":3.1,"traps":["block-f-01","block-f-02","block-f-03"],"col":2,"row":1}],"days":[{"date":"2026-04-15","tmin_f":36.0,"tmax_f":55.0,"dd_today":2.5,"counts":{"block-a":0,"block-b":1,"block-c":0,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":1,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-16","tmin_f":43.0,"tmax_f":61.0,"dd_today":5.5,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-17","tmin_f":41.0,"tmax_f":64.0,"dd_today":7.0,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":1,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":1,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-18","tmin_f":33.0,"tmax_f":51.0,"dd_today":0.5,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-19","tmin_f":34.0,"tmax_f":47.0,"dd_today":0.0,"counts":{"block-a":0,"block-b":0,"block-c":1,"block-d":0,"block-e":0,"block-f":1},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":1,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":1,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-20","tmin_f":41.0,"tmax_f":60.0,"dd_today":5.0,"counts":{"block-a":1,"block-b":0,"block-c":0,"block-d":1,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":1,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":1,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-21","tmin_f":29.0,"tmax_f":46.0,"dd_today":0.0,"counts":{"block-a":0,"block-b":1,"block-c":0,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":1,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-22","tmin_f":34.0,"tmax_f":51.0,"dd_today":0.5,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-23","tmin_f":31.0,"tmax_f":52.0,"dd_today":1.0,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":1,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":1,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-24","tmin_f":35.0,"tmax_f":51.0,"dd_today":0.5,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":0,"block-e":1,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":1,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-25","tmin_f":36.0,"tmax_f":55.0,"dd_today":2.5,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-26","tmin_f":48.0,"tmax_f":69.0,"dd_today":9.5,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-27","tmin_f":43.0,"tmax_f":63.0,"dd_today":6.5,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-28","tmin_f":41.0,"tmax_f":59.0,"dd_today":4.5,"counts":{"block-a":0,"block-b":1,"block-c":6,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":1,"block-c-01":0,"block-c-02":6,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-29","tmin_f":47.0,"tmax_f":74.0,"dd_today":12.0,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-04-30","tmin_f":41.0,"tmax_f":63.0,"dd_today":6.5,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-01","tmin_f":48.0,"tmax_f":67.0,"dd_today":8.5,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":0,"block-e":0,"block-f":1},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":1,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-02","tmin_f":36.0,"tmax_f":55.0,"dd_today":2.5,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-03","tmin_f":39.0,"tmax_f":64.0,"dd_today":7.0,"counts":{"block-a":1,"block-b":1,"block-c":1,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":1,"block-b-01":0,"block-b-02":1,"block-b-03":0,"block-c-01":0,"block-c-02":1,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-04","tmin_f":43.0,"tmax_f":62.0,"dd_today":6.0,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":1,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":1,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-05","tmin_f":30.0,"tmax_f":52.0,"dd_today":1.0,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-06","tmin_f":39.0,"tmax_f":57.0,"dd_today":3.5,"counts":{"block-a":0,"block-b":0,"block-c":1,"block-d":1,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":1,"block-c-03":0,"block-d-01":0,"block-d-02":1,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-07","tmin_f":39.0,"tmax_f":59.0,"dd_today":4.5,"counts":{"block-a":0,"block-b":0,"block-c":0,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":0,"block-c-03":0,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-08","tmin_f":45.0,"tmax_f":63.0,"dd_today":6.5,"counts":{"block-a":0,"block-b":0,"block-c":2,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":1,"block-c-02":0,"block-c-03":1,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-09","tmin_f":43.0,"tmax_f":66.0,"dd_today":8.0,"counts":{"block-a":0,"block-b":0,"block-c":2,"block-d":0,"block-e":1,"block-f":1},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":1,"block-c-03":1,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":1,"block-e-03":0,"block-f-01":0,"block-f-02":1,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":8.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[{"block_id":"block-c","type":"biofix","title":"Biofix set on Block C","message":"Sustained codling moth catch on Block C: 2 moths today after 2 yesterday. Degree-day clock starts now."}]},{"date":"2026-05-10","tmin_f":42.0,"tmax_f":63.0,"dd_today":6.5,"counts":{"block-a":2,"block-b":0,"block-c":6,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":0,"block-a-02":2,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":2,"block-c-02":3,"block-c-03":1,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":14.5},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-11","tmin_f":40.0,"tmax_f":61.0,"dd_today":5.5,"counts":{"block-a":3,"block-b":0,"block-c":4,"block-d":0,"block-e":0,"block-f":0},"traps":{"block-a-01":1,"block-a-02":2,"block-a-03":0,"block-b-01":0,"block-b-02":0,"block-b-03":0,"block-c-01":1,"block-c-02":1,"block-c-03":2,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":5.5},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":20.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[{"block_id":"block-a","type":"biofix","title":"Biofix set on Block A","message":"Sustained codling moth catch on Block A: 3 moths today after 2 yesterday. Degree-day clock starts now."}]},{"date":"2026-05-12","tmin_f":48.0,"tmax_f":62.0,"dd_today":6.0,"counts":{"block-a":0,"block-b":1,"block-c":5,"block-d":1,"block-e":2,"block-f":0},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":0,"block-b-01":1,"block-b-02":0,"block-b-03":0,"block-c-01":0,"block-c-02":3,"block-c-03":2,"block-d-01":0,"block-d-02":0,"block-d-03":1,"block-e-01":2,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":11.5},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":26.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-13","tmin_f":47.0,"tmax_f":67.0,"dd_today":8.5,"counts":{"block-a":1,"block-b":2,"block-c":4,"block-d":3,"block-e":1,"block-f":1},"traps":{"block-a-01":0,"block-a-02":0,"block-a-03":1,"block-b-01":1,"block-b-02":1,"block-b-03":0,"block-c-01":2,"block-c-02":1,"block-c-03":1,"block-d-01":0,"block-d-02":2,"block-d-03":1,"block-e-01":1,"block-e-02":0,"block-e-03":0,"block-f-01":0,"block-f-02":1,"block-f-03":0},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":20.0},"block-b":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":34.5},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-14","tmin_f":47.0,"tmax_f":69.0,"dd_today":9.5,"counts":{"block-a":4,"block-b":2,"block-c":6,"block-d":1,"block-e":2,"block-f":0},"traps":{"block-a-01":2,"block-a-02":0,"block-a-03":2,"block-b-01":0,"block-b-02":0,"block-b-03":2,"block-c-01":1,"block-c-02":1,"block-c-03":4,"block-d-01":1,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":1,"block-e-03":1,"block-f-01":0,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":29.5},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":9.5},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":44.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[{"block_id":"block-b","type":"biofix","title":"Biofix set on Block B","message":"Sustained codling moth catch on Block B: 2 moths today after 2 yesterday. Degree-day clock starts now."}]},{"date":"2026-05-15","tmin_f":47.0,"tmax_f":69.0,"dd_today":9.5,"counts":{"block-a":3,"block-b":2,"block-c":9,"block-d":0,"block-e":1,"block-f":1},"traps":{"block-a-01":1,"block-a-02":1,"block-a-03":1,"block-b-01":0,"block-b-02":1,"block-b-03":1,"block-c-01":3,"block-c-02":3,"block-c-03":3,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":0,"block-e-02":1,"block-e-03":0,"block-f-01":0,"block-f-02":1,"block-f-03":0},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":39.0},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":19.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":53.5},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-16","tmin_f":46.0,"tmax_f":67.0,"dd_today":8.5,"counts":{"block-a":5,"block-b":4,"block-c":12,"block-d":0,"block-e":8,"block-f":1},"traps":{"block-a-01":2,"block-a-02":1,"block-a-03":2,"block-b-01":1,"block-b-02":1,"block-b-03":2,"block-c-01":3,"block-c-02":3,"block-c-03":6,"block-d-01":0,"block-d-02":0,"block-d-03":0,"block-e-01":3,"block-e-02":2,"block-e-03":3,"block-f-01":0,"block-f-02":1,"block-f-03":0},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":47.5},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":27.5},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":62.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-17","tmin_f":48.0,"tmax_f":68.0,"dd_today":9.0,"counts":{"block-a":7,"block-b":6,"block-c":11,"block-d":3,"block-e":5,"block-f":2},"traps":{"block-a-01":4,"block-a-02":2,"block-a-03":1,"block-b-01":1,"block-b-02":3,"block-b-03":2,"block-c-01":1,"block-c-02":4,"block-c-03":6,"block-d-01":0,"block-d-02":1,"block-d-03":2,"block-e-01":1,"block-e-02":4,"block-e-03":0,"block-f-01":0,"block-f-02":0,"block-f-03":2},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":56.5},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":36.5},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":71.0},"block-d":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":9.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[{"block_id":"block-e","type":"biofix","title":"Biofix set on Block E","message":"Sustained codling moth catch on Block E: 5 moths today after 8 yesterday. Degree-day clock starts now."}]},{"date":"2026-05-18","tmin_f":52.0,"tmax_f":72.0,"dd_today":12.0,"counts":{"block-a":5,"block-b":3,"block-c":13,"block-d":7,"block-e":8,"block-f":1},"traps":{"block-a-01":3,"block-a-02":2,"block-a-03":0,"block-b-01":1,"block-b-02":1,"block-b-03":1,"block-c-01":2,"block-c-02":5,"block-c-03":6,"block-d-01":6,"block-d-02":0,"block-d-03":1,"block-e-01":2,"block-e-02":4,"block-e-03":2,"block-f-01":0,"block-f-02":0,"block-f-03":1},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":68.5},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":48.5},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":83.0},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":12.0},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":21.0},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[{"block_id":"block-d","type":"biofix","title":"Biofix set on Block D","message":"Sustained codling moth catch on Block D: 7 moths today after 3 yesterday. Degree-day clock starts now."}]},{"date":"2026-05-19","tmin_f":48.0,"tmax_f":71.0,"dd_today":10.5,"counts":{"block-a":6,"block-b":5,"block-c":22,"block-d":4,"block-e":5,"block-f":2},"traps":{"block-a-01":1,"block-a-02":3,"block-a-03":2,"block-b-01":0,"block-b-02":3,"block-b-03":2,"block-c-01":12,"block-c-02":4,"block-c-03":6,"block-d-01":1,"block-d-02":2,"block-d-03":1,"block-e-01":4,"block-e-02":1,"block-e-03":0,"block-f-01":2,"block-f-02":0,"block-f-03":0},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":79.0},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":59.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":93.5},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":22.5},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":31.5},"block-f":{"status":"watching","biofix_date":null,"dd_since_biofix":0.0}},"events":[]},{"date":"2026-05-20","tmin_f":51.0,"tmax_f":69.0,"dd_today":10.0,"counts":{"block-a":6,"block-b":6,"block-c":24,"block-d":7,"block-e":5,"block-f":3},"traps":{"block-a-01":3,"block-a-02":1,"block-a-03":2,"block-b-01":1,"block-b-02":1,"block-b-03":4,"block-c-01":8,"block-c-02":7,"block-c-03":9,"block-d-01":2,"block-d-02":1,"block-d-03":4,"block-e-01":0,"block-e-02":2,"block-e-03":3,"block-f-01":2,"block-f-02":0,"block-f-03":1},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":89.0},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":69.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":103.5},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":32.5},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":41.5},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":10.0}},"events":[{"block_id":"block-f","type":"biofix","title":"Biofix set on Block F","message":"Sustained codling moth catch on Block F: 3 moths today after 2 yesterday. Degree-day clock starts now."}]},{"date":"2026-05-21","tmin_f":48.0,"tmax_f":72.0,"dd_today":11.0,"counts":{"block-a":10,"block-b":9,"block-c":21,"block-d":13,"block-e":8,"block-f":1},"traps":{"block-a-01":3,"block-a-02":3,"block-a-03":4,"block-b-01":4,"block-b-02":3,"block-b-03":2,"block-c-01":7,"block-c-02":7,"block-c-03":7,"block-d-01":4,"block-d-02":3,"block-d-03":6,"block-e-01":4,"block-e-02":1,"block-e-03":3,"block-f-01":0,"block-f-02":1,"block-f-03":0},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":100.0},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":80.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":114.5},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":43.5},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":52.5},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":21.0}},"events":[]},{"date":"2026-05-22","tmin_f":45.0,"tmax_f":68.0,"dd_today":9.0,"counts":{"block-a":14,"block-b":2,"block-c":21,"block-d":13,"block-e":12,"block-f":5},"traps":{"block-a-01":6,"block-a-02":3,"block-a-03":5,"block-b-01":0,"block-b-02":1,"block-b-03":1,"block-c-01":7,"block-c-02":4,"block-c-03":10,"block-d-01":5,"block-d-02":3,"block-d-03":5,"block-e-01":2,"block-e-02":2,"block-e-03":8,"block-f-01":2,"block-f-02":2,"block-f-03":1},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":109.0},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":89.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":123.5},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":52.5},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":61.5},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":30.0}},"events":[]},{"date":"2026-05-23","tmin_f":46.0,"tmax_f":66.0,"dd_today":8.0,"counts":{"block-a":22,"block-b":9,"block-c":26,"block-d":6,"block-e":7,"block-f":5},"traps":{"block-a-01":7,"block-a-02":4,"block-a-03":11,"block-b-01":2,"block-b-02":4,"block-b-03":3,"block-c-01":4,"block-c-02":10,"block-c-03":12,"block-d-01":1,"block-d-02":2,"block-d-03":3,"block-e-01":0,"block-e-02":3,"block-e-03":4,"block-f-01":1,"block-f-02":2,"block-f-03":2},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":117.0},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":97.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":131.5},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":60.5},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":69.5},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":38.0}},"events":[]},{"date":"2026-05-24","tmin_f":49.0,"tmax_f":69.0,"dd_today":9.5,"counts":{"block-a":16,"block-b":14,"block-c":31,"block-d":9,"block-e":10,"block-f":11},"traps":{"block-a-01":3,"block-a-02":5,"block-a-03":8,"block-b-01":4,"block-b-02":5,"block-b-03":5,"block-c-01":8,"block-c-02":15,"block-c-03":8,"block-d-01":3,"block-d-02":1,"block-d-03":5,"block-e-01":0,"block-e-02":4,"block-e-03":6,"block-f-01":4,"block-f-02":6,"block-f-03":1},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":126.5},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":106.5},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":141.0},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":70.0},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":79.0},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":47.5}},"events":[]},{"date":"2026-05-25","tmin_f":44.0,"tmax_f":67.0,"dd_today":8.5,"counts":{"block-a":12,"block-b":12,"block-c":20,"block-d":14,"block-e":13,"block-f":9},"traps":{"block-a-01":0,"block-a-02":1,"block-a-03":11,"block-b-01":6,"block-b-02":2,"block-b-03":4,"block-c-01":3,"block-c-02":8,"block-c-03":9,"block-d-01":2,"block-d-02":7,"block-d-03":5,"block-e-01":4,"block-e-02":2,"block-e-03":7,"block-f-01":2,"block-f-02":5,"block-f-03":2},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":135.0},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":115.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":149.5},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":78.5},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":87.5},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":56.0}},"events":[]},{"date":"2026-05-26","tmin_f":45.0,"tmax_f":66.0,"dd_today":8.0,"counts":{"block-a":18,"block-b":16,"block-c":32,"block-d":17,"block-e":17,"block-f":9},"traps":{"block-a-01":4,"block-a-02":6,"block-a-03":8,"block-b-01":7,"block-b-02":4,"block-b-03":5,"block-c-01":8,"block-c-02":8,"block-c-03":16,"block-d-01":6,"block-d-02":5,"block-d-03":6,"block-e-01":3,"block-e-02":5,"block-e-03":9,"block-f-01":2,"block-f-02":3,"block-f-03":4},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":143.0},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":123.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":157.5},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":86.5},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":95.5},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":64.0}},"events":[]},{"date":"2026-05-27","tmin_f":43.0,"tmax_f":65.0,"dd_today":7.5,"counts":{"block-a":22,"block-b":15,"block-c":43,"block-d":20,"block-e":19,"block-f":17},"traps":{"block-a-01":7,"block-a-02":6,"block-a-03":9,"block-b-01":5,"block-b-02":6,"block-b-03":4,"block-c-01":15,"block-c-02":10,"block-c-03":18,"block-d-01":5,"block-d-02":6,"block-d-03":9,"block-e-01":8,"block-e-02":3,"block-e-03":8,"block-f-01":6,"block-f-02":6,"block-f-03":5},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":150.5},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":130.5},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":165.0},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":94.0},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":103.0},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":71.5}},"events":[]},{"date":"2026-05-28","tmin_f":43.0,"tmax_f":64.0,"dd_today":7.0,"counts":{"block-a":28,"block-b":23,"block-c":22,"block-d":22,"block-e":11,"block-f":7},"traps":{"block-a-01":6,"block-a-02":11,"block-a-03":11,"block-b-01":7,"block-b-02":8,"block-b-03":8,"block-c-01":6,"block-c-02":7,"block-c-03":9,"block-d-01":4,"block-d-02":6,"block-d-03":12,"block-e-01":3,"block-e-02":3,"block-e-03":5,"block-f-01":0,"block-f-02":3,"block-f-03":4},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":157.5},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":137.5},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":172.0},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":101.0},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":110.0},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":78.5}},"events":[]},{"date":"2026-05-29","tmin_f":52.0,"tmax_f":66.0,"dd_today":9.0,"counts":{"block-a":23,"block-b":17,"block-c":34,"block-d":16,"block-e":18,"block-f":13},"traps":{"block-a-01":8,"block-a-02":8,"block-a-03":7,"block-b-01":5,"block-b-02":5,"block-b-03":7,"block-c-01":8,"block-c-02":8,"block-c-03":18,"block-d-01":3,"block-d-02":4,"block-d-03":9,"block-e-01":7,"block-e-02":5,"block-e-03":6,"block-f-01":4,"block-f-02":5,"block-f-03":4},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":166.5},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":146.5},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":181.0},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":110.0},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":119.0},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":87.5}},"events":[]},{"date":"2026-05-30","tmin_f":52.0,"tmax_f":70.0,"dd_today":11.0,"counts":{"block-a":19,"block-b":20,"block-c":32,"block-d":22,"block-e":18,"block-f":15},"traps":{"block-a-01":3,"block-a-02":5,"block-a-03":11,"block-b-01":11,"block-b-02":3,"block-b-03":6,"block-c-01":10,"block-c-02":10,"block-c-03":12,"block-d-01":6,"block-d-02":8,"block-d-03":8,"block-e-01":5,"block-e-02":6,"block-e-03":7,"block-f-01":4,"block-f-02":10,"block-f-03":1},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":177.5},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":157.5},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":192.0},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":121.0},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":130.0},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":98.5}},"events":[]},{"date":"2026-05-31","tmin_f":50.0,"tmax_f":74.0,"dd_today":12.0,"counts":{"block-a":27,"block-b":17,"block-c":25,"block-d":24,"block-e":16,"block-f":14},"traps":{"block-a-01":3,"block-a-02":12,"block-a-03":12,"block-b-01":3,"block-b-02":3,"block-b-03":11,"block-c-01":5,"block-c-02":10,"block-c-03":10,"block-d-01":6,"block-d-02":5,"block-d-03":13,"block-e-01":7,"block-e-02":5,"block-e-03":4,"block-f-01":5,"block-f-02":5,"block-f-03":4},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":189.5},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":169.5},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":204.0},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":133.0},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":142.0},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":110.5}},"events":[]},{"date":"2026-06-01","tmin_f":52.0,"tmax_f":72.0,"dd_today":12.0,"counts":{"block-a":13,"block-b":21,"block-c":37,"block-d":17,"block-e":20,"block-f":16},"traps":{"block-a-01":5,"block-a-02":3,"block-a-03":5,"block-b-01":5,"block-b-02":7,"block-b-03":9,"block-c-01":9,"block-c-02":14,"block-c-03":14,"block-d-01":6,"block-d-02":2,"block-d-03":9,"block-e-01":4,"block-e-02":8,"block-e-03":8,"block-f-01":7,"block-f-02":3,"block-f-03":6},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":201.5},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":181.5},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":216.0},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":145.0},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":154.0},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":122.5}},"events":[]},{"date":"2026-06-02","tmin_f":53.0,"tmax_f":78.0,"dd_today":15.5,"counts":{"block-a":18,"block-b":21,"block-c":21,"block-d":28,"block-e":24,"block-f":12},"traps":{"block-a-01":4,"block-a-02":7,"block-a-03":7,"block-b-01":4,"block-b-02":11,"block-b-03":6,"block-c-01":3,"block-c-02":8,"block-c-03":10,"block-d-01":11,"block-d-02":7,"block-d-03":10,"block-e-01":8,"block-e-02":9,"block-e-03":7,"block-f-01":6,"block-f-02":4,"block-f-03":2},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":217.0},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":197.0},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":231.5},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":160.5},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":169.5},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":138.0}},"events":[]},{"date":"2026-06-03","tmin_f":51.0,"tmax_f":74.0,"dd_today":12.5,"counts":{"block-a":16,"block-b":18,"block-c":26,"block-d":20,"block-e":14,"block-f":16},"traps":{"block-a-01":6,"block-a-02":5,"block-a-03":5,"block-b-01":7,"block-b-02":5,"block-b-03":6,"block-c-01":8,"block-c-02":10,"block-c-03":8,"block-d-01":3,"block-d-02":10,"block-d-03":7,"block-e-01":4,"block-e-02":4,"block-e-03":6,"block-f-01":5,"block-f-02":5,"block-f-03":6},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":229.5},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":209.5},"block-c":{"status":"accumulating","biofix_date":"2026-05-08","dd_since_biofix":244.0},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":173.0},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":182.0},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":150.5}},"events":[]},{"date":"2026-06-04","tmin_f":55.0,"tmax_f":79.0,"dd_today":17.0,"counts":{"block-a":25,"block-b":22,"block-c":26,"block-d":26,"block-e":19,"block-f":14},"traps":{"block-a-01":7,"block-a-02":9,"block-a-03":9,"block-b-01":4,"block-b-02":6,"block-b-03":12,"block-c-01":10,"block-c-02":10,"block-c-03":6,"block-d-01":5,"block-d-02":9,"block-d-03":12,"block-e-01":2,"block-e-02":6,"block-e-03":11,"block-f-01":4,"block-f-02":4,"block-f-03":6},"blocks":{"block-a":{"status":"accumulating","biofix_date":"2026-05-10","dd_since_biofix":246.5},"block-b":{"status":"accumulating","biofix_date":"2026-05-13","dd_since_biofix":226.5},"block-c":{"status":"spray_window","biofix_date":"2026-05-08","dd_since_biofix":261.0},"block-d":{"status":"accumulating","biofix_date":"2026-05-17","dd_since_biofix":190.0},"block-e":{"status":"accumulating","biofix_date":"2026-05-16","dd_since_biofix":199.0},"block-f":{"status":"accumulating","biofix_date":"2026-05-19","dd_since_biofix":167.5}},"events":[{"block_id":"block-c","type":"spray_window_open","title":"Spray window open on Block C","message":"Block C has reached 261 degree-days since biofix with 26 moths in traps today. Time to spray for codling moth."}]}],"species":{"block-a":{"codling_moth":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,3,0,1,4,3,5,7,5,6,6,10,14,22,16,12,18,22,28,23,19,27,13,18,16,25],"oriental_fruit_moth":[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,2,1,2,3,3,5,1,2,3,5,4,8],"spotted_lanternfly":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"block-b":{"codling_moth":[1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,2,2,2,4,6,3,5,6,9,2,9,14,12,16,15,23,17,20,17,21,21,18,22],"oriental_fruit_moth":[0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,4,3,0,2,1,3,3,4,5,3,8],"spotted_lanternfly":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"block-c":{"codling_moth":[0,0,0,0,1,0,0,0,0,0,0,0,0,6,0,0,0,0,1,0,0,1,0,2,2,6,4,5,4,6,9,12,11,13,22,24,21,21,26,31,20,32,43,22,34,32,25,37,21,26,26],"oriental_fruit_moth":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3,1,1,6,5,5,7,10,11,8,13,6,8,15],"spotted_lanternfly":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"block-d":{"codling_moth":[0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,1,3,1,0,0,3,7,4,7,13,13,6,9,14,17,20,22,16,22,24,17,28,20,26],"oriental_fruit_moth":[0,0,1,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,3,1,1,3,2,2,2,4,3,5,3],"spotted_lanternfly":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"block-e":{"codling_moth":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,2,1,2,1,8,5,8,5,5,8,12,7,10,13,17,19,11,18,18,16,20,24,14,19],"oriental_fruit_moth":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,2,1,3,3,0,1,1,4,2,3,3],"spotted_lanternfly":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"block-f":{"codling_moth":[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,2,1,2,3,1,5,5,11,9,9,17,7,13,15,14,16,12,16,14],"oriental_fruit_moth":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,1,0,2,1,2,0,2,1,2,2,1],"spotted_lanternfly":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}};
+const DAY=DATA.days.at(-1), BLOCKS=DATA.blocks, DAYS=DATA.days;
+const total=Object.values(DAY.counts).reduce((a,b)=>a+b,0);
+const weekly=id=>DAYS.slice(-7).reduce((a,d)=>a+d.counts[id],0);
+const allweek=BLOCKS.reduce((a,b)=>a+weekly(b.id),0);
+const prevweek=BLOCKS.reduce((a,b)=>a+DAYS.slice(-14,-7).reduce((s,d)=>s+d.counts[b.id],0),0);
+const delta=((allweek/prevweek-1)*100).toFixed(1);
+const tone = (bg,surface,surface2,ink,muted,line,primary,soft,warn,on='#062126')=>({bg,surface,surface2,ink,muted,line,primary,onPrimary:on,primarySoft:soft,onPrimarySoft:ink,inverse:ink,onInverse:bg,inversePrimary:primary,warn});
+const PROJECT={slug:'fieldops-future',title:'FieldOps, reimagined.',intro:'A cinematic analytics workspace for the final film. Start with the atmosphere, then choose how each tab tells the orchard’s story. Every number comes from the committed demo season, shown on June 4.',steps:['Choose a look, typeface and navigation. Those choices carry through every screen.','Click a screen to inspect it at full size. Mix options across rows.','Save your picks, then tell me in chat.'],findingsTitle:'What changes',findings:[{lead:'Give analytics a home.',text:'The current dashboard places species, trap and weather analytics below the replay. Dedicated tabs bring each into focus.'},{lead:'Design for the camera.',text:'The June 4 snapshot contains 132 codling moths, 18 traps and one open spray window. Those facts become the visual hierarchy.'},{lead:'Borrow the visual language.',text:'Read-only review of your MJH Skills styles informed the cinematic color layers; SIFT informed the structured navigation and evidence panels.'}],frame:{kind:'browser',w:1440,h:900,tile:360,nowTile:240},toggles:{mode:true,textSize:true,defaultMode:'dark',defaultTs:1},swatch:['bg','primary','warn'],looks:{
+ion:{name:'Ion atlas',radius:{rl:12,rm:8,rbtn:7,rchip:5},dark:tone('#080f1b','#101b2b','#1a293c','#edf6ff','#9daec3','#263649','#70d8ed','#153645','#ffce86'),light:tone('#edf3f9','#ffffff','#e2eaf3','#10243b','#526780','#cbd8e6','#08657b','#d9eff4','#885000','#ffffff')},
+vice:{name:'Dusk observatory',radius:{rl:14,rm:9,rbtn:8,rchip:5},dark:tone('#100e1d','#1c182e','#29233e','#faf4ff','#b9aecb','#39304c','#c5abff','#362955','#ffd398','#251744'),light:tone('#f4eff9','#fffaff','#eae1f3','#2d1b42','#6f5b83','#dacfe6','#6c42a6','#ebe0fa','#855200','#ffffff')},
+current:{name:'Current orchard',radius:{rl:16,rm:12,rbtn:999,rchip:999},dark:tone('#12251e','#1b3027','#263d31','#eaf3ed','#a5b9ab','#3a5144','#9ed3b8','#254b3a','#ffd398'),light:tone('#f4f6f1','#ffffff','#e8ece3','#1f3229','#5a6b61','#d9dfd5','#126d58','#d8ede5','#885000','#ffffff')}
+},types:{space:{name:'Space + Manrope',fd:'Space',fb:'Manrope',dw:650,dls:'-1px'},plex:{name:'Plex precision',fd:'Plex',fb:'Plex',dw:600,dls:'-.8px'}},decisions:[]};
+const names=['Overview','Pest analytics','Orchard blocks','Trap lab','Weather & timing','FieldOps intelligence'];
+const icons=['grid','bars','home','search','clock','note'];
+function shell(ctx,active,body,{title=names[active],subtitle='Nashoba Ridge Orchard / Bolton, Massachusetts',action='Export view'}={}){return K.web(`<div class="fx-app ${ctx.nav==='top'?'fx-horizontal':''}"><aside class="fx-nav"><div class="fx-brand"><i class="fx-logo"></i>FieldOps</div><div class="fx-navlinks">${names.map((n,i)=>`<div class="fx-link ${i===active?'fx-active':''}">${ic(icons[i],18)}<span>${n}</span></div>`).join('')}</div><div class="fx-navfoot"><span class="fx-dot"></span>Local intelligence<br><br>Nashoba Ridge<br>2026 season<br><br>Demo dataset</div></aside><div class="fx-work"><div class="fx-top"><b>Orchard workspace</b><span class="fx-muted">/ 2026 season</span><span class="fx-spacer"></span><span class="fx-pill">${ic('cal',13)} Jun 4, 2026</span><span class="fx-pill">18 traps</span><span class="fx-letter">HN</span></div><div class="fx-content"><div class="fx-title"><div><h1>${title}</h1><p>${subtitle}</p></div><div class="fx-button fx-quiet">${ic('download',15)}${action}</div></div>${body}<div class="fx-footer"><span>FieldOps / Orchard intelligence</span><span>Demo season • Snapshot June 4, 2026</span></div></div></div></div>`)}
+function kpis(){return `<div class="fx-kpis">${[['Codling moths today',total,'Across all 18 traps'],['7-day catch',allweek,`${+delta>=0?'+':''}${delta}% vs previous 7 days`],['Open spray windows','01','Block C / Gala'],['Thermal accumulation','17.0','Degree-days today']].map(([t,n,f])=>`<div class="fx-kpi"><div class="fx-label">${t}</div><div class="fx-number">${n}</div><div class="fx-small">${f}</div></div>`).join('')}</div>`}
+function map(iso=false){let contours=Array.from({length:13},(_,i)=>`<ellipse class="fx-contour" cx="390" cy="220" rx="${240+i*24}" ry="${95+i*16}" transform="rotate(-16 390 220)"/>`).join('');let polys=BLOCKS.map((b,i)=>{let x=70+(i%3)*214,y=76+Math.floor(i/3)*143,open=i===2;let c=open?'var(--warn)':'var(--primary)';let rows=Array.from({length:8},(_,j)=>`<path d="M${x+20+j*20} ${y+15}l-9 105" stroke="${c}" opacity=".18" stroke-width="3" stroke-dasharray="2 6"/>`).join('');return `<g><path d="M${x+8} ${y}L${x+197} ${y-7}L${x+187} ${y+125}L${x} ${y+117}Z" fill="${c}" fill-opacity="${open?'.14':'.055'}" stroke="${c}" stroke-opacity="${open?'1':'.4'}" stroke-width="${open?2:1}"/>${rows}<rect x="${x+16}" y="${y+16}" width="168" height="49" rx="5" fill="var(--surface)" fill-opacity=".94"/><text class="fx-mapletter" x="${x+27}" y="${y+49}" fill="${c}">${b.name.slice(-1)}</text><text x="${x+62}" y="${y+36}" fill="var(--ink)">${b.variety}</text><text x="${x+62}" y="${y+55}" fill="${c}">${open?'Window open':'Accumulating'}</text>${[0,1,2].map((n)=>`<circle cx="${x+37+n*60}" cy="${y+91}" r="4" fill="${c}"/><circle cx="${x+37+n*60}" cy="${y+91}" r="9" fill="none" stroke="${c}" stroke-opacity=".22"/>`).join('')}</g>`}).join('');return `<div class="fx-map"><svg viewBox="0 0 780 390" role="img" aria-label="Schematic orchard, six blocks, Block C spray window open">${contours}<path d="M30 52L729 42 731 358 29 357Z" fill="none" stroke="var(--line)" stroke-dasharray="4 5"/><g ${iso?'transform="translate(115 -5) rotate(8 350 195) skewX(-14) scale(.85 1)"':''}>${polys}</g><text x="728" y="28" fill="var(--muted)">N ↑</text></svg><div class="fx-maplabel"><span>Schematic orchard • ${BLOCKS.reduce((s,b)=>s+b.acres,0).toFixed(1)} acres</span><span>◎ 18 trap locations</span></div></div>`}
+function plot(kind='catch',small=false){const W=740,H=220,L=38,R=715,T=15,B=187;let vals=DAYS.map(d=>kind==='weather'?(d.tmin_f+d.tmax_f)/2:kind==='dd'?d.blocks['block-c'].dd_since_biofix:d.counts['block-c']);let other=DAYS.map(d=>kind==='weather'?d.tmax_f:kind==='dd'?d.blocks['block-a'].dd_since_biofix:Object.values(d.counts).reduce((a,b)=>a+b,0)/6);let max=kind==='dd'?350:kind==='weather'?90:50;let pt=(a)=>a.map((v,i)=>`${L+(R-L)*i/(a.length-1)},${B-(B-T)*v/max}`).join(' ');let line=(a)=>'M'+pt(a).replaceAll(' ',' L');return `<svg class="fx-plot" viewBox="0 0 ${W} ${H}" aria-label="${kind} chart from April 15 to June 4">${[0,.5,1].map(f=>`<line x1="${L}" x2="${R}" y1="${B-(B-T)*f}" y2="${B-(B-T)*f}" stroke="var(--line)"/><text x="${L-9}" y="${B-(B-T)*f+4}" text-anchor="end">${Math.round(max*f)}</text>`).join('')}${kind==='dd'?`<rect x="${L}" y="${T}" width="${R-L}" height="${(B-T)*100/350}" fill="var(--warn)" opacity=".07"/><text x="${L+10}" y="${T+20}" style="fill:var(--warn)">Spray window 250–350 DD</text>`:''}<path d="${line(vals)} L${R},${B} L${L},${B} Z" fill="var(--primary)" opacity=".07"/><polyline points="${pt(other)}" fill="none" stroke="var(--warn)" stroke-width="2" stroke-dasharray="5 5"/><polyline points="${pt(vals)}" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linejoin="round"/><circle cx="${R}" cy="${B-(B-T)*vals.at(-1)/max}" r="4" fill="var(--primary)"/>${[['Apr 15','2026-04-15'],['May 1','2026-05-01'],['May 15','2026-05-15'],['Jun 4','2026-06-04']].map(([t,date],i)=>`<text x="${L+DAYS.findIndex(d=>d.date===date)*(R-L)/(DAYS.length-1)}" y="215" text-anchor="${i===3?'end':'start'}">${t}</text>`).join('')}</svg>`}
+function chartCard(kind='catch'){return `<div class="fx-card"><div class="fx-cardhead"><h2>${kind==='dd'?'The biological clock':kind==='weather'?'Temperature profile':'Flight activity'}</h2><span class="fx-small">Apr 15 – Jun 4</span></div><div class="fx-chartkey"><span><i class="fx-linekey"></i>${kind==='weather'?'Daily mean':'Block C'}</span><span><i class="fx-linekey fx-dashed"></i>${kind==='weather'?'Daily high':kind==='dd'?'Block A':'Farm mean / block'}</span></div><div class="fx-pad">${plot(kind)}</div></div>`}
+function alertCard(){return `<div class="fx-card fx-alert fx-pad"><div class="fx-between"><span class="fx-tag">Spray window open</span>${ic('bell',18)}</div><h2>Block C is ready<br>for intervention.</h2><p>Gala / 3.4 acres</p><div class="fx-number fx-warn">261<small> DD</small></div><div class="fx-progress fx-amber"><i style="width:74.6%"></i></div><div class="fx-between fx-small"><span>Biofix May 8</span><span>350 DD closes</span></div><div class="fx-rule"></div><div class="fx-between"><span class="fx-small">Threshold crossed today</span>${ic('chev',20)}</div></div>`}
+function ranks(){return `<div class="fx-card"><div class="fx-cardhead"><h2>Next in focus</h2><span class="fx-small">Degree-days</span></div><div class="fx-rows">${[0,1,4].map(i=>{let b=BLOCKS[i];return `<div class="fx-row"><span class="fx-letter">${b.name.slice(-1)}</span><div><b>${b.name}</b><div class="fx-small">${b.variety}</div></div><span class="fx-spacer"></span><b>${DAY.blocks[b.id].dd_since_biofix}</b></div>`}).join('')}</div></div>`}
+function overview(ctx,alt=false){let upper=alt?`<div class="fx-grid">${chartCard()}${alertCard()}</div><div class="fx-grid fx-bottom"><div class="fx-card"><div class="fx-cardhead"><h2>Orchard atlas</h2><span class="fx-small">Block C selected</span></div>${map(true)}</div>${ranks()}</div>`:`<div class="fx-grid"><div class="fx-card"><div class="fx-cardhead"><h2>Orchard atlas</h2><span class="fx-tag">1 window open</span></div>${map()}</div>${alertCard()}</div><div class="fx-grid fx-bottom">${chartCard()}${ranks()}</div>`;return shell(ctx,0,kpis()+upper,{title:alt?'The season, in focus.':'Your orchard. In perspective.',subtitle:'Thursday, June 4 / One block has entered its spray window.'})}
+function heatmap(){return `<div class="fx-card"><div class="fx-cardhead"><h2>Catch intensity by week</h2><span class="fx-small">Codling moth</span></div><div class="fx-matrix"><span></span>${Array.from({length:8},(_,i)=>`<span class="fx-small">${i+1}</span>`).join('')}${BLOCKS.map(b=>`<b>${b.name.slice(-1)}</b>${Array.from({length:8},(_,i)=>{let v=DAYS.slice(i*7,i*7+7).reduce((s,d)=>s+d.counts[b.id],0);return `<span class="fx-cell" style="--heat:${Math.max(4,v/230*90)}" title="${v} moths"></span>`}).join('')}`).join('')}</div><div class="fx-caption">Week 1 begins Apr 15. Week 8 includes data through Jun 4.</div></div>`}
+function speciesRows(){return `<div class="fx-card"><div class="fx-cardhead"><h2>Species by block</h2><span class="fx-small">Last 7 days</span></div><div class="fx-rows">${BLOCKS.map(b=>{let c=weekly(b.id),o=DATA.species[b.id].oriental_fruit_moth.slice(-7).reduce((a,b)=>a+b,0);return `<div class="fx-row"><b style="width:66px">${b.name}</b><div style="flex:1"><div class="fx-progress" style="margin:5px 0"><i style="width:${c/220*100}%"></i></div><div class="fx-progress fx-amber" style="margin:5px 0"><i style="width:${o/220*100}%"></i></div></div><span class="fx-small" style="width:76px;text-align:right">${c} / ${o}</span></div>`}).join('')}</div><div class="fx-caption">Upper bar: codling moth / lower bar: oriental fruit moth<br>Spotted lanternfly: none in this demo season.</div></div>`}
+function pests(ctx,alt){return shell(ctx,1,`<div class="fx-strip"><span class="fx-picked">Codling moth</span><span>Oriental fruit moth</span><span>Spotted lanternfly</span><span>All blocks</span></div>${kpis()}${alt?`<div class="fx-grid fx-equal">${heatmap()}${speciesRows()}</div><div class="fx-bottom">${chartCard()}</div>`:`${chartCard()}<div class="fx-grid fx-bottom">${heatmap()}${speciesRows()}</div>`}`,{title:alt?'Where pressure is building.':'Read the flight.'})}
+function blocks(ctx,alt){let grid=`<div class="fx-tilegrid">${BLOCKS.map(b=>`<div class="fx-card fx-pad ${b.id==='block-c'?'fx-alert':''}"><div class="fx-between"><span class="fx-letter">${b.name.slice(-1)}</span><span class="fx-small">${b.acres} acres</span></div><h2 style="margin-top:18px">${b.variety}</h2><div class="fx-number">${DAY.blocks[b.id].dd_since_biofix}<small> DD</small></div><span class="fx-tag">${b.id==='block-c'?'Window open':'Accumulating'}</span><div class="fx-progress"><i style="width:${DAY.blocks[b.id].dd_since_biofix/350*100}%"></i></div><div class="fx-small">${DAY.counts[b.id]} moths today / ${weekly(b.id)} this week</div></div>`).join('')}</div>`;return shell(ctx,2,alt?grid:`<div class="fx-grid"><div class="fx-card"><div class="fx-cardhead"><h2>Farm boundary & blocks</h2><span class="fx-small">Selected: C</span></div>${map(true)}<div class="fx-caption">Schematic map. Select a block for its pest history and timing.</div></div>${alertCard()}</div><div class="fx-bottom">${grid}</div>`,{title:alt?'Six blocks. One clear picture.':'Every block has a story.'})}
+function trapTable(){return `<div class="fx-card"><table class="fx-table"><thead><tr><th>Trap</th><th>Block</th><th>Today</th><th>7-day catch</th><th>Season context</th></tr></thead><tbody>${Object.entries(DAY.traps).sort((a,b)=>b[1]-a[1]).map(([id,v])=>{let n=DAYS.slice(-7).reduce((s,d)=>s+d.traps[id],0);return `<tr class="${id.includes('block-c')?'fx-selected':''}"><td>${id}</td><td>${id.slice(6,7).toUpperCase()}</td><td><b>${v}</b></td><td>${n}</td><td><div class="fx-progress" style="width:100px;margin:0"><i style="width:${n/90*100}%"></i></div></td></tr>`}).join('')}</tbody></table></div>`}
+function traps(ctx,alt){return shell(ctx,3,`<div class="fx-strip"><span class="fx-picked">All 18 traps</span><span>Block C</span><span>Codling moth</span><span>Highest catch first</span></div>${alt?trapTable():`<div class="fx-grid"><div class="fx-card"><img class="fx-image fx-imagewide" src="${IMG.trap}" alt="Synthetic sticky trap sample containing 12 codling moths"><div class="fx-caption">Synthetic reference image / trap_03_codling012.jpg<br>Sample image is separate from the June 4 daily counts.</div></div><div class="fx-card fx-pad"><span class="fx-tag">Reference capture</span><h2 style="margin-top:18px">Inspect the evidence.</h2><div class="fx-number">12<small> codling moths</small></div><p>Manifest ground truth for this synthetic trap card. It is a visual reference, not a fresh model result.</p><div class="fx-rule"></div><div class="fx-small">June 4 • Orchard snapshot</div><div class="fx-row"><span>Traps reporting</span><span class="fx-spacer"></span><b>18 / 18</b></div><div class="fx-row"><span>Codling catch</span><span class="fx-spacer"></span><b>132</b></div><div class="fx-row"><span>Block C catch</span><span class="fx-spacer"></span><b>26</b></div></div></div><div class="fx-bottom">${trapTable()}</div>`}`,{title:alt?'Every reading, accounted for.':'From image to intelligence.'})}
+function ddRanks(){return `<div class="fx-card"><div class="fx-cardhead"><h2>Progress toward the spray window</h2><span class="fx-small">Opens at 250 DD</span></div><div class="fx-ddlist">${BLOCKS.slice().sort((a,b)=>DAY.blocks[b.id].dd_since_biofix-DAY.blocks[a.id].dd_since_biofix).map(b=>`<div class="fx-ddrow"><b>${b.name}</b><div class="fx-progress ${b.id==='block-c'?'fx-amber':''}"><i style="width:${DAY.blocks[b.id].dd_since_biofix/350*100}%"></i></div><b>${DAY.blocks[b.id].dd_since_biofix}</b></div>`).join('')}</div><div class="fx-caption">Degree-days since each block’s biofix. Base 50°F, upper threshold 88°F.</div></div>`}
+function weather(ctx,alt){return shell(ctx,4,`${kpis()}${alt?`<div class="fx-grid">${ddRanks()}${alertCard()}</div><div class="fx-bottom">${chartCard('weather')}</div>`:`${chartCard('weather')}<div class="fx-grid fx-equal fx-bottom">${chartCard('dd')}${ddRanks()}</div>`}`,{title:alt?'The right moment to act.':'Weather becomes a decision.',subtitle:'Observed demo weather / 55°F low, 79°F high / June 4'})}
+function evidence(){return `<div class="fx-card fx-pad"><h2>The evidence chain</h2>${[['01','Sustained catch','Block C biofix was set on May 8.'],['02','Heat accumulation','261 degree-days have accumulated since biofix.'],['03','Window opens','The configured spray range is 250–350 DD.'],['04','Grower decision','Review the spray window and local treatment plan.']].map(([n,t,p])=>`<div class="fx-step"><b>${n}</b><div><strong>${t}</strong><p>${p}</p></div></div>`).join('')}<div class="fx-small">Deterministic season facts / snapshot June 4</div></div>`}
+function agent(ctx,alt){return shell(ctx,5,alt?`<div class="fx-grid"><div class="fx-card fx-pad"><div class="fx-orb"></div><div class="fx-brief">Good timing changes<br>everything.</div><p style="font-size:calc(17px * var(--ts));margin-top:20px">Block C has entered its spray window at 261 DD. Block A is next in line at 246.5 DD, only 3.5 DD below the opening threshold.</p><div class="fx-rule"></div><div class="fx-between"><span class="fx-small">Season briefing / June 4</span><span class="fx-button">Read supporting facts</span></div><div class="fx-question">Ask a follow-up ${ic('note',18)}</div></div>${evidence()}</div>`:`<div class="fx-grid"><div class="fx-card fx-pad"><span class="fx-tag">FieldOps intelligence</span><div class="fx-question">Why does Block C need attention? ${ic('user',18)}</div><div class="fx-chat"><div class="fx-brief">Its spray window<br>opened today.</div><p>Block C has reached <b class="fx-accent">261 degree-days</b> since its May 8 biofix. The configured window begins at 250 DD and closes at 350 DD.</p><p>Today’s traps recorded <b>26 codling moths</b>. Block A is closest to following, at 246.5 DD.</p><div class="fx-strip" style="margin-top:20px"><span>Block C</span><span>Degree-day model</span><span>Trap counts</span></div></div><div class="fx-question">Ask about your orchard… ${ic('chev',20)}</div><div class="fx-small" style="margin-top:12px">Preview answer from committed season facts</div></div>${evidence()}</div>`,{title:alt?'Your orchard, explained.':'Ask. Understand. Act.',subtitle:'A clear explanation, with the facts always within reach.'})}
+function cinema(ctx,alt){if(alt)return shell(ctx,0,`<div class="fx-grid"><div class="fx-card fx-pad"><span class="fx-small">Chapter 03 / The decision</span><div class="fx-brief" style="margin:20px 0">The window opens.<br>The grower knows.</div><p>June 4. Block C reaches 261 degree-days.</p><div class="fx-rule"></div><div class="fx-chartkey"><span><i class="fx-linekey"></i>Block C</span><span><i class="fx-linekey fx-dashed"></i>Block A</span></div>${plot('dd')}<div class="fx-chapters"><span>01 Detect</span><span>02 Understand</span><b>03 Act</b></div></div>${alertCard()}</div><div class="fx-bottom">${chartCard()}</div>`,{title:'The season story.',subtitle:'Presentation mode / chapter navigation',action:'Exit presentation'});return K.web(`<div class="fx-app"><div class="fx-cinema" style="width:100%"><div class="fx-between"><div class="fx-brand"><i class="fx-logo"></i>FieldOps</div><span class="fx-small">Nashoba Ridge / June 4, 2026</span></div><h1>The orchard speaks.<br><span class="fx-accent">Know when to act.</span></h1><div class="fx-grid"><div class="fx-card">${map(true)}</div>${alertCard()}</div><div class="fx-chapters"><b>03 / The decision</b><span>Block C</span><span>261 degree-days</span><span>Spray window open</span><span class="fx-spacer"></span><span>Next chapter ${ic('chev',16)}</span></div><div class="fx-small" style="margin-top:20px">Demo season / Schematic orchard</div></div></div>`)}
+const option=(id,name,desc,r,value)=>({id,name,desc,r,...(value?{value}:{})});
+const dec=(id,group,name,ask,why,opts,now='current',rec='A')=>({id,group,name,ask,why:[why],opts,rec,now,nowCap:'Current dashboard / June 4'});
+PROJECT.decisions=[
+{...dec('look','Foundation','Atmosphere','Which world should FieldOps live in?','The current pale orchard view lacks the cinematic depth requested for the video.',[option('A','Ion atlas','Deep blue instrument panels, crisp cyan data and a warm treatment signal.',c=>overview(c,false),'ion'),option('B','Dusk observatory','Violet layers and luminous lavender, with the flight curve leading the composition.',c=>overview(c,true),'vice')]),drives:'look',nowValue:'current'},
+{...dec('type','Foundation','Typography','Expressive or precise?','Numbers and narrative need distinct hierarchy at recording size.',[option('A','Space + Manrope','Geometric display type for headlines and readings; restrained Manrope for detail.',c=>overview(c,false),'space'),option('B','Plex precision','A single technical family makes the workspace feel like a scientific instrument.',c=>overview(c,false),'plex')]),drives:'type',nowValue:'plex'},
+{...dec('navigation','Foundation','Navigation','A persistent rail or a wide workspace?','The existing single page has no tabs and leaves detailed analytics below the replay.',[option('A','Workspace rail','Named tabs stay on the left, with the orchard context anchored below.',c=>overview(c,false),'rail'),option('B','Top workspace','A horizontal tab bar opens up the full width for charts and maps.',c=>overview(c,false),'top')]),drives:'nav',nowValue:'rail'},
+dec('overview','Analytics tabs','Overview','Lead with the orchard or its signals?','The current view makes the map prominent but compresses the decision and flight curve.',[option('A','Orchard atlas','A large block map sits beside the open spray window; trends continue below.',c=>overview(c,false)),option('B','Signal desk','The flight chart and decision lead; the map becomes supporting context.',c=>overview(c,true))]),
+dec('pests','Analytics tabs','Pest activity','A story over time or a comparison across blocks?','Species bars and the weekly heatmap are currently below the main dashboard.',[option('A','Flight observatory','A broad trend chart leads, with the weekly matrix and species comparison below.',c=>pests(c,false)),option('B','Pressure matrix','Catch intensity and species comparisons lead; the flight history supports them.',c=>pests(c,true))],'analytics'),
+dec('blocks','Analytics tabs','Orchard blocks','Explore a map or scan the whole farm?','Current block details are spread between the map, degree-day clock and analytics.',[option('A','Spatial inspector','A tilted schematic makes place tangible, with selected block details beside it.',c=>blocks(c,false)),option('B','Block portfolio','Six comparable block cards show thermal progress, variety and daily catch.',c=>blocks(c,true))]),
+dec('traps','Analytics tabs','Trap lab','Visual evidence or a precise reading ledger?','The trap table exists, but reviewing capture imagery needs a dedicated surface.',[option('A','Evidence lab','A reference trap capture and its ground truth sit above the daily reading ledger.',c=>traps(c,false)),option('B','Reading ledger','A full-width sortable-table direction puts every trap and weekly total first.',c=>traps(c,true))],'analytics'),
+dec('timing','Analytics tabs','Weather & timing','Explain the weather or prioritize the next window?','Weather and degree-day charts are separate panels below the fold today.',[option('A','Climate lens','Temperature history leads into thermal accumulation and block readiness.',c=>weather(c,false)),option('B','Window planner','Ranked degree-day progress and the open window lead; weather is supporting evidence.',c=>weather(c,true))],'analytics','B'),
+dec('intelligence','Analytics tabs','Intelligence','A conversation or a prepared briefing?','The current agent is a small transcript in a narrow side panel.',[option('A','Evidence dialogue','A full conversation canvas pairs every explanation with the underlying facts.',c=>agent(c,false)),option('B','Daily briefing','A calm intelligence sphere introduces a concise orchard brief and evidence chain.',c=>agent(c,true))],'current','B'),
+dec('film','Presentation','Video mode','An immersive chapter or a guided dashboard?','The final deliverable is a video, so each beat needs a clear visual focus.',[option('A','Cinematic chapters','Hide application chrome and stage the map, timing and decision as a film chapter.',c=>cinema(c,false)),option('B','Guided workspace','Keep the product navigation visible and progress through the season in chapters.',c=>cinema(c,true))])
+];
+
+</script>
+
+<script id="engine">
+"use strict";
+/* ================= engine: state, rendering, picking, saving ================= */
+const P = PROJECT, DEC = P.decisions, FR = Object.assign({ kind: "phone", w: 395, h: 880, tile: 268, nowTile: 206 }, P.frame || {});
+const TG = Object.assign({ mode: true, textSize: true, defaultMode: "dark", defaultTs: FR.kind === "phone" ? 1.15 : 1 }, P.toggles || {});
+const Q = new URLSearchParams(location.search), SHOT = Q.get("only"), ONE = Q.get("screen");
+const KEY = `${P.slug}-picks-v1`;
+const state = { mode: TG.defaultMode, ts: TG.defaultTs, picks: {}, source: {}, notes: {} };
+if (!SHOT && !ONE && !(P.walk && Q.has("walk"))) { try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s && s.picks) Object.assign(state, s); } catch (e) {} }
+if (Q.get("mode")) state.mode = Q.get("mode");
+if (Q.get("ts")) state.ts = Number(Q.get("ts"));
+if (Q.get("picks")) Q.get("picks").split(",").forEach(p => { const [d, o] = p.split(":"); if (d && o) state.picks[d] = o; });
+const persist = () => { if (SHOT || ONE || (P.walk && Q.has("walk"))) return; try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+const eff = d => state.picks[d.id] || P.picks?.[d.id] || d.rec;
+const optOf = (d, id) => d.opts.find(o => o.id === id);
+function baseCtx() {
+  const ctx = { mode: state.mode, ts: state.ts };
+  DEC.filter(d => d.drives).forEach(d => { const p = eff(d); ctx[d.drives] = p === "now" ? d.nowValue : (optOf(d, p) || d.opts[0]).value; });
+  return ctx;
+}
+function vars(ctx) {
+  const looks = P.looks || {}, types = P.types || {};
+  const L = looks[ctx.look] || Object.values(looks)[0], T = types[ctx.type] || Object.values(types)[0];
+  let s = `--ts:${ctx.ts};`;
+  if (T) s += `--fd:${T.fd},system-ui,sans-serif;--fb:${T.fb},system-ui,sans-serif;--dw:${T.dw};--dls:${T.dls};`;
+  if (L) { const r = L.radius || {}; s += `--rl:${r.rl ?? 16}px;--rm:${r.rm ?? 12}px;--rbtn:${r.rbtn ?? 12}px;--rchip:${r.rchip ?? 8}px;`; const t = L[ctx.mode] || L.light; for (const k in t) s += `--${k}:${t[k]};`; }
+  return s.replace(/"/g, "'");
+}
+function device(inner, scale, now) {
+  const w = FR.w * scale, h = FR.h * scale;
+  return `${FR.kind === "browser" ? `<div class="bchrome"><i></i><i></i><i></i><span></span></div>` : ""}<div class="vp" style="width:${w}px;height:${h}px">${inner}</div>`;
+}
+function screen(d, o, ctx, scale) {
+  const c = Object.assign({}, ctx, d.drives && o.value !== undefined ? { [d.drives]: o.value } : {}, o.ctx || {});
+  let html = "";
+  try { html = o.r(c); } catch (e) { html = `<div style="padding:20px;color:#c00;font:14px system-ui">Render error: ${K.esc(e.message)}</div>`; console.error(d.id, o.id, e); }
+  return device(`<div class="scr" style="width:${FR.w}px;height:${FR.h}px;transform:scale(${scale});${vars(c)}">${html}</div>`, scale);
+}
+/* nowCtx lets a screen row draw its Keep-as-is tile entirely in today's app (look, type, nav), like a screenshot would. */
+const nowOpt = d => ({ id: "now", name: "Keep as is", desc: d.nowCap || "Now", value: d.nowValue, r: d.nowRender, ctx: d.nowCtx });
+function buildPage() {
+  document.title = P.title;
+  document.getElementById("intro").innerHTML = `<h1>${P.title}</h1><p>${P.intro || ""}</p>
+    <ol class="steps">${(P.steps || []).map(s => `<li>${s}</li>`).join("")}</ol>
+    ${P.findings && P.findings.length ? `<div class="found"><h2>${P.findingsTitle || "What I found"}</h2><ul>${P.findings.map(f => `<li><b>${f.lead}</b> ${f.text}</li>`).join("")}</ul></div>` : ""}`;
+  if (!TG.mode) document.getElementById("modeCtl").remove();
+  if (!TG.textSize) document.getElementById("tsCtl").remove();
+  const list = SHOT ? DEC.filter(d => d.id === SHOT) : DEC;
+  document.getElementById("decisions").innerHTML = list.map(d => {
+    const i = DEC.indexOf(d);
+    const hasNow = d.now || d.nowRender;
+    const nowTile = hasNow ? `<div class="opt now" data-dec="${d.id}" data-opt="now" style="width:${FR.nowTile + (FR.kind === "phone" ? 14 : FR.kind === "tablet" ? 20 : 0)}px">
+      <div class="ohead"><span class="letter">Now</span><span class="oname">Keep as is</span></div>
+      <div class="dev ${FR.kind}" role="button" tabindex="0" data-zoom="${d.id}:now" aria-label="Zoom current ${K.esc(d.name)}">${d.now ? device(`<img class="nowimg" alt="Current ${K.esc(d.name)}" src="${IMG[d.now] || ""}">`, FR.nowTile / FR.w) : `<div data-slot data-dec="${d.id}" data-opt="now"></div>`}</div>
+      <p class="nowcap">${d.nowCap || "Now"}</p><button class="choose" data-pick="${d.id}:now">Keep current</button></div>` : "";
+    const tiles = d.opts.map(o => d.text ? `<div class="opt text" data-dec="${d.id}" data-opt="${o.id}">
+      <div class="ohead"><span class="letter">${o.id}</span><span class="oname">${o.name}</span>${d.rec === o.id ? `<span class="rec">Recommended</span>` : ""}</div>
+      <p class="odesc">${o.desc || ""}</p><div class="tcard"><dl>${(o.lines || []).map(([k, v]) => `<div><dt>${K.esc(k)}</dt><dd>${K.esc(v)}</dd></div>`).join("")}</dl></div>
+      <button class="choose" data-pick="${d.id}:${o.id}">Choose ${o.id}</button></div>`
+      : `<div class="opt" data-dec="${d.id}" data-opt="${o.id}" style="width:${FR.tile + (FR.kind === "phone" ? 14 : FR.kind === "tablet" ? 20 : 0)}px">
+      <div class="ohead"><span class="letter">${o.id}</span><span class="oname">${o.name}</span>${d.rec === o.id ? `<span class="rec">Recommended</span>` : ""}</div>
+      <div class="dev ${FR.kind}" role="button" tabindex="0" data-zoom="${d.id}:${o.id}" aria-label="Zoom option ${o.id}, ${K.esc(o.name)}"><div data-slot data-dec="${d.id}" data-opt="${o.id}"></div></div>
+      ${(d.play || []).includes(o.id) ? `<button class="play" data-play>Play the animation</button>` : ""}
+      <p class="odesc">${o.desc || ""}</p><button class="choose" data-pick="${d.id}:${o.id}">Choose ${o.id}</button></div>`).join("");
+    return `<section class="decision" id="d-${d.id}" aria-labelledby="h-${d.id}">
+      <div class="dhead"><h2 id="h-${d.id}">${d.name}</h2><span class="dgroup">${d.group ? d.group + ", " : ""}${i + 1} of ${DEC.length}</span></div>
+      ${d.ask ? `<p class="ask">${d.ask}</p>` : ""}${d.why && d.why.length ? `<ul class="why">${d.why.map(w => `<li>${w}</li>`).join("")}</ul>` : ""}
+      <div class="options" role="group" aria-label="${K.esc(d.name)}">${nowTile}${tiles}</div>
+      <div class="note"><label for="n-${d.id}">Anything to change about your pick? (optional)</label><textarea id="n-${d.id}" data-note="${d.id}" rows="1" placeholder="e.g. like B, but keep the old header"></textarea></div>
+    </section>`;
+  }).join("");
+  if (SHOT) document.body.classList.add("shot");
+}
+const lastKey = new Map();
+function renderSlots(force) {
+  const ctx = baseCtx();
+  document.querySelectorAll("[data-slot]").forEach(el => {
+    const d = DEC.find(x => x.id === el.dataset.dec); const o = el.dataset.opt === "now" ? nowOpt(d) : optOf(d, el.dataset.opt);
+    const key = JSON.stringify(ctx);
+    if (!force && lastKey.get(el) === key) return;
+    lastKey.set(el, key);
+    el.innerHTML = screen(d, o, ctx, (el.dataset.opt === "now" ? FR.nowTile : FR.tile) / FR.w);
+  });
+}
+function pickLabel(d) { const p = state.picks[d.id]; if (!p) return ""; return p === "now" ? "keep" : (optOf(d, p) || {}).name || p; }
+function syncChrome() {
+  document.documentElement.dataset.theme = state.mode;
+  document.querySelectorAll("#modeTog button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === state.mode)));
+  document.querySelectorAll("#tsTog button").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.v) === state.ts)));
+  document.querySelectorAll(".opt").forEach(el => {
+    const on = state.picks[el.dataset.dec] === el.dataset.opt; el.dataset.chosen = String(on);
+    const btn = el.querySelector(".choose"); btn.setAttribute("aria-pressed", String(on));
+    btn.innerHTML = on ? `${ic("check", 18, 2.6)} Chosen` : (el.dataset.opt === "now" ? "Keep current" : `Choose ${el.dataset.opt}`);
+  });
+  document.querySelectorAll("textarea[data-note]").forEach(t => { if (document.activeElement !== t) t.value = state.notes[t.dataset.note] || ""; });
+  const n = DEC.filter(d => state.picks[d.id]).length;
+  document.getElementById("progN").textContent = `${n} of ${DEC.length}`;
+  document.getElementById("progBar").style.width = `${n / DEC.length * 100}%`;
+  const groups = [...new Set(DEC.map(d => d.group || ""))];
+  document.getElementById("railList").innerHTML = groups.map(g => `${g ? `<h3>${g}</h3>` : ""}<ol>${DEC.filter(d => (d.group || "") === g).map(d => { const p = state.picks[d.id]; return `<li><a href="#d-${d.id}"><span class="st ${p ? "on" : ""} ${p && state.source[d.id] === "recommended" ? "rec" : ""}">${p ? (p === "now" ? "=" : p) : ""}</span>${d.name}<span class="pick">${pickLabel(d)}</span></a></li>`; }).join("")}</ol>`).join("");
+  const ctx = baseCtx(), L = P.looks && (P.looks[ctx.look] || Object.values(P.looks)[0]);
+  if (L) { const t = L[state.mode] || L.light; const T = P.types && (P.types[ctx.type] || Object.values(P.types)[0]);
+    document.getElementById("swatch").innerHTML = (P.swatch || ["bg", "primary"]).map(k => `<i style="background:${t[k]}"></i>`).join("") + `<span>${L.name}${T ? ", " + T.name : ""}</span>`; }
+  syncReview();
+}
+function syncReview() {
+  document.getElementById("reviewBody").innerHTML = DEC.map(d => { const p = state.picks[d.id]; return `<tr><td>${d.name}</td><td>${p ? `${p === "now" ? "Keep as is" : `${p}: ${pickLabel(d)}`}${state.source[d.id] === "recommended" ? " <span class='missing'>(recommended)</span>" : ""}` : `<span class="missing">Not chosen yet</span>`}</td><td>${K.esc(state.notes[d.id] || "")}</td></tr>`; }).join("");
+}
+function refresh(force) { syncChrome(); renderSlots(force); persist(); }
+function choose(d, o) { state.picks[d] = o; state.source[d] = "chosen"; refresh(); }
+document.addEventListener("click", e => {
+  const pick = e.target.closest("[data-pick]"); if (pick) { const [d, o] = pick.dataset.pick.split(":"); choose(d, o); return; }
+  const tog = e.target.closest("#modeTog button, #tsTog button");
+  if (tog) { if (tog.parentElement.id === "modeTog") state.mode = tog.dataset.v; else state.ts = Number(tog.dataset.v); refresh(); return; }
+  const play = e.target.closest("[data-play]"); if (play) { const s = play.closest(".opt").querySelector(".scr"); if (s) { s.classList.remove("anim"); void s.offsetWidth; s.classList.add("anim"); } return; }
+  const z = e.target.closest("[data-zoom]"); if (z) openLb(z.dataset.zoom);
+});
+document.addEventListener("input", e => { const t = e.target.closest("textarea[data-note]"); if (t) { state.notes[t.dataset.note] = t.value; persist(); syncReview(); } });
+document.getElementById("useRec").addEventListener("click", () => { DEC.forEach(d => { if (!state.picks[d.id] && d.rec) { state.picks[d.id] = d.rec; state.source[d.id] = "recommended"; } }); refresh(); setStatus('Filled the rest with my recommendations. They\'re marked "recommended" in your picks.'); });
+let lbKey = null, lastFocus = null; const lb = document.getElementById("lb");
+/* The zoom view flips through the row's options in place, so they can be compared at full size. */
+const lbOrder = d => [...(d.now || d.nowRender ? ["now"] : []), ...d.opts.map(o => o.id)];
+function openLb(key) {
+  const [did, oid] = key.split(":"); const d = DEC.find(x => x.id === did); lbKey = key;
+  const wasOpen = lb.classList.contains("open"); if (!wasOpen) lastFocus = document.activeElement;
+  const chromeH = FR.kind === "browser" ? 30 : FR.kind === "phone" ? 14 : FR.kind === "tablet" ? 20 : 0;
+  const s = Math.max(0.3, Math.min(1.05, (innerHeight - 70 - chromeH) / FR.h, (innerWidth - (innerWidth > 1100 ? 420 : 40)) / FR.w));
+  const o = oid === "now" ? nowOpt(d) : optOf(d, oid), order = lbOrder(d);
+  document.getElementById("lbDev").innerHTML = `<div class="dev ${FR.kind}">${oid === "now" && d.now ? device(`<img class="nowimg" alt="" src="${IMG[d.now] || ""}">`, s) : screen(d, o, baseCtx(), s)}</div>`;
+  document.getElementById("lbTitle").textContent = oid === "now" ? `${d.name}: keep as is` : `${d.name}: ${oid}, ${o.name}`;
+  document.getElementById("lbDesc").textContent = o.desc || "";
+  document.getElementById("lbChoose").textContent = state.picks[did] === oid ? "Chosen" : (oid === "now" ? "Keep current" : `Choose ${oid}`);
+  document.getElementById("lbPos").textContent = `${order.indexOf(oid) + 1} of ${order.length}. The arrow keys flip between them.`;
+  document.querySelector(".lb .lbnav").style.display = order.length > 1 ? "" : "none";
+  lb.classList.add("open"); if (!wasOpen) document.getElementById("lbClose").focus();
+}
+function stepLb(dir) {
+  if (!lbKey) return; const [did, oid] = lbKey.split(":"), d = DEC.find(x => x.id === did), order = lbOrder(d);
+  openLb(`${did}:${order[(order.indexOf(oid) + dir + order.length) % order.length]}`);
+}
+function closeLb() { lb.classList.remove("open"); lbKey = null; if (lastFocus) lastFocus.focus(); }
+document.getElementById("lbClose").addEventListener("click", closeLb);
+document.getElementById("lbPrev").addEventListener("click", () => stepLb(-1));
+document.getElementById("lbNext").addEventListener("click", () => stepLb(1));
+lb.addEventListener("click", e => { if (e.target === lb) closeLb(); });
+document.getElementById("lbChoose").addEventListener("click", () => { if (!lbKey) return; const [d, o] = lbKey.split(":"); choose(d, o); closeLb(); });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && lb.classList.contains("open")) { closeLb(); return; }
+  if ((e.key === "ArrowLeft" || e.key === "ArrowRight") && lb.classList.contains("open")) { e.preventDefault(); stepLb(e.key === "ArrowLeft" ? -1 : 1); return; }
+  const z = e.target.closest && e.target.closest("[data-zoom]"); if (z && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openLb(z.dataset.zoom); }
+});
+function payload() {
+  const picks = {}; DEC.forEach(d => { const p = state.picks[d.id]; if (p) picks[d.id] = { option: p, name: p === "now" ? "Keep as is" : pickLabel(d), source: state.source[d.id] || "chosen" }; });
+  const notes = {}; Object.entries(state.notes).forEach(([k, v]) => { if (v && v.trim()) notes[k] = v.trim(); });
+  return { app: P.slug, kind: "design-picks", version: 1, savedAt: new Date().toISOString(), preview: { mode: state.mode, textSize: state.ts }, picks, notes, notChosen: DEC.filter(d => !state.picks[d.id]).map(d => d.id) };
+}
+function asText() { const p = payload(); return [`${P.title}: picks`, ...DEC.map(d => { const x = p.picks[d.id]; return `${d.name}: ${x ? `${x.option === "now" ? "keep as is" : `${x.option} ${x.name}`}${x.source === "recommended" ? " (recommended)" : ""}` : "not chosen"}${p.notes[d.id] ? `. Note: ${p.notes[d.id]}` : ""}`; })].join("\n"); }
+function setStatus(m) { document.getElementById("status").textContent = m; }
+function save() {
+  const p = payload(), name = `${P.slug}-design-picks.json`;
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(p, null, 2)], { type: "application/json" })); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  setStatus(p.notChosen.length ? `Saved ${name} to your Downloads. ${p.notChosen.length} still not chosen; I'll use my recommendations for those unless you say otherwise.` : `Saved ${name} to your Downloads. Tell me in chat that you've picked.`);
+}
+document.getElementById("saveBtn").addEventListener("click", save);
+document.getElementById("saveTop").addEventListener("click", () => { document.getElementById("review").scrollIntoView(); save(); });
+document.getElementById("copyBtn").addEventListener("click", async () => { try { await navigator.clipboard.writeText(asText()); setStatus("Copied. Paste it into chat."); } catch (e) { setStatus("Copy didn't work here. Use Save my picks instead."); } });
+/* ?screen=<decision>:<option> (or :now) draws that one screen full-bleed: on a phone at the phone's own width, else at the frame size. */
+function renderOne() {
+  const [did, oid] = ONE.split(":"), d = DEC.find(x => x.id === did), o = d && (oid === "now" ? nowOpt(d) : optOf(d, oid));
+  const phone = matchMedia("(max-width:700px)").matches, w = Number(Q.get("w")) || (phone ? innerWidth : FR.w), h = Number(Q.get("h")) || (phone ? innerHeight : FR.h);
+  document.documentElement.dataset.theme = state.mode; document.body.innerHTML = "";
+  if (!o) { document.body.textContent = `No screen ${ONE}`; return; }
+  const c = Object.assign(baseCtx(), d.drives && o.value !== undefined ? { [d.drives]: o.value } : {}, o.ctx || {}), el = document.createElement("div");
+  el.className = "scr"; el.dataset.one = ONE; el.style.cssText = `position:fixed;width:${w}px;height:${h}px;${vars(c)}`;
+  if (oid === "now" && d.now && !d.nowRender) el.innerHTML = `<img class="nowimg" alt="" src="${IMG[d.now] || ""}">`;
+  else { try { el.innerHTML = o.r(c); } catch (e) { el.innerHTML = `<div style="padding:20px;color:#c00;font:14px system-ui">Render error: ${K.esc(e.message)}</div>`; } }
+  document.body.append(el); document.body.style.background = getComputedStyle(el).getPropertyValue("--bg");
+}
+if (ONE) renderOne(); else { buildPage(); refresh(true); }
+</script>
+<script id="walk">
+"use strict";
+(() => {
+  const w = P.walk; if (!w || SHOT || ONE) return;
+  const ids = Object.keys(w.screens), tabs = w.tabs || [], tours = w.tours || [], rules = w.links || [], esc = K.esc;
+  const tapSel = ".r,.btn,.chip,.it,.tbtn,.ib,.tile,.card,.link,.rmini,.rpc,[data-tap],a,button" + (w.tappable ? "," + w.tappable : "");
+  const devices = w.devices?.length ? w.devices : [{ id:"default", name:"Default device", w:FR.w, h:FR.h, ts:1 }], key = `${P.slug}-walk-v1`;
+  let prefs = {}; if (!Q.has("walk")) { try { prefs = JSON.parse(localStorage.getItem(key) || "{}") || {}; } catch (e) {} }
+  let dev = devices.find(d => d.id === (Q.get("device") || prefs.device)) || devices[0], mode = state.mode, ts = Number(Q.get("ts")) || (Q.has("device") ? dev.ts || 1 : prefs.ts || dev.ts || 1);
+  const shot = Q.has("walk"), reduced = matchMedia("(prefers-reduced-motion: reduce)"), visited = new Set(), warned = new Set(), scrolls = new Map();
+  let W, H, scale = 1, phone, host, viewport, hints, active, stack = [], graph, cache = new Map(), busy = false, token = 0, miniN = 0, flashTimer, flashing = false, tour = null, tourIndex = 0, leftTour = false, collapsed = false;
+  const meta = document.querySelector('meta[name="viewport"]'), oldMeta = meta?.content, oldBg = document.body.style.background;
+  const current = () => stack.at(-1)?.id, entry = () => stack.at(-1);
+  /* A counter, not crypto.randomUUID: that exists only in secure contexts, and a phone opening this file from Files or Gmail is not one. */
+  /* depth = this history entry's distance from the walkthrough's first one. A tab switch unwinds
+     to that first entry and rebuilds from the start tab, as Android does, so back after a finished
+     flow never reopens its sheets. */
+  let depth = 0, pendingTab = null;
+  const put = (push, id = current()) => { if (push) depth++; history[push ? "pushState" : "replaceState"]({ walk:stack, d:depth }, "", "#walk/" + encodeURIComponent(id)); };
+  let entryN = 0; const newEntry = (id, how) => ({ id, how, key:`e${++entryN}` });
+  /* On a phone the real screen is the device: its width in CSS px is its width in dp. Chrome ignores the system font size, so text size still comes from the first device. */
+  const thisPhone = { id:"this", name:"This phone's own size", w:0, h:0, ts:devices[0].ts || 1 };
+  const devList = () => phone && !shot ? [thisPhone,...devices] : devices;
+  const savePrefs = () => { try { localStorage.setItem(key, JSON.stringify({ ...prefs, device:dev.id, ts })); } catch (e) {} };
+  const button = (action, text, value = "") => `<button data-wa="${action}" data-value="${esc(value)}">${esc(text)}</button>`;
+  function dimensions() {
+    phone = shot || (Q.has("phone") ? Q.get("phone") === "1" : matchMedia("(max-width:700px)").matches);
+    if (phone && !shot && !Q.has("device") && (!prefs.device || prefs.device === "this")) dev = thisPhone; else if (dev === thisPhone && (!phone || shot)) dev = devices[0];
+    W = Number(Q.get("w")) || (dev === thisPhone ? innerWidth : dev.w); H = Number(Q.get("h")) || (dev === thisPhone ? innerHeight : dev.h);
+    scale = shot ? 1 : phone ? innerWidth / W : Math.min(1, Math.max(1, (host?.querySelector(".wstage")?.clientHeight || innerHeight - 160) - 14 - (FR.kind === "browser" ? 30 : 0)) / H, Math.max(1, (host?.querySelector(".wstage")?.clientWidth || innerWidth - 700) - 14) / W);
+    if (phone && !shot) H = innerHeight / scale;
+  }
+  function render(id) {
+    const s = w.screens[id], d = s.dec && DEC.find(d => d.id === s.dec), p = d && (s.opt || eff(d));
+    const o = d && (p === "now" ? nowOpt(d) : optOf(d, p));
+    const ctx = Object.assign({}, baseCtx(), { mode, ts }, s.ctx || {}, d?.drives && o?.value !== undefined ? { [d.drives]:o.value } : {}, o?.ctx || {});
+    const root = document.createElement("div"); root.className = "scr wscr"; root.style.cssText = `width:${W}px;height:${H}px;${vars(ctx)}`;
+    const img = s.img || (p === "now" && !d.nowRender ? d.now : null); root.dataset.image = img ? "true" : "false";
+    try { root.innerHTML = img ? `<img class="nowimg" alt="${esc(s.name || id)}" src="${IMG[img] || ""}">` : (o ? o.r(ctx) : s.r(ctx)); }
+    catch (e) { root.innerHTML = `<div style="padding:20px;color:#c00;font:14px system-ui">Render error: ${esc(e.message)}</div>`; console.error(id, e); }
+    return root;
+  }
+  const norm = t => t.replace(/\s+/g, " ").trim().toLowerCase();
+  function resolve(root, rule, tourTarget = false) {
+    if (rule.rect) {
+      const signature = JSON.stringify(rule.rect), found = [...root.querySelectorAll(".whs")].find(el => el.dataset.rect === signature);
+      if (found) return { el:found };
+      const el = document.createElement("div"), [x,y,a,b] = rule.rect; el.className = "whs"; el.dataset.rect = signature;
+      el.style.cssText = `left:${x}px;top:${y}px;width:${a}px;height:${b}px;${tourTarget ? "pointer-events:none;" : ""}`; root.append(el); return { el };
+    }
+    if (root.dataset.image === "true") return { reason:"image screens require rect hotspots" };
+    try {
+      let matches;
+      if (rule.text !== undefined) {
+        const all = [...root.querySelectorAll("*")].filter(el => !["SCRIPT","STYLE"].includes(el.tagName) && norm(el.textContent).includes(norm(rule.text)));
+        matches = all.filter(el => !all.some(other => other !== el && el.contains(other)));
+        if (rule.sel) matches = matches.map(el => el.closest(rule.sel)).filter(el => el && root.contains(el));
+        matches = [...new Set(matches)].sort((a,b) => a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
+      } else matches = rule.sel ? [...root.querySelectorAll(rule.sel)] : [];
+      let el = matches[rule.nth || 0];
+      if (el && rule.text !== undefined) { const tap = el.closest(tapSel); if (tap && root.contains(tap)) el = tap; }
+      return el ? { el } : { reason:"no matching target" };
+    } catch (e) { return { reason:`invalid selector: ${e.message}` }; }
+  }
+  function linkScreen(root, id, unresolved, starHits = null) {
+    const bind = (el, r, index) => {
+      if (r.go !== "back" && !ids.includes(r.go)) { unresolved.push({ screen:id, rule:index, reason:`unknown go ${r.go}` }); return; }
+      const how = r.how || "push";
+      if (!["push","sheet","tab","replace"].includes(how)) { unresolved.push({ screen:id, rule:index, reason:`unknown how ${how}` }); return; }
+      el.dataset.wgo = r.go; el.dataset.whow = how; if (r.tabBar) el.dataset.wtab = "1"; else delete el.dataset.wtab; el.dataset.wlabel = r.label || r.text || w.screens[r.go]?.name || r.go; el.style.cursor = "pointer";
+    };
+    if (root.dataset.image !== "true") root.querySelectorAll("[data-go]").forEach((el,i) => bind(el, { go:el.dataset.go, how:el.dataset.how }, `markup ${i}`));
+    const apply = (r,i,quiet = false) => { const result = resolve(root,r); if (result.el) { bind(result.el,r,i); starHits?.add(i); } else if (!quiet) unresolved.push({ screen:id, rule:i, reason:result.reason }); };
+    rules.forEach((r,i) => { if (r.on === "*") apply(r,i,true); });
+    tabs.forEach((r,i) => apply({ ...r, how:"tab", tabBar:true }, `tab ${i}`, true));
+    rules.forEach((r,i) => { if (r.on !== "*" && [].concat(r.on).includes(id)) apply(r,i); });
+    return [...root.querySelectorAll("[data-wgo]")].map(el => ({ from:id, to:el.dataset.wgo, how:el.dataset.whow, label:el.dataset.wlabel, tab:!!el.dataset.wtab }));
+  }
+  function inspect() {
+    dimensions(); cache.clear();
+    const unresolved = [], links = [], starHits = new Set(), tourReports = tours.map(t => ({ id:t.id, problems:[] })), probe = document.createElement("div"); probe.className = "wprobe"; document.body.append(probe);
+    ids.forEach(id => {
+      const root = render(id); probe.append(root); links.push(...linkScreen(root,id,unresolved,starHits));
+      tours.forEach((t,i) => t.steps.forEach((s,j) => { if (s.at === id && s.tap) { const found = resolve(root,s.tap,true); if (!found.el) tourReports[i].problems.push({ step:j, screen:id, reason:found.reason }); } }));
+      cache.set(id,root.cloneNode(true)); root.remove();
+    });
+    probe.remove();
+    rules.forEach((r,i) => { if (r.on === "*" && !starHits.has(i)) unresolved.push({ screen:"*", rule:i, reason:"matches nothing on any screen" }); });
+    tours.forEach((t,i) => t.steps.forEach((s,j) => { if (!ids.includes(s.at)) tourReports[i].problems.push({ step:j, screen:s.at, reason:"unknown screen" }); }));
+    const roots = [...new Set([w.start,...tabs.map(t => t.go).filter(id => ids.includes(id)),...ids.filter(id => w.screens[id].root)])], edges = [];
+    links.filter(l => l.to !== "back" && !l.tab).forEach(l => { if (!edges.some(e => e.from === l.from && e.to === l.to)) edges.push(l); });
+    const depths = new Map(roots.map(id => [id,0])), queue = [...roots];
+    for (let i=0;i<queue.length;i++) edges.filter(e => e.from === queue[i]).forEach(e => { if (!depths.has(e.to)) { depths.set(e.to,depths.get(e.from)+1); queue.push(e.to); } });
+    graph = { roots, edges, depths, order:queue, report:{ screens:[...ids], links:links.length, unresolved, unreachable:ids.filter(id => !depths.has(id)), deadEnds:ids.filter(id => !links.some(l => l.from === id && l.to !== "back" && !l.tab)), tours:tourReports } };
+    unresolved.forEach(p => { const key = JSON.stringify(p); if (!warned.has(key)) { warned.add(key); console.warn(`[walk] ${p.screen}, rule ${p.rule}: ${p.reason}`); } });
+    return graph.report;
+  }
+  function path(id, from = null) {
+    id = ids.includes(id) ? id : w.start;
+    const starts = [...new Set([from,...graph.roots].filter(x => ids.includes(x)))];
+    const queue = starts.map(id => [newEntry(id,"tab")]), seen = new Set(starts);
+    for (let i=0;i<queue.length;i++) {
+      const p = queue[i], last = p.at(-1).id; if (last === id) return p;
+      graph.edges.filter(e => e.from === last && ["push","sheet"].includes(e.how)).forEach(e => { if (!seen.has(e.to)) { seen.add(e.to); queue.push([...p,newEntry(e.to,e.how)]); } });
+    }
+    return [newEntry(id,"tab")];
+  }
+  function remember(writeHistory = true) {
+    if (!active || !entry()) return;
+    entry().scroll = [...active.querySelectorAll(".bd,.sheet .sb2")].map(el => el.scrollTop);
+    scrolls.set(entry().key,entry().scroll);
+    if (!shot && writeHistory) put(false);
+  }
+  function setPath(id, opening = false, from = null) {
+    if (busy) return; remember(); const p = path(id, from); stack = [p[0]];
+    if (!shot) {
+      if (opening) depth = -1; put(opening);
+      p.slice(1).forEach(e => { stack = [...stack,e]; put(true); });
+    } else stack = p;
+    draw("replace");
+  }
+  function go(id, how = "push") {
+    if (busy) return;
+    if (!host) { open(id,true); return; }
+    if (id === "back") { if (stack.length > 1 || depth > 0) { remember(); history.back(); } else flash(); return; }
+    if (!ids.includes(id) || !["push","sheet","tab","replace"].includes(how)) return;
+    remember();
+    if (how === "tab" && !shot) { if (depth > 0) { pendingTab = id; busy = true; history.go(-depth); } else tabFrom0(id); return; }
+    if (how === "tab") stack = [newEntry(id,how)]; else if (how === "replace") stack = [...stack.slice(0,-1),newEntry(id,how)]; else stack = [...stack,newEntry(id,how)];
+    if (!shot) put(how !== "replace", id);
+    draw(how);
+  }
+  function tabFrom0(id) {
+    const from = entry(); stack = [newEntry(w.start,"tab")]; depth = 0; put(false);
+    if (id !== w.start) { stack = [newEntry(id,"tab")]; put(true); }
+    if (from?.id === id && from.how === "tab") return draw("replace",false,true);
+    draw("tab");
+  }
+  function animate(el, frames, duration) { return el.animate(frames, { duration, easing:"cubic-bezier(.2,.8,.2,1)", fill:"both" }).finished.catch(() => {}); }
+  async function draw(how = "replace", reverse = false, instant = false) {
+    if (!host) return; const serial = ++token, old = active?.parentElement, layer = document.createElement("div"); layer.className = "wlayer";
+    viewport.querySelectorAll(".wlayer").forEach(el => { el.getAnimations({ subtree:true }).forEach(a => a.cancel()); if (el !== old) el.remove(); });
+    const root = render(current()); linkScreen(root,current(),[]); root.style.transform = `scale(${scale})`; layer.append(root); viewport.insertBefore(layer,hints); active = root;
+    root.querySelectorAll(".bd,.sheet .sb2").forEach((el,i) => { el.scrollTop = (scrolls.get(entry().key) || entry().scroll)?.[i] || 0; }); visited.add(current()); busy = true;
+    try { updateChrome(); } catch (e) { console.error("[walk] chrome update failed", e); } /* a chrome bug must never leave navigation stuck on busy */
+    dimensions(); viewport.style.cssText = `width:${W*scale}px;height:${H*scale}px`; root.style.transform = `scale(${scale})`;
+    if (old && !instant && !shot && !reduced.matches) {
+      const animations = [], incoming = reverse ? old : layer;
+      if (reverse) viewport.insertBefore(layer,old);
+      if (how === "push") {
+        animations.push(animate(layer,reverse ? [{ transform:"translateX(-25%)",opacity:.7 },{ transform:"translateX(0)",opacity:1 }] : [{ transform:"translateX(100%)" },{ transform:"translateX(0)" }],280));
+        animations.push(animate(old,reverse ? [{ transform:"translateX(0)" },{ transform:"translateX(100%)" }] : [{ transform:"translateX(0)",opacity:1 },{ transform:"translateX(-25%)",opacity:.7 }],280));
+      } else if (how === "sheet" && incoming.querySelector(".sheet")) {
+        animations.push(animate(incoming.querySelector(".sheet"),reverse ? [{ transform:"translateY(0)" },{ transform:"translateY(100%)" }] : [{ transform:"translateY(100%)" },{ transform:"translateY(0)" }],280));
+        const scrim = incoming.querySelector(".scrim"); if (scrim) animations.push(animate(scrim,reverse ? [{ opacity:1 },{ opacity:0 }] : [{ opacity:0 },{ opacity:1 }],280));
+      } else animations.push(animate(layer,[{ opacity:0 },{ opacity:1 }],how === "sheet" ? 280 : 150),animate(old,[{ opacity:1 },{ opacity:0 }],how === "sheet" ? 280 : 150));
+      await Promise.all(animations);
+    }
+    if (serial !== token) return;
+    old?.remove(); layer.getAnimations({ subtree:true }).forEach(a => a.cancel()); busy = false; positionHints();
+  }
+  function source(id) {
+    const s = w.screens[id]; if (s.img) return "screenshot of the app today"; if (!s.dec) return "walkthrough-only screen";
+    const d = DEC.find(d => d.id === s.dec), p = s.opt || eff(d), o = optOf(d,p);
+    if (p === "now") return d.nowRender ? `${d.name}: the app today` : "screenshot of the app today";
+    const chosen = state.picks[d.id] ? state.source[d.id] !== "recommended" : !!P.picks?.[d.id];
+    return `${d.name}, option ${p}, ${o?.name || ""}: ${s.opt ? "pinned to option " + p : chosen ? "your pick" : "recommended"}`;
+  }
+  function lists() {
+    return `<h3>Tours</h3><div class="wlist">${tours.map(t => button("tour",`${t.name} (${t.steps.length} steps)`,t.id) + (tour?.id === t.id ? '<div class="wtour-slot"></div>' : "")).join("")}</div><h3>Screens</h3>${[...new Set(ids.map(id => w.screens[id].group || ""))].map(g => `${g ? `<h3>${esc(g)}</h3>` : ""}<div class="wlist">${ids.filter(id => (w.screens[id].group || "") === g).map(id => `<button data-wa="jump" data-value="${esc(id)}" aria-current="${id === current()}">${visited.has(id) ? "✓ " : ""}${esc(w.screens[id].name || id)}</button>`).join("")}</div>`).join("")}`;
+  }
+  function settings() {
+    const sizes = [...new Set([dev.ts || 1,1,1.3,1.5,2,ts])].sort((a,b) => a-b);
+    return `${button("back","Back")}${button("restart","Restart")}${button("mode",mode === "dark" ? "Light" : "Dark")}<label>Device <select data-wsetting="device">${devList().map(d => `<option value="${esc(d.id)}" ${d.id === dev.id ? "selected" : ""}>${esc(d.name)}</option>`).join("")}</select></label><label>Text size <select data-wsetting="ts">${sizes.map(s => `<option ${s === ts ? "selected" : ""} value="${s}">${Math.round(s*100)}%</option>`).join("")}</select></label><button data-wa="hints" aria-pressed="${!!prefs.hints}">Show tappable areas</button><span class="wmap-button">${button("map","Map")}</span>${button("close","Back to the picker")}`;
+  }
+  function problems() {
+    const r = graph.report, list = [...r.unresolved.map(p => `${p.screen}, rule ${p.rule}: ${p.reason}`),...r.unreachable.map(id => `${id}: not reachable`),...r.tours.flatMap(t => t.problems.map(p => `${t.id}, step ${p.step+1}: ${p.reason}`))];
+    return list.length ? `<h3>Problems</h3><ul>${list.map(p => `<li>${esc(p)}</li>`).join("")}</ul>` : "";
+  }
+  function mapHTML() {
+    const pos = new Map(), cols = new Map(), miniH = H*64/W, rowH = miniH+80, unreachableCol = Math.max(0,...graph.depths.values())+1;
+    [...graph.order,...graph.report.unreachable].forEach(id => { const col = graph.depths.get(id) ?? unreachableCol, row = cols.get(col) || 0; cols.set(col,row+1); pos.set(id,{ x:col*158+8,y:row*rowH+30 }); });
+    const mw = (Math.max(0,...cols.keys())+1)*158+40, mh = Math.max(1,...cols.values())*rowH+50;
+    const paths = graph.edges.map(e => { const a = pos.get(e.from), b = pos.get(e.to), x = a.x+100, y = a.y+miniH/2, tx = b.x, ty = b.y+miniH/2, back = tx <= x, below = Math.max(a.y,b.y)+rowH-8;
+      const d = back ? `M${x},${y} C${x+55},${below} ${tx-55},${below} ${tx},${ty}` : `M${x},${y} C${x+30},${y} ${tx-30},${ty} ${tx},${ty}`;
+      return `<path d="${d}" fill="none" stroke="var(--ink2)" ${e.how === "sheet" ? 'stroke-dasharray="5 4"' : ""}/><text x="${back ? x : (x+tx)/2}" y="${back ? below : (y+ty)/2-5}" fill="var(--ink2)" font-size="9">${esc(e.label.slice(0,20))}</text>`; }).join("");
+    return `<div class="wtabs">${tabs.map(t => button("tab",t.text || w.screens[t.go]?.name || t.go,t.go)).join("")}</div><div class="wmap-scroll"><div class="wmap" style="width:${mw}px;height:${mh}px"><svg width="${mw}" height="${mh}">${paths}</svg>${graph.report.unreachable.length ? `<span class="wgroup" style="left:${unreachableCol*158+8}px;top:0">Not reachable</span>` : ""}${[...pos].map(([id,p]) => { const mini = cache.get(id).cloneNode(true); mini.style.transform = `scale(${64/W})`; const prefix = "wmini" + (++miniN) + "-", names = new Map([...mini.querySelectorAll("[id]")].map(el => [el.id,prefix+el.id])); mini.querySelectorAll("*").forEach(el => { for (const a of [...el.attributes]) { let value = a.value; names.forEach((next,old) => { value = value.split("url(#"+old+")").join("url(#"+next+")"); if ((a.name === "href" || a.name === "xlink:href") && value === "#"+old) value = "#"+next; }); if (a.name === "id") value = names.get(value); if (value !== a.value) el.setAttribute(a.name,value); } }); return `<div class="wnode" role="button" tabindex="0" data-wa="jump" data-value="${esc(id)}" aria-current="${id === current()}" style="left:${p.x}px;top:${p.y}px"><div class="wmini" inert style="height:${miniH}px">${mini.outerHTML}</div><span class="wname" title="${esc(w.screens[id].name || id)}">${visited.has(id) ? "• " : ""}${esc(w.screens[id].name || id)}</span>${w.screens[id].group ? `<small>${esc(w.screens[id].group)}</small>` : ""}</div>`; }).join("")}</div></div>`;
+  }
+  /* Keep the current screen's node in view; the map is usually wider and taller than its panel. */
+  function centerMap(scope) {
+    const sc = scope?.querySelector(".wmap-scroll"), cur = sc?.querySelector('.wnode[aria-current="true"]'); if (!cur) return;
+    sc.scrollLeft = cur.offsetLeft - sc.clientWidth / 2 + cur.offsetWidth / 2; sc.scrollTop = cur.offsetTop - sc.clientHeight / 2 + cur.offsetHeight / 2;
+  }
+  const screenInfo = () => `<h3>This screen</h3><b>${esc(w.screens[current()].name || current())}</b><p>${esc(source(current()))}</p><p>${esc(w.screens[current()].note || "")}</p>`;
+  function updateChrome() {
+    if (!host) return;
+    host.querySelector(".wleft").innerHTML = `<h2>${esc(w.title || P.title)}</h2>${lists()}`;
+    host.querySelector(".wtools").innerHTML = settings();
+    host.querySelector(".wright").innerHTML = `<h2>Flow map</h2>${mapHTML()}${screenInfo()}${problems()}`;
+    centerMap(host.querySelector(".wright"));
+    renderTour();
+  }
+  function target() { const s = tour?.steps[tourIndex]; return s?.tap && s.at === current() ? resolve(active,s.tap,true).el : null; }
+  function positionHints() {
+    if (!hints || !active) return; hints.innerHTML = "";
+    const v = viewport.getBoundingClientRect(), ring = !leftTour && target(), elements = !shot && (prefs.hints || flashing) ? [...active.querySelectorAll("[data-wgo]")] : [];
+    if (ring && !elements.includes(ring)) elements.push(ring);
+    elements.forEach(el => { const b = el.getBoundingClientRect(); if (!b.width || !b.height) return; const hint = document.createElement("div"); hint.className = "whint" + (el === ring ? " wring" : ""); hint.style.cssText = `left:${b.left-v.left}px;top:${b.top-v.top}px;width:${b.width}px;height:${b.height}px`; hints.append(hint);
+      if (el === ring && !phone) { const arrow = document.createElement("span"); arrow.className = "warrow"; arrow.textContent = "➜"; arrow.style.cssText = `left:${Math.max(0,b.left-v.left-28)}px;top:${b.top-v.top+b.height/2-14}px`; hints.append(arrow); }
+    });
+  }
+  function flash() { flashing = true; positionHints(); clearTimeout(flashTimer); flashTimer = setTimeout(() => { flashing = false; positionHints(); },700); }
+  function renderTour() {
+    host.querySelectorAll(".wtour").forEach(el => el.remove()); if (!tour) { positionHints(); return; }
+    const s = tour.steps[tourIndex], card = document.createElement("div"); card.className = "wtour" + (collapsed ? " wcollapsed" : "");
+    card.innerHTML = leftTour ? `<p>You left the tour.</p>${button("resume","Resume")}${button("exit","Exit")}` : `${button("collapse",`Step ${tourIndex+1} of ${tour.steps.length}: ${tour.name}`)}<p>${esc(s.say || "")}</p><footer>${tourIndex ? button("tour-back","Back") : ""}${button("next",tourIndex === tour.steps.length-1 ? "Done" : "Next")}${button("exit","Exit")}</footer>`;
+    (phone ? host : host.querySelector(".wtour-slot")).append(card);
+    if (phone) { const t = leftTour ? null : target(), b = t?.getBoundingClientRect(); card.classList.toggle("wlow", !b || b.top + b.height / 2 < innerHeight / 2); }
+    positionHints();
+  }
+  function startTour(id, index = 0, keepScreen = false) { tour = tours.find(t => t.id === id); if (!tour?.steps.length) { tour = null; return; } tourIndex = Math.max(0,Math.min(index,tour.steps.length-1)); leftTour = false; collapsed = false; if (!keepScreen) setPath(tour.steps[tourIndex].at,false,tour.steps[0].at); renderTour(); }
+  function follow(el, intended = false) {
+    if (tour && !leftTour) {
+      const hit = target();
+      if (intended || (hit && (hit === el || el?.contains(hit) || hit.contains(el)))) {
+        const next = tour.steps[tourIndex+1], dest = el?.dataset.wgo === "back" ? stack.at(-2)?.id : el?.dataset.wgo;
+        if (next && (dest === next.at || !dest)) { tourIndex++; if (!dest) { go(next.at); return; } }
+        else if (next) leftTour = true;
+      } else leftTour = true;
+    }
+    if (el?.dataset.wgo) go(el.dataset.wgo,el.dataset.whow); else { flash(); renderTour(); }
+  }
+  function overlay(kind) {
+    host.querySelectorAll(".wveil,.wmap-overlay").forEach(el => el.remove()); const el = document.createElement("div");
+    if (kind === "map") { el.className = "wmap-overlay"; el.innerHTML = `${button("dismiss","Close map")}<h2>Flow map</h2>${mapHTML()}${screenInfo()}${problems()}`; host.append(el); centerMap(el); return; }
+    else { el.className = "wveil"; el.innerHTML = `<div class="wmenu">${button("dismiss","Close menu")}${button("map","Map")}${lists()}<h3>Settings</h3><div class="wtools">${settings()}</div>${document.documentElement.requestFullscreen ? button("fullscreen","Full screen") : ""}</div>`; }
+    host.append(el);
+  }
+  function resize() {
+    if (!host) return; remember(); dimensions(); host.classList.toggle("wphone",phone); viewport.style.cssText = `width:${W*scale}px;height:${H*scale}px`;
+    if (meta) meta.content = phone ? "width=device-width, initial-scale=1, maximum-scale=1" : oldMeta;
+    inspect(); draw("replace",false,true);
+  }
+  function open(id = w.start, push = false, restored = null) {
+    if (host) { setPath(id); return; }
+    mode = Q.get("mode") || state.mode; dimensions(); inspect();
+    host = document.createElement("div"); host.className = `walk${phone ? " wphone" : ""}${shot ? " wshot" : ""}`; host.setAttribute("role","dialog"); host.setAttribute("aria-label",w.title || "Walkthrough");
+    host.innerHTML = `<aside class="wleft"></aside><div class="wcenter"><div class="wtools"></div><div class="wstage"><div class="dev ${FR.kind}">${FR.kind === "browser" ? `<div class="bchrome"><i></i><i></i><i></i><span></span></div>` : ""}<div class="vp wviewport"><div class="whints"></div></div></div></div><div class="whelp">Click to move around. Esc or Alt+Left goes back.</div></div><aside class="wright"></aside>`;
+    document.body.append(host); document.body.classList.add("walk-open"); if (shot) document.body.classList.add("walk-shot");
+    viewport = host.querySelector(".wviewport"); hints = host.querySelector(".whints"); dimensions(); viewport.style.cssText = `width:${W*scale}px;height:${H*scale}px`;
+    if (meta && phone) meta.content = "width=device-width, initial-scale=1, maximum-scale=1";
+    if (restored) { stack = restored; draw("replace",false,true); } else setPath(id,push);
+    document.body.style.setProperty("--wbg",getComputedStyle(active).getPropertyValue("--bg"));
+    if (phone && !shot && !prefs.intro) { const intro = document.createElement("div"); intro.className = "wintro"; intro.innerHTML = `<p>Tap around like it's the app. Your phone's back gesture goes back. Long-press anywhere for tours, the map and settings.</p>${button("intro","Got it")}`; host.append(intro); }
+    host.addEventListener("click",click);
+    host.addEventListener("keydown",e => { if (e.target.matches('.wnode') && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); e.target.click(); } });
+    host.addEventListener("change",e => { const k = e.target.dataset.wsetting; if (!k) return; if (k === "device") { dev = devList().find(d => d.id === e.target.value) || devices[0]; ts = dev.ts || 1; } else ts = Number(e.target.value); savePrefs(); host.querySelectorAll(".wveil,.wmap-overlay").forEach(el => el.remove()); resize(); });
+    host.addEventListener("scroll",positionHints,true); gestures();
+    if (shot && Q.get("tour")) startTour(Q.get("tour"),Number(Q.get("step")) || 0,true);
+  }
+  function close() {
+    ++token; busy = false; host?.remove(); host = active = viewport = hints = null; tour = null; stack = []; document.body.classList.remove("walk-open","walk-shot"); document.body.style.background = oldBg;
+    if (meta) meta.content = oldMeta; document.documentElement.dataset.theme = state.mode;
+  }
+  let suppressUntil = 0; /* swallows the click that ends a menu gesture; a time window, since Chrome may never send pointerup after a long-press */
+  function click(e) {
+    e.stopPropagation(); if (Date.now() < suppressUntil) { e.preventDefault(); suppressUntil = 0; return; }
+    const b = e.target.closest("[data-wa]");
+    if (b) {
+      const a = b.dataset.wa, v = b.dataset.value;
+      if (busy && ["back","restart","jump","tab","tour","resume","next","tour-back"].includes(a)) return;
+      if (["jump","tab","tour","resume","restart"].includes(a)) host.querySelectorAll(".wveil,.wmap-overlay").forEach(el => el.remove());
+      if (a === "close") { history.replaceState(null,"",location.pathname+location.search); close(); }
+      else if (a === "back") go("back");
+      else if (a === "restart") { tour = null; setPath(w.start); }
+      else if (a === "jump" || a === "tab") { if (tour) leftTour = true; a === "tab" ? go(v,"tab") : setPath(v); }
+      else if (a === "mode") { mode = mode === "dark" ? "light" : "dark"; resize(); }
+      else if (a === "hints") { prefs.hints = !prefs.hints; savePrefs(); host.querySelectorAll('[data-wa="hints"]').forEach(b => b.setAttribute("aria-pressed",String(!!prefs.hints))); positionHints(); }
+      else if (a === "map") overlay("map");
+      else if (a === "dismiss") host.querySelectorAll(".wveil,.wmap-overlay").forEach(el => el.remove());
+      else if (a === "fullscreen") document.documentElement.requestFullscreen({ navigationUI:"hide" }).catch(e => console.warn("[walk] Full screen:",e.message));
+      else if (a === "intro") { prefs.intro = true; savePrefs(); host.querySelector(".wintro")?.remove(); }
+      else if (a === "tour") startTour(v);
+      else if (a === "exit") { tour = null; renderTour(); }
+      else if (a === "resume") { leftTour = false; setPath(tour.steps[tourIndex].at,false,tour.steps[0].at); }
+      else if (a === "collapse") { collapsed = !collapsed; renderTour(); }
+      else if (a === "tour-back") { tourIndex--; remember(); history.back(); renderTour(); }
+      else if (a === "next") { if (tourIndex === tour.steps.length-1) { tour = null; renderTour(); } else follow(target()?.closest("[data-wgo]"),true); }
+      return;
+    }
+    if (busy || !active.contains(e.target)) return;
+    const el = e.target.closest("[data-wgo]"); e.preventDefault(); follow(el);
+  }
+  function gestures() {
+    const points = new Map(); let timer, start = 0, multi = false, moved = false;
+    const menu = () => { suppressUntil = Date.now() + 700; overlay("menu"); };
+    host.addEventListener("pointerdown",e => {
+      [...points].forEach(([id,p]) => { if (Date.now() - p.t > 2000) points.delete(id); }); /* a pointer whose end never arrived */
+      if (!phone || shot || e.target.closest(".wmenu,.wmap-overlay,.wtour,.wintro")) return;
+      points.set(e.pointerId,{ x:e.clientX, y:e.clientY, t:Date.now() });
+      if (points.size === 1) { moved = false; multi = false; start = Date.now(); clearTimeout(timer); timer = setTimeout(() => { if (!moved && points.size === 1) menu(); },500); }
+      else { clearTimeout(timer); multi = true; }
+    });
+    host.addEventListener("pointermove",e => { const p = points.get(e.pointerId); if (p && Math.hypot(e.clientX-p.x,e.clientY-p.y) > 10) { moved = true; clearTimeout(timer); } });
+    const end = e => { clearTimeout(timer); if (!points.has(e.pointerId)) return; if (e.type === "pointercancel") moved = true; points.delete(e.pointerId);
+      if (!points.size && multi) { multi = false; if (!moved && Date.now() - start < 500) menu(); } };
+    host.addEventListener("pointerup",end); host.addEventListener("pointercancel",end); host.addEventListener("contextmenu",e => { if (phone) e.preventDefault(); });
+  }
+  addEventListener("popstate",e => {
+    remember(false);
+    if (!e.state?.walk) { if (host) close(); return; }
+    if (pendingTab) { const id = pendingTab; pendingTab = null; busy = false; depth = 0; if (!host) return; tabFrom0(id); return; }
+    depth = e.state.d || 0;
+    const removed = entry(), next = e.state.walk.filter(e => ids.includes(e.id)); if (!next.length) { close(); return; }
+    if (!host) { open(next.at(-1).id,false,next); return; }
+    const reverse = next.length < stack.length || (removed?.how === "tab" && next.at(-1).id !== current()); stack = next;
+    if (tour && tour.steps[tourIndex]?.at !== current()) leftTour = true;
+    draw((reverse ? removed?.how : entry().how) || "replace",reverse);
+  });
+  addEventListener("hashchange",() => { if (location.hash.startsWith("#walk")) { if (!host) open(hashId()); else if (hashId() !== current()) setPath(hashId()); } else if (host && !shot) close(); });
+  addEventListener("keydown",e => { if (!host || e.key !== "Escape") return; e.preventDefault(); const o = host.querySelectorAll(".wveil,.wmap-overlay"); if (o.length) o.forEach(el => el.remove()); else go("back"); });
+  let resizeTimer; const onResize = () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(resize,120); };
+  addEventListener("resize",onResize); window.visualViewport?.addEventListener("resize",onResize);
+  function hashId() { try { return decodeURIComponent(location.hash.slice(6)) || w.start; } catch (e) { return w.start; } }
+  window.__walk = { report:inspect, go, current, stack:() => structuredClone(stack), debug:() => ({ busy, depth, tour:tour?.id || null, step:tourIndex, leftTour }) };
+  const launch = document.createElement("button"); launch.id = "walkBtn"; launch.className = "cbtn"; launch.textContent = "Walk through it"; document.getElementById("saveTop").before(launch);
+  /* The controls bar sits below a long intro; on a phone that is several screens down, so the way in also goes under the title. */
+  const top = document.createElement("button"); top.id = "walkTop"; top.className = "cbtn main"; top.style.cssText = "margin:6px 0 18px;padding:12px 18px;font-size:15px"; top.textContent = "Walk through the app";
+  document.querySelector("#intro h1")?.after(top);
+  [launch,top].forEach(b => b.addEventListener("click",() => open(location.hash.startsWith("#walk") ? hashId() : w.start,true)));
+  if (shot) {
+    open(Q.get("walk") === "__report__" ? w.start : Q.get("walk"));
+    if (Q.get("walk") === "__report__") { const pre = document.createElement("pre"); pre.id = "walkReport"; pre.textContent = JSON.stringify(inspect()); document.body.append(pre); }
+  } else if (location.hash.startsWith("#walk")) open(hashId());
+})();
+</script>
+</body>
+</html>
