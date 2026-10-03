@@ -32,7 +32,7 @@ the 50-moth trap photo with "Found 4 days too late."
 - Then the replay. Say "a whole season in thirty seconds" and press **Play season**. Let it run.
   - Mid May: Block C turns amber. "Biofix. First sustained catch. The degree-day clock starts."
   - Early June: Block C turns red and the banner lands: "Spray window open on Block C." That is
-    the line. Read it off the screen. Thursday, June 4 on the sample data.
+    the line. Read it off the screen. Thursday, June 4 on the committed season data.
   - The other blocks follow over the next days and stack their own banners.
 - If a judge asks "why Thursday": click the degree-day clock. It shows the accumulated total
   against 250 DD and the biofix date. The curve shows the catch that set the biofix.

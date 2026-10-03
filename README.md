@@ -64,9 +64,9 @@ degree-days and calls the spray window. There's a synthetic trap-image generator
 counts (`fieldops/synth_traps.py`), the pitch deck (`pitch/index.html`), the season replay
 dashboard (`dashboard/index.html`) and the presenter runbook (`pitch/DEMO.md`).
 
-Still to come: the live vision layer, the agent and phone alert, and the emitter that writes the
-real replay timeline the dashboard reads (until then the dashboard plays a committed sample). See
-[PLAN.md](PLAN.md) for the order of work and the open items.
+The replay timeline the dashboard plays comes from `python -m fieldops.decide --replay`, which
+writes `dashboard/data/timeline.json` and its JS twin. Still to come: the live vision layer and the
+agent and phone alert. See [PLAN.md](PLAN.md) for the order of work and the open items.
 
 ```bash
 python -m fieldops.season                        # regenerate data/season.csv
