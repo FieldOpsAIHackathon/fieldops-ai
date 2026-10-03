@@ -21,7 +21,10 @@ Phases are written as hours from kickoff (**H+0**), not wall-clock, so they surv
 - `fieldops/season.py` + `data/season.csv` — season generator and committed output
   (`date,tmin_f,tmax_f,trap_id,species,count`): six blocks of three traps, Apr 15 to Aug 31, two flight
   peaks, and a one-day blip on Apr 28 that must not set biofix.
-- `fieldops/store.py` — validate / add / query over SQLite, `--load` a season CSV.
+- `fieldops/store.py` — the single source of truth `decide` reads: `counts` and `temps` tables,
+  the contract validator, and `--load` to rebuild both from the committed season CSV. Reloading is
+  idempotent and the store path yields a byte-identical timeline to the CSV path. `decide --csv`
+  bypasses it; an empty store falls back to the CSV automatically.
 - `fieldops/decide.py` — degree-days, biofix, spray window and the contract-shaped timeline.
   `python -m fieldops.decide --replay` writes `dashboard/data/timeline.{json,js}`; a self-test
   runs first.
