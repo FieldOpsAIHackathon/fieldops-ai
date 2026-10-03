@@ -31,13 +31,18 @@ jobs:
           node-version: '22'
       - name: Check replay, store, API and browser assets
         run: python scripts/ci_check.py
+      - name: Check voice protocol and playback cancellation
+        run: |
+          python -m voice.check
+          node voice/check_client.cjs
+          bash -n voice/run.sh
       - name: Check deploy script syntax
         run: bash -n scripts/deploy_gb10.sh
       - name: Package the tested revision
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
           git archive --format=tar.gz --output="$RUNNER_TEMP/fieldops-$GITHUB_SHA.tar.gz" \
-            HEAD fieldops dashboard pitch data openclaw scripts deploy README.md LICENSE
+            HEAD fieldops dashboard pitch data openclaw scripts deploy voice README.md LICENSE
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         with:

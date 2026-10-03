@@ -1,0 +1,10 @@
+# Optional expressive model, kept separate from the live LLM/vision environment.
+ARG BASE_IMAGE=local/fieldops-natural-base:latest
+FROM ${BASE_IMAGE}
+RUN pip install --no-cache-dir --no-deps qwen-tts==0.1.1 transformers==4.57.3 accelerate==1.12.0 \
+ && pip install --no-cache-dir 'huggingface-hub>=0.34,<1' sox onnxruntime
+RUN apt-get update && apt-get install -y --no-install-recommends sox && rm -rf /var/lib/apt/lists/*
+RUN pip install --no-cache-dir --no-deps --index-url https://download.pytorch.org/whl/cpu torchaudio==2.11.0
+WORKDIR /app
+ENV HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 HF_HUB_DISABLE_TELEMETRY=1 \
+    DO_NOT_TRACK=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1

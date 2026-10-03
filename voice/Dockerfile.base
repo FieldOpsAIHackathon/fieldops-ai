@@ -1,0 +1,10 @@
+# CUDA/PyTorch in the vision image already support the GB10's ARM64 + SM121 GPU.
+FROM local/fieldops-yolo:latest
+RUN python3 -c "import importlib.metadata as m; print('\n'.join(f'{p}=={m.version(p)}' for p in ('torch', 'numpy', 'transformers')))" > /tmp/pins.txt \
+ && pip install --no-cache-dir -c /tmp/pins.txt kokoro==0.9.4 'misaki[en]==0.9.4' \
+ && python3 -m spacy download en_core_web_sm
+# The NVIDIA vLLM image supplies only a 14 KB cuFFT stub; speech needs the real FFT.
+RUN pip install --no-cache-dir --no-deps nvidia-cufft==12.2.0.57 \
+ && mkdir -p /opt/fieldops-cuda \
+ && find /usr/local/lib/python3.12/dist-packages/nvidia -name 'libcufft.so*' -exec ln -sf {} /opt/fieldops-cuda/ \;
+ENV LD_LIBRARY_PATH=/opt/fieldops-cuda:${LD_LIBRARY_PATH}
