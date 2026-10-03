@@ -168,3 +168,21 @@ on close. Local-browser recognition only if available; otherwise show unavailabl
 honestly while exposing hooks for the voice session. Preserve local-facts fallback,
 block/date context and evidence in optional chat. Speech output uses fieldopsVoice
 when installed, else supported local browser voice. No automatic network polling.
+
+## Drone survey extension for the demo film
+
+User clarified the intended collection story: drones survey the farm and collect
+imagery for analysis. Add a clearly labeled simulated drone mission to the 3D
+farm and a Survey review workspace. The existing code analyzes trap photos; do
+not misrepresent that as deployed drone hardware or pest counts from aerial pixels.
+Aerial views provide spatial coverage; linked trap observations and the degree-day
+model provide the demonstrated pest/timing findings. June 4 / Block C remains the
+strongest consistent story: 26 codling moths and 261 DD, one open window.
+
+Start drone survey animates a quadcopter along six block waypoints over 24 seconds.
+Order: A, B, D, E, F, C. Show capture count, pause/resume/reset and optional follow
+camera. Playback never triggers a phone alert, inference request or real flight.
+Capture cards use committed virtual aerial previews rendered from this farm.
+The Survey workspace joins these to the selected day's actual trap counts and
+states. Selecting a capture focuses its block; inspect its evidence and ask the
+agent about its timing. A completed survey offers a next step to review Block C.
