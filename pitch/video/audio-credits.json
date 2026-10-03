@@ -1,26 +1,39 @@
 {
+  "revision": "117-second light-mode cinematic edit",
   "narrator": {
     "provider": "ElevenLabs",
-    "voice_name": "Brian - Deep, Resonant and Comforting",
-    "voice_id": "nPczCjzI2devNBz1zQrb",
+    "voice_name": "Chris - Charming, Down-to-Earth",
+    "voice_id": "iP95p4xoKVk53GoZ742B",
     "category": "premade",
     "model_id": "eleven_multilingual_v2",
     "settings": {
-      "stability": 0.6,
+      "stability": 0.45,
       "similarity_boost": 0.75,
-      "style": 0.15,
+      "style": 0.4,
       "use_speaker_boost": true,
-      "speed": 0.95
+      "speed": 1.08
     }
   },
   "music": {
-    "provider": "ElevenLabs",
-    "type": "generated instrumental score",
-    "mix": "Normalized background; sidechain ducking under speech"
+    "provider": "ElevenLabs Music",
+    "model": "music_v1",
+    "prompt": "Premium bright modern product-launch instrumental score for a 117-second technology film about orchard intelligence. Enthusiastic, optimistic, confident, engaged and moving forward at 106 BPM. Tight gentle percussion, warm rhythmic plucks, an elegant piano motif, light organic string detail, clean modern electronic textures, rounded controlled bass. Strong memorable uplifting musical identity and professional polished studio production. No vocals, no singing, no choir, no speech. No epic trailer effects, no bombastic impacts, no aggressive bass, no slow ambient drone. Keep voiceover intelligible with open midrange and controlled dynamics. 0-17 seconds immediate bright intrigue; 17-50 seconds purposeful rhythmic development; 50-62 seconds confident lift for the decisive reveal; 62-69 seconds smooth preparation for an assistant response; 69-81 seconds very sparse, quiet and spacious beneath real spoken dialogue; 81-108 seconds optimistic forward momentum returns; 108-117 seconds a satisfying confident resolved finish with a clean final brand moment. Energetic premium product launch, friendly and human, never frantic.",
+    "requested_duration_seconds": 117,
+    "force_instrumental": true,
+    "song_id": "CpAL8GEWWab19x7jImra",
+    "status": "complete",
+    "duration_seconds": 117.028562,
+    "mix_note": "Trim final 0.03s to 117s; duck for dialogue69–81; sidechain narrator. No narration was slowed."
   },
   "assistant": {
     "provider": "Local GB10",
     "model": "Kokoro-82M",
-    "voice": "orchard"
-  }
+    "voice": "orchard",
+    "source": "Actual GB10 assistant reply; original WAV preserved byte-identically before final mix",
+    "timeline_seconds": [
+      69,
+      81
+    ]
+  },
+  "production_note": "External narration and music generation were used only to produce the film. FieldOps inference is local."
 }

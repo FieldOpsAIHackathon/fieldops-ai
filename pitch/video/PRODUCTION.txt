@@ -1,21 +1,37 @@
-FIELDOPS — THE RIGHT MOMENT
+FIELDOPS — SEE THE SIGNAL. ACT IN TIME.
 
-Approved two-minute hackathon demo. Output: 1920x1080, 30fps, H.264/AAC.
+117-second light-mode cinematic cut. Output: 1920x1080, 30fps, H.264/AAC.
 
-fieldops-demo.mp4 — main cut.
-Only one MP4 is published. Local backups are outside the repository.
-index.html — local browser player and download links.
-fieldops-demo.srt — timed English captions (also burned into MP4).
-transcript.txt / storyboard.json — approved words and scene plan.
-generation-prompts.json — exact approved orchard/drone concept prompts.
-poster.png — film poster.
+fieldops-demo.mp4 — stable published filename; existing shared links remain valid.
+Only one MP4 is published. Local backups stay outside the repository.
+index.html — browser player and download links.
+fieldops-demo.srt — timed English captions, also burned into the MP4.
+transcript.txt / storyboard.json — current narration and contiguous 117-second timeline.
+generation-prompts.json — approved prompts and completed concept footage status.
+audio-credits.json — narrator, music, and local assistant audio provenance.
+poster.png — current film poster.
 
-Production: actual browser recordings; Astra art direction rendered as HTML;
-ElevenLabs premade Brian voice, multilingual_v2; actual GB10 Kokoro assistant
-reply; ElevenLabs-generated instrumental score with automatic speech ducking; FFmpeg composition and encoding.
+Production: actual light-mode browser recordings and screenshots, custom cream/
+teal/lime HTML artwork, deliberate detail crops and camera movement, and smooth
+0.3-second dissolves between shots. FFmpeg composition and encoding.
+
+Narration: enthusiastic ElevenLabs Chris, eleven_multilingual_v2, speed 1.08,
+with selected segments fitted to their slots without slowing the narration.
+Music: new ElevenLabs Music instrumental score, music_v1, requested at 117 seconds,
+normalized and ducked automatically under speech. The assistant response at
+69–81 seconds is the actual locally generated GB10 Kokoro reply.
+
+Both completed Higgsfield concept clips are included: orchard_reveal opens the
+film and visual_sampling illustrates the drone concept. Generated footage is
+labeled concept visualization; actual software footage shows the working UI.
 External providers are film-production tools, not FieldOps inference services.
 
-Truth in the demo: flight/captures are simulated. Trap lab uses a synthetic
-reference. June4 BlockC replay is26 codling/261DD. The real supplied Telegram
-screenshot is a distinct photo with27 codling+7 oriental moths and150DD.
+Evidence boundaries: dashboard survey flight and captures are simulated. The
+trap lab uses labeled synthetic sample references. The June 4 Block C replay
+shows 26 codling moths and 261 degree-days. The latest supplied Telegram photos
+are a distinct live photo example showing 25 codling moths + 6 oriental fruit
+moths (31 total), with Block C at 150 of 250 degree-days. These are different
+observations and must not be presented as one matching snapshot.
+
+Inference stays local on the Dell GB10. Telegram delivery requires connectivity.
 No messages or alerts were sent while recording. No credentials are included.

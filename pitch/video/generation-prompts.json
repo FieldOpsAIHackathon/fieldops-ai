@@ -1,23 +1,36 @@
 {
-  "status": "APPROVED; two requests submitted with corrected credential",
+  "status": "COMPLETED; both generated concept clips included in the 117-second edit",
   "style": "Photorealistic premium agricultural documentary, natural New England apple orchard in early June, grounded and credible. 16:9. No generated UI or readable text; typography is composited later.",
   "shots": [
     {
       "id": "orchard_reveal",
       "target_duration_seconds": 6,
-      "prompt": "One uninterrupted cinematic documentary shot, 16:9 landscape. A real-looking New England apple orchard in early June, mature apple trees with dense green leaves and small unripe green fruit, parallel orchard rows, naturally uneven grass with clover and wildflowers along the borders, weathered wooden perimeter fence and distant low wooded hills. Soft early-morning side light, restrained cinematic color, crisp natural detail. Camera starts just above the grass beside an orchard row and gently rises into a wide three-quarter aerial view. A single compact white quadcopter with four rotors and a small black stabilized camera gimbal glides slowly forward above the trees, maintaining consistent shape and size. Quiet precision agriculture, premium live-action cinematography, believable scale and physically plausible motion. Smooth stable camera, no cuts, no sudden acceleration, no fantastical technology, no spraying, no robotic arms, no harvesting, no extra rotors, no people, no logos, no labels, no subtitles, no interface graphics. The orchard is the hero; the drone remains clearly visible."
+      "prompt": "One uninterrupted cinematic documentary shot, 16:9 landscape. A real-looking New England apple orchard in early June, mature apple trees with dense green leaves and small unripe green fruit, parallel orchard rows, naturally uneven grass with clover and wildflowers along the borders, weathered wooden perimeter fence and distant low wooded hills. Soft early-morning side light, restrained cinematic color, crisp natural detail. Camera starts just above the grass beside an orchard row and gently rises into a wide three-quarter aerial view. A single compact white quadcopter with four rotors and a small black stabilized camera gimbal glides slowly forward above the trees, maintaining consistent shape and size. Quiet precision agriculture, premium live-action cinematography, believable scale and physically plausible motion. Smooth stable camera, no cuts, no sudden acceleration, no fantastical technology, no spraying, no robotic arms, no harvesting, no extra rotors, no people, no logos, no labels, no subtitles, no interface graphics. The orchard is the hero; the drone remains clearly visible.",
+      "status": "completed",
+      "included_in_final_edit": true,
+      "edit_seconds": [
+        0,
+        6
+      ]
     },
     {
       "id": "visual_sampling",
       "target_duration_seconds": 6,
-      "prompt": "One uninterrupted photorealistic cinematic documentary shot, 16:9 landscape. In a lush New England apple orchard in early June, a single compact white quadcopter with four rotors and a small black stabilized camera gimbal hovers safely beside a gap between mature apple tree rows. Natural grass and clover under the trees, a modest weathered fence beyond, tiny unripe green apples, gentle morning light matching a premium agriculture documentary. Camera starts in a medium side view showing the drone and two distinct rows, then makes a slow smooth push toward its black camera gimbal as it tilts downward to photograph the orchard region. A small yellow insect-monitoring sticky card hanging from a nearby branch is visible as environmental context, remaining stationary. The drone collects photographs only; no physical picking or material collection. Subtle realistic rotor blur, calm leaves, consistent drone geometry, no collision with foliage, no dramatic wind. No cuts, no invented lasers, no scanning beams, no computer screens, no logos, no readable text, no numbers, no subtitles. Believable field equipment, clear visual story, restrained cinematic realism."
+      "prompt": "One uninterrupted photorealistic cinematic documentary shot, 16:9 landscape. In a lush New England apple orchard in early June, a single compact white quadcopter with four rotors and a small black stabilized camera gimbal hovers safely beside a gap between mature apple tree rows. Natural grass and clover under the trees, a modest weathered fence beyond, tiny unripe green apples, gentle morning light matching a premium agriculture documentary. Camera starts in a medium side view showing the drone and two distinct rows, then makes a slow smooth push toward its black camera gimbal as it tilts downward to photograph the orchard region. A small yellow insect-monitoring sticky card hanging from a nearby branch is visible as environmental context, remaining stationary. The drone collects photographs only; no physical picking or material collection. Subtle realistic rotor blur, calm leaves, consistent drone geometry, no collision with foliage, no dramatic wind. No cuts, no invented lasers, no scanning beams, no computer screens, no logos, no readable text, no numbers, no subtitles. Believable field equipment, clear visual story, restrained cinematic realism.",
+      "status": "completed",
+      "included_in_final_edit": true,
+      "edit_seconds": [
+        9,
+        15
+      ]
     }
   ],
   "generation_rules": [
     "Two submissions only initially; do not retry a pending request. Persist request IDs and poll status.",
     "Generate silent footage; narration and sound design added in edit.",
     "Use actual dashboard footage for all UI. Never generate fake dashboard screens.",
-    "Concept visualization label remains visible on generated drone shots.",
-    "If provider generation misses the deadline, use actual 3D drone survey with graceful camera motion; do not delay the full edit."
-  ]
+    "Concept visualization label remains visible on generated drone shots."
+  ],
+  "provider": "Higgsfield",
+  "production_note": "Generated concept footage is visibly labeled and distinct from actual dashboard recordings."
 }

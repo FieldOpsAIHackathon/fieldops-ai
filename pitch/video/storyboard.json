@@ -1,151 +1,84 @@
 {
-  "title": "FieldOps \u2014 The right moment",
-  "status": "Approved and produced",
-  "duration_seconds": 120,
-  "format": {
-    "width": 1920,
-    "height": 1080,
-    "fps": 30,
-    "delivery": "MP4 H.264 + AAC, captions plus SRT, transcript"
-  },
-  "base_commit": "0a90558",
+  "title": "FieldOps \u2014 See the signal. Act in time.",
+  "duration_seconds": 117,
+  "revision": "Light-mode cinematic edit",
   "segments": [
     {
       "id": "hook",
       "start": 0,
-      "end": 12,
-      "speaker": "narrator",
-      "text": "An orchard can look healthy while the next harvest is already at risk. The difference is catching the right signal\u2014and acting on it in time.",
-      "visual": "Cinematic orchard aerial, camera moving between natural grassy rows; drone reveal. FieldOps title arrives over footage.",
-      "source": "Higgsfield concept footage",
-      "label": "Drone concept visualization"
+      "end": 6,
+      "text": "Growers check traps by hand. Between visits, pests keep moving\u2014and treatment windows can close.",
+      "speaker": "narrator"
     },
     {
       "id": "drone",
-      "start": 12,
-      "end": 26,
-      "speaker": "narrator",
-      "text": "Meet FieldOps: orchard intelligence on a Dell Pro Max with GB10. Our vision starts with a drone collecting visual samples: photographs of farm regions, connected to insect observations from sticky traps.",
-      "visual": "Drone gimbal photographs two orchard regions; subtle capture brackets. Match cut into actual 3D farm and Start drone survey.",
-      "source": "Higgsfield concept footage \u2192 actual dashboard",
-      "label": "Concept visualization \u2192 Simulated survey"
+      "start": 6,
+      "end": 17,
+      "text": "FieldOps connects trap photos, pest activity, and weather to answer two questions: which block needs attention, and when? Our drone concept adds farm-wide visual context.",
+      "speaker": "narrator"
     },
     {
       "id": "farm",
-      "start": 26,
-      "end": 40,
-      "speaker": "narrator",
-      "text": "Here, the simulated survey covers six growing blocks. Rotate the farm, follow the flight, and open each virtual capture. The dashboard connects the landscape to eighteen traps and the season underneath.",
-      "visual": "Real 3D orbit, Follow drone, capture sweep, Review captures, select Block C. Compress the 24-second simulation through purposeful cuts.",
-      "source": "actual dashboard recording",
-      "label": "Demo season \u00b7 Simulated survey"
+      "start": 17,
+      "end": 28,
+      "text": "Now explore the working dashboard. Six blocks. Eighteen traps. One connected orchard. Rotate the three-dimensional farm, follow the simulated survey, and open each capture without losing the bigger picture.",
+      "speaker": "narrator"
     },
     {
-      "id": "decision",
-      "start": 40,
-      "end": 57,
-      "speaker": "narrator",
-      "text": "On June fourth, Block C stands out in red. Its traps recorded twenty-six codling moths. Its biological clock has reached two hundred sixty-one degree-days\u2014inside the configured treatment window.",
-      "visual": "Overview danger count \u2192 visible red Block C \u2192 26 trap count and 261 DD \u2192 Weather & timing 250\u2013350 DD window. Hold the key figures.",
-      "source": "actual dashboard recording",
-      "label": "Committed demo season \u00b7 June 4"
+      "id": "evidence",
+      "start": 28,
+      "end": 38,
+      "text": "Go closer. The evidence lab links labeled sample images with trap records and species counts. You can inspect the observation behind the number, instead of trusting a score.",
+      "speaker": "narrator"
     },
     {
       "id": "analytics",
-      "start": 57,
-      "end": 72,
-      "speaker": "narrator",
-      "text": "Follow the evidence: labeled trap images, pest activity, and temperature history. Biofix starts the clock. Deterministic code determines the window. The counting is impressive. The decision is what matters.",
-      "visual": "Trap lab with synthetic reference badge; Pest analytics flight curve and heatmap; Window planner. Use close framing so chart labels remain legible.",
-      "source": "actual dashboard recording",
-      "label": "Sample trap image \u00b7 Demo season"
+      "start": 38,
+      "end": 50,
+      "text": "Then watch the season unfold. Flight curves reveal sustained pest activity. Block comparisons show where pressure is building. Temperature history starts a biological clock, turning scattered observations into a clear timeline.",
+      "speaker": "narrator"
+    },
+    {
+      "id": "decision",
+      "start": 50,
+      "end": 62,
+      "text": "Here is the moment that matters. June fourth. Block C. Twenty-six codling moths and two hundred sixty-one degree-days since biofix. The treatment window is open\u2014and the dashboard makes it impossible to miss.",
+      "speaker": "narrator"
     },
     {
       "id": "voice_intro",
-      "start": 72,
-      "end": 79,
-      "speaker": "narrator",
-      "text": "Ask why. The assistant explains the season facts, with speech generated locally on the GB10.",
-      "visual": "Open Talk to FieldOps, Type instead, enter Why is Block C in danger?, return to voice and click Hear answer. Keep the actual input method visible.",
-      "source": "actual dashboard recording",
-      "label": "Local speech \u00b7 Season facts"
+      "start": 62,
+      "end": 69,
+      "text": "Want the reason? Ask FieldOps. The assistant explains the selected facts, with a natural voice generated right on the GB10.",
+      "speaker": "narrator"
     },
     {
       "id": "voice_reply",
-      "start": 79,
-      "end": 92,
-      "speaker": "FieldOps / live GB10 Kokoro",
+      "start": 69,
+      "end": 81,
       "text": "Block C: Spray window open. The authoritative timeline records biofix on May 8. Block C has 261.0 degree-days since that recorded start.",
-      "visual": "Actual speaking orb and answer over the movable farm; no narrator or music competing with the reply.",
-      "source": "actual dashboard and GB10 audio; exact UI reply",
-      "label": "GB10-generated speech"
+      "speaker": "FieldOps / GB10"
     },
     {
       "id": "telegram",
-      "start": 92,
-      "end": 105,
-      "speaker": "narrator",
-      "text": "Here is the real Telegram workflow. Send a trap photo; FieldOps returns species counts, a marked-up image, and the block status. The next action reaches the grower.",
-      "visual": "Use pitch/assets/telegram-trap-count.webp. Show submitted photo, then pan to actual boxes and 27 codling / 7 oriental fruit moth counts. Keep this labeled as a separate live photo example. A small simulated June 4 window-alert card may close the shot, explicitly labeled; never change the real screenshot numbers.",
-      "source": "real supplied Telegram screenshot; optional window-alert card is simulated",
-      "label": "Live photo example \u00b7 separate from season replay"
+      "start": 81,
+      "end": 94,
+      "text": "And the grower does not have to sit at a dashboard. Here is the real Telegram workflow: send a trap photo, get the marked-up image, species counts, and block context back on the phone.",
+      "speaker": "narrator"
     },
     {
       "id": "local",
-      "start": 105,
-      "end": 115,
-      "speaker": "narrator",
-      "text": "NemoClaw, OpenClaw, and OpenShell support the local agent workflow. Inference and decisions stay on the farm; Telegram delivers the message.",
-      "visual": "Simple architecture overlay: photo \u2192 GB10 / YOLO + decision engine + local agent \u2192 dashboard / phone. Return to farm hero.",
-      "source": "motion graphics over real product",
-      "label": "Local inference \u00b7 Telegram requires connectivity"
+      "start": 94,
+      "end": 108,
+      "text": "Behind it all: local vision, deterministic timing, and an agent workflow built with NemoClaw, OpenClaw, and OpenShell. Inference stays on the Dell GB10. Telegram carries the message. The decision comes from the evidence.",
+      "speaker": "narrator"
     },
     {
       "id": "close",
-      "start": 115,
-      "end": 120,
-      "speaker": "narrator",
-      "text": "FieldOps. Count the moths. Start the clock. Act at the right moment.",
-      "visual": "Bold FieldOps lockup over farm, red Block C slowly recedes; end card holds cleanly.",
-      "source": "product end card",
-      "label": ""
+      "start": 108,
+      "end": 117,
+      "text": "Less manual counting. Earlier visibility. One clear next action. FieldOps helps growers focus attention where\u2014and when\u2014it matters.",
+      "speaker": "narrator"
     }
-  ],
-  "production": {
-    "narration": "ElevenLabs premade Brian voice, multilingual_v2; controlled warm documentary delivery. Timed captions from provider alignment.",
-    "agent_voice": "Record actual GB10 Kokoro output, not ElevenLabs, in the assistant segment.",
-    "concept_footage": "Higgsfield, two six-second shots specified in generation-prompts.json; use available documented model duration closest to six seconds, trim in edit.",
-    "composition": "Astra-directed HTML title cards, actual browser recordings, and FFmpeg 1080p composition with timed captions and normalized speech.",
-    "music": "Original instrumental score generated with ElevenLabs; normalized and automatically ducked under narration; GB10 reply preserved.",
-    "recording_url": "http://127.0.0.1:8789/dashboard/?present=1&date=2026-06-04&focus=block-c&tab=overview",
-    "telegram": "Use actual supplied screenshot. No real messages sent; label any added alert card as simulated.",
-    "secrets": "Read provider credentials only at execution from hackathon-root .env. Never embed in HTML, repo, logs or exports."
-  },
-  "facts": {
-    "date": "2026-06-04",
-    "block": "block-c",
-    "codling_daily_block_count": 26,
-    "degree_days_since_biofix": 261,
-    "biofix_date": "2026-05-08",
-    "window_degree_days": [
-      250,
-      350
-    ],
-    "farm_blocks": 6,
-    "farm_traps": 18,
-    "sample_trap_image": "data/traps/trap_03_codling012.jpg",
-    "sample_photo_counts": {
-      "codling_moth": 12,
-      "oriental_fruit_moth": 3
-    },
-    "sample_photo_note": "Synthetic reference image and manifest counts; separate from the 26-moth selected-day block total.",
-    "telegram_asset": "pitch/assets/telegram-trap-count.webp",
-    "telegram_photo_counts": {
-      "codling_moth": 27,
-      "oriental_fruit_moth": 7,
-      "spotted_lanternfly": 0
-    },
-    "telegram_block_status": "Accumulating, 150 of 250 DD; separate state from June4 replay"
-  },
-  "approval_scope": "User approved generation and publication in this repository."
+  ]
 }
