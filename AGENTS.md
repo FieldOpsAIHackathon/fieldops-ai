@@ -45,6 +45,9 @@ One JSON shape for counts. Everything crosses module boundaries in this form; do
 Producers emit a list of these. Consumers accept a list of these. If you need extra fields
 (bounding boxes, confidence), keep them in the vision layer and do not leak them into the contract.
 
+The second boundary is `decide -> dashboard`: one JSON timeline the dashboard plays back. Its shape
+and the decision rules are pinned in [dashboard/TIMELINE_CONTRACT.md](dashboard/TIMELINE_CONTRACT.md).
+
 ## Architecture
 
 Six pieces, loosely coupled, each runnable on its own:
