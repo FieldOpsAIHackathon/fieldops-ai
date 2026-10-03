@@ -8,6 +8,7 @@ dashboard/TIMELINE_CONTRACT.md; thresholds come from species.json.
 """
 import argparse
 import json
+import math
 from collections import defaultdict
 from datetime import date, timedelta
 from pathlib import Path
@@ -148,6 +149,51 @@ def event_date(tl: dict, block_id: str, event_type: str):
     return None
 
 
+# Per-block views of the timeline, for the agent's tools. They add no rules of their own.
+EVENT_NAMES = {"biofix": "biofix_confirmed", "spray_window_open": "spray_window_open",
+               "spray_window_close": "spray_window_closed"}
+
+
+def _status(tl: dict, i: int, block_id: str) -> dict:
+    """One block's state at the end of day i, with the dates its milestones happened."""
+    day, state = tl["days"][i], tl["days"][i]["blocks"][block_id]
+    so_far = {"days": tl["days"][: i + 1]}
+    out = {
+        "species": tl["farm"]["pest"], "block": block_id, "as_of": day["date"], "status": state["status"],
+        "biofix_date": state["biofix_date"], "dd": state["dd_since_biofix"],
+        "confirmed_on": event_date(so_far, block_id, "biofix"),
+        "opened_on": event_date(so_far, block_id, "spray_window_open"),
+        "closed_on": event_date(so_far, block_id, "spray_window_close"),
+        "projected_open": None,
+    }
+    if state["status"] == "accumulating":
+        recent = [x["dd_today"] for x in tl["days"][max(0, i - 6): i + 1]]  # same 7-day rate the dashboard shows
+        rate = sum(recent) / len(recent)
+        if rate > 0:
+            left = tl["thresholds"]["spray_open_dd"] - state["dd_since_biofix"]
+            out["projected_open"] = (date.fromisoformat(day["date"]) + timedelta(days=math.ceil(left / rate))).isoformat()
+    return out
+
+
+def evaluate(records: list, weather: dict, as_of: date, config: dict = None) -> list:
+    """Status of every block using only data up to as_of. projected_open is an estimate, not a forecast."""
+    seen = [r for r in records if r["timestamp"][:10] <= as_of.isoformat()]
+    try:
+        tl = build_timeline(seen, weather, config)
+    except ValueError:
+        return []  # nothing counted yet
+    return [_status(tl, len(tl["days"]) - 1, b["id"]) for b in tl["blocks"]]
+
+
+def replay(records: list, weather: dict, config: dict = None) -> list:
+    """One event per milestone, in date order, each carrying that block's status on the day."""
+    tl = build_timeline(records, weather, config)
+    return [
+        dict(_status(tl, i, e["block_id"]), event=EVENT_NAMES[e["type"]])
+        for i, day in enumerate(tl["days"]) for e in day["events"]
+    ]
+
+
 def write_timeline(tl: dict, out_dir: Path = DASHBOARD_DATA) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "timeline.json").write_text(json.dumps(tl, indent=1) + "\n")
@@ -185,11 +231,14 @@ def selftest() -> None:
     }
     start = date(2026, 5, 1)
 
-    def run(counts):
+    def inputs(counts):
         records = [{"trap_id": "block-x-01", "timestamp": f"{start + timedelta(days=i):%Y-%m-%d}T14:00:00Z",
                     "species": "codling_moth", "count": n} for i, n in enumerate(counts)]
         weather = {start + timedelta(days=i): (50, 70) for i in range(len(counts))}  # 10 DD every day
-        return build_timeline(records, weather, cfg)
+        return records, weather
+
+    def run(counts):
+        return build_timeline(*inputs(counts), cfg)
 
     quiet = run([0] * 8)
     assert all(x["blocks"]["block-x"]["status"] == "watching" for x in quiet["days"])
@@ -205,6 +254,15 @@ def selftest() -> None:
     assert event_date(tl, "block-x", "spray_window_open") == "2026-05-08"  # 30 DD >= 25
     assert event_date(tl, "block-x", "spray_window_close") == "2026-05-09"  # 40 DD >= 35
     validate(tl)
+
+    # The agent's views read the same timeline: May 6 is biofix day, and the estimate matches what happens.
+    records, weather = inputs([0, 5, 0, 0, 3, 4, 0, 0, 0])
+    assert evaluate(records[:1], weather, date(2026, 5, 1), cfg)[0]["status"] == "watching"
+    s = evaluate(records, weather, date(2026, 5, 6), cfg)[0]
+    assert (s["status"], s["biofix_date"], s["dd"], s["opened_on"]) == ("accumulating", "2026-05-05", 10, None)
+    assert s["projected_open"] == "2026-05-08"  # 15 DD to go at 10 a day, rounded up to 2 days
+    assert [e["event"] for e in replay(records, weather, cfg)] == [
+        "biofix_confirmed", "spray_window_open", "spray_window_closed"]
 
 
 def main() -> None:

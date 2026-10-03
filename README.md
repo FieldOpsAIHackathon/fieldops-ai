@@ -66,21 +66,22 @@ Working end to end: season data, the decision engine, the replay dashboard, and 
 `fieldops/season.py` generates a season, `fieldops/decide.py` finds biofix, accumulates
 degree-days and calls the spray window, and `--replay` writes the timeline the dashboard plays.
 `fieldops/agent.py` turns an event into a sentence for the grower and `fieldops/alert.py` sends it
-to a phone. Also here: a synthetic trap-image generator with ground-truth counts
+to a phone, and `fieldops/api.py` serves both the dashboard trigger and the OpenClaw tools. Also
+here: a synthetic trap-image generator with ground-truth counts
 (`fieldops/synth_traps.py`), the deck (`pitch/index.html`) and the presenter runbook
 (`pitch/DEMO.md`).
 
-Still to come: the live vision layer (`ingest.py`, `vision.py`), and the hook that lets the
-dashboard trigger the buzz mid-replay. No local model has been confirmed to load on the GB10 yet —
-run `python -m fieldops.check_models` first; until then the agent runs on its template fallback.
-See [PLAN.md](PLAN.md) for the order of work and the open decisions.
+Still to come: the live vision layer (`ingest.py`, `vision.py`). No local model has been confirmed
+to load on the GB10 yet — run `python -m fieldops.check_models` first; until then the agent runs on
+its template fallback. See [PLAN.md](PLAN.md) for the order of work and the open decisions.
 
 ```bash
 python -m fieldops.check_models                  # do the local LLM and VLM load? run this first
 python -m fieldops.season                        # regenerate data/season.csv
 python -m fieldops.decide                        # self-test, then print each block's milestones
 python -m fieldops.decide --replay               # ...and write the dashboard timeline
-python -m fieldops.agent                         # phrase Block C's spray alert (--send to buzz)
+python -m fieldops.agent --status                # what the agent's tools return right now
+python -m fieldops.api                           # tool server: dashboard buzz + OpenClaw tools
 open dashboard/index.html                        # the replay, straight from disk, no server
 open pitch/index.html                            # the deck; arrow keys to advance
 

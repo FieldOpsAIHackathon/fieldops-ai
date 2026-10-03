@@ -555,13 +555,19 @@
   }
 
   /* ---------- banners + chime ---------- */
-  var banners = $('banners'), bannerTimers = [], firedKeys = {}, phoneSent = false;
-  // Asks the local listener (python -m fieldops.trigger) to text the phone. no-cors keeps a file:// page
-  // free of CORS preflights; if the listener is down the banner still shows and nothing else happens.
+  var banners = $('banners'), bannerTimers = [], firedKeys = {}, phoneSent = {};
+  // Asks the local tool server (python -m fieldops.api) to text the phone. no-cors keeps a file:// page
+  // free of CORS preflights; if the server is down the banner still shows and nothing else happens.
   function notifyPhone(date, ev) {
     try {
-      fetch('http://127.0.0.1:8765/alert', { method: 'POST', mode: 'no-cors', body: JSON.stringify({ date: date, block_id: ev.block_id, type: ev.type }) }).catch(function () {});
-    } catch (e) { /* no listener; ignore */ }
+      fetch('http://127.0.0.1:8765/trigger', { method: 'POST', mode: 'no-cors', body: JSON.stringify({ date: date, block_id: ev.block_id, type: ev.type }) }).catch(function () {});
+    } catch (e) { /* no server; ignore */ }
+  }
+  // One text per milestone type per replay run, for the first block to reach it, not one per block.
+  // Scrubbing (force) never texts.
+  function notifyOnce(date, ev, force) {
+    if (force || phoneSent[ev.type]) return;
+    phoneSent[ev.type] = true; notifyPhone(date, ev);
   }
   function showBanner(ev, soft) {
     var b = document.createElement('div');
@@ -601,10 +607,9 @@
       if (ev.type === 'spray_window_open') {
         showBanner(ev, false);
         if (!chimed) { chime(); chimed = true; }
-        // One text per replay run, for the first block to open, not one per block. Scrubbing never texts.
-        if (!phoneSent && !force) { phoneSent = true; notifyPhone(days[i].date, ev); }
+        notifyOnce(days[i].date, ev, force);
       }
-      else if (ev.type === 'biofix') showBanner(ev, true);
+      else if (ev.type === 'biofix') { showBanner(ev, true); notifyOnce(days[i].date, ev, force); }
     });
   }
 
@@ -636,7 +641,7 @@
     var prev = state.i;
     state.i = Math.max(0, Math.min(n - 1, i));
     if (state.i < prev) clearBanners();
-    if (state.i === 0 && prev !== 0) { firedKeys = {}; phoneSent = false; }
+    if (state.i === 0 && prev !== 0) { firedKeys = {}; phoneSent = {}; }
     render();
     if (fire && state.i > prev) fireEvents(prev, state.i);
   }

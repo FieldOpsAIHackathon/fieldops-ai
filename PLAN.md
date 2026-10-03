@@ -29,16 +29,20 @@ Phases are written as hours from kickoff (**H+0**), not wall-clock, so they surv
   key names.
 - `dashboard/index.html` — the replay dashboard. It loads `timeline.js` after the sample, so the
   real timeline wins. Opened from `file://` in a browser against the real timeline: replay, banners
-  and alert log work, and the spray banner now calls the phone trigger below.
-- `fieldops/trigger.py` — loopback listener (`python -m fieldops.trigger`, port 8765). The dashboard
-  POSTs `{date, block_id, type}` when the first spray banner of a replay fires; the listener looks
-  the event up in `timeline.json`, has `agent` phrase it and `alert` send it. Message text never
-  comes from the request. Rejects unknown events, foreign origins and bad bodies.
-- `fieldops/agent.py` — phrases a timeline event for the grower via a local OpenAI-compatible
-  LLM. Falls back to the event's templated `message` if the model is down, slow, or invents a
-  number. `python -m fieldops.agent [--send]`.
-- `fieldops/alert.py` — Telegram sender; prints to console and returns `False` when
-  `FIELDOPS_TG_TOKEN` / `FIELDOPS_TG_CHAT_ID` are unset. Never raises.
+  and alert log work, and the banners call the phone trigger below.
+- `fieldops/agent.py` (owner C) — the tools over `decide` (`get_counts`, `get_degree_days`,
+  `get_status`, `send_alert`), `write_alert` (local LLM phrasing, template fallback, and a check that
+  rejects any number the model was not given), `answer` for "why Thursday?", and a paced `--replay`.
+  `find_event` / `deliver_event` serve the dashboard trigger.
+- `fieldops/alert.py` (owner C) — Telegram sender with several chat IDs; credentials in the
+  environment or `~/.config/fieldops.env`, outside the repo. Logs every alert to `data/alerts.jsonl`.
+  Never raises.
+- `fieldops/api.py` (owner C) — the one tool server (`python -m fieldops.api`, port 8765): GET
+  `/status`, `/counts`, `/degree_days`, POST `/alert` for the OpenClaw sandbox, and POST `/trigger`
+  for the dashboard, which sends `{date, block_id, type}` for the first biofix and the first spray
+  window of a replay. The text comes from `decide` and the agent, never from the request.
+  Browsers are refused on `/alert`; `/trigger` accepts only a page opened from disk.
+- `openclaw/` — the sandbox policy and the tool skill the OpenClaw agent reads.
 - `fieldops/check_models.py` — smoke test that the local LLM and VLM load and answer. Run it
   first on the GB10.
 - `pitch/DEMO.md` — the presenter runbook.
@@ -57,17 +61,27 @@ entirely unbuilt. It is also still cut-able.
 been confirmed to load. Everything in `agent.py` currently runs on its template fallback. Do this
 first: it gates the agent wording and the whole vision phase.
 
-**The dashboard-to-phone trigger is built** (`fieldops/trigger.py`, option A). Start it before the
-demo; if it is not running, the banner still shows and the phone just does not buzz. It texts once
-per replay run, for the first block to open (Block C), not once per block. Tested end to end in a
-browser with the Telegram step stubbed out, because there is no bot token on this machine yet.
+**The dashboard-to-phone trigger is built** (`POST /trigger` on `fieldops.api`). Start
+`python -m fieldops.api` before the demo; if it is not running, the banners still show and the
+phone just does not buzz. It texts twice per replay run, for the first block to reach each
+milestone (biofix, then spray window), not once per block. Tested in a browser with the Telegram
+step stubbed out, because there is no bot token on this machine yet. Do not also run
+`python -m fieldops.agent --replay` during the same demo: it sends the same two alerts on its own
+clock, so the phone would buzz twice.
 
-**The agent fallback is built.** `agent.write_alert` returns the event's templated `message`
-whenever the LLM errors, exceeds 280 characters, or emits a digit absent from the facts — so a
-hallucinated spray date cannot reach the phone. Verified working with no LLM running.
+**No spray date in the biofix alert.** `decide.evaluate` still returns `projected_open`, an estimate
+from the last week's warmth. In spring it runs weeks late (on May 12 it said Jun 20; the window
+opened Jun 4), so the alert text leaves it out and `answer` / OpenClaw should call it an estimate.
+The pitch line "opens Thursday" is true once the window opens, not at biofix. Showing a real date
+at biofix needs a forecast, which we do not have offline.
 
-**"Why Thursday?" has no home.** The runbook answers it by clicking the degree-day clock. A spoken
-or typed Q&A through `agent.answer` is should-have, not must-have.
+**The agent's number check is built.** `agent.write_alert` falls back to a template whenever the
+LLM errors, is too long, or uses a number that is not in the facts it was given, so a hallucinated
+degree-day count or date cannot reach the phone. Verified with a stubbed model.
+
+**"Why Thursday?" is built but unverified.** `python -m fieldops.agent --ask "..."` and the OpenClaw
+tools answer from `decide`'s numbers as of the replay's current day. Nobody has run them against a
+real model.
 
 **Decisions needed from the team:** which local runtimes for the VLM and LLM; Telegram or SMS;
 whether the organizers require OpenClaw or NemoClaw (`agent.py` is the plug-in point).
@@ -101,7 +115,7 @@ Everyone in the room, one conversation, then we split and don't block each other
 - [ ] Agree both contracts out loud: the counts shape in [AGENTS.md](AGENTS.md) and the replay
       timeline in [dashboard/TIMELINE_CONTRACT.md](dashboard/TIMELINE_CONTRACT.md). Freeze them.
       They do not change after this meeting.
-- [ ] Scaffold the remaining `fieldops/` modules: `ingest.py`, `vision.py`, `agent.py`, `alert.py`
+- [ ] Scaffold the remaining `fieldops/` modules: `ingest.py` and `vision.py` (`agent.py`, `alert.py` and `api.py` have landed)
       (`store.py` and `decide.py` have landed). Each gets a `if __name__ == "__main__":` from the start.
 - [x] `fieldops/species.json` with apple / codling moth filled in.
 - [x] Create the SQLite schema and commit it.
