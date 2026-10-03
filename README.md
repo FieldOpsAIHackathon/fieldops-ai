@@ -105,6 +105,7 @@ python -m fieldops.history
 | Path | What's in it |
 |---|---|
 | [PLAN.md](PLAN.md) | Implementation plan — phases, tasks, interfaces, risks, definition of done. |
+| [ORCHESTRATION.md](ORCHESTRATION.md) | How the pieces run together: processes, ports, data flow, start order, failure modes. |
 | [AGENTS.md](AGENTS.md) | Build conventions for coding agents and teammates. Read before writing code. |
 | [FieldOps_Hackathon_Plan.md](FieldOps_Hackathon_Plan.md) | The pitch: story beats, demo script, scope calls. |
 | [dashboard/TIMELINE_CONTRACT.md](dashboard/TIMELINE_CONTRACT.md) | The `decide → dashboard` timeline shape and the decision rules. Frozen. |
