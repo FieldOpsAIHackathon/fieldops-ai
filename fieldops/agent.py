@@ -127,6 +127,80 @@ def get_status(as_of=None) -> dict:
     return status
 
 
+def get_farm(as_of=None, species=DEFAULT_SPECIES) -> dict:
+    """Mode 2: the whole farm, crispest form. Blocks ranked by urgency, one action each.
+
+    Deliberately small: a phone reply should fit on a screen, so this carries the headline and the
+    one number behind it, not the full verdict. Call /degree_days for a block's full reasoning.
+    """
+    full = get_degree_days(None, species, as_of)
+    cfg = species_cfg.load()["species"][species]
+    names = {b["id"]: b["name"] for b in species_cfg.load()["blocks"]}
+
+    blocks = []
+    for st in full["blocks"]:
+        step = decide.next_step(st, cfg)
+        blocks.append({
+            "block": st["block"],
+            "name": names.get(st["block"], st["block"]),
+            "status": st["status"],
+            "level": step["level"],
+            "urgency": step["urgency"],
+            "dd": round(st["dd"]),
+            "headline": step["headline"],
+            "detail": step["detail"],
+            "line": f"{names.get(st['block'], st['block'])}: {step['headline']}. {step['detail']}",
+        })
+    blocks.sort(key=lambda b: (b["urgency"], b["block"]))
+
+    acting = [b for b in blocks if b["level"] == "act"]
+    prepping = [b for b in blocks if b["level"] == "prepare"]
+    if acting:
+        many = len(acting) > 1
+        head = f"{len(acting)} block{'s' if many else ''} {'need' if many else 'needs'} spraying " \
+               f"now: " + ", ".join(b["name"] for b in acting) + "."
+    elif prepping:
+        head = "Nothing to spray today. Coming up within three days: " \
+               + ", ".join(b["name"] for b in prepping) + "."
+    else:
+        head = "Nothing to spray today and nothing due in the next three days."
+
+    return {
+        "as_of": full["as_of"],
+        "species": species,
+        "pest_name": cfg["display_name"],
+        "summary": head,
+        "needs_action": [b["block"] for b in acting],
+        "blocks": blocks,
+        "note": full.get("projection_note"),
+    }
+
+
+def get_block_report(block, as_of=None, species=DEFAULT_SPECIES, counts: dict = None) -> dict:
+    """Mode 1: one block's state and next step, optionally alongside counts just read from a photo."""
+    full = get_degree_days(block, species, as_of)
+    if not full["blocks"]:
+        return {"error": f"no such block: {block}"}
+    st = full["blocks"][0]
+    cfg = species_cfg.load()["species"][species]
+    names = {b["id"]: b["name"] for b in species_cfg.load()["blocks"]}
+    step = decide.next_step(st, cfg)
+    name = names.get(st["block"], st["block"])
+
+    out = {
+        "as_of": full["as_of"], "block": st["block"], "name": name,
+        "pest_name": cfg["display_name"], "status": st["status"], "level": step["level"],
+        "dd": round(st["dd"]), "biofix_date": st["biofix_date"],
+        "spray_opens_at_dd": cfg["spray_open_dd"],
+        "projected_open": st.get("projected_open"),
+        "headline": step["headline"], "detail": step["detail"],
+        "line": f"{name}: {step['headline']}. {step['detail']}",
+    }
+    if counts:
+        out["photo_counts"] = counts
+    return out
+
+
 def send_alert(text: str) -> dict:
     return {"delivered": alert.send(text)}
 
