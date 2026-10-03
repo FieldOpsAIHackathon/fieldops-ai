@@ -29,6 +29,13 @@ Phases are written as hours from kickoff (**H+0**), not wall-clock, so they surv
   key names.
 - `dashboard/index.html` — the replay dashboard. It loads `timeline.js` after the sample, so the
   real timeline wins. Not yet checked in a browser against real data.
+- `fieldops/agent.py` — phrases a timeline event for the grower via a local OpenAI-compatible
+  LLM. Falls back to the event's templated `message` if the model is down, slow, or invents a
+  number. `python -m fieldops.agent [--send]`.
+- `fieldops/alert.py` — Telegram sender; prints to console and returns `False` when
+  `FIELDOPS_TG_TOKEN` / `FIELDOPS_TG_CHAT_ID` are unset. Never raises.
+- `fieldops/check_models.py` — smoke test that the local LLM and VLM load and answer. Run it
+  first on the GB10.
 - `pitch/DEMO.md` — the presenter runbook.
 - `pitch/index.html` — the five-beat deck, single offline file.
 
@@ -38,8 +45,12 @@ Phases are written as hours from kickoff (**H+0**), not wall-clock, so they surv
 rule and output shape, and the real timeline matches `sample_timeline.json` field for field.
 What is still open:
 
-**Not started.** `ingest.py`, `vision.py`, `agent.py` and `alert.py` do not exist yet. Nobody has
-confirmed that the VLM and the LLM load on the GB10. Do that first.
+**Not started.** `ingest.py` and `vision.py` do not exist — the live counting path is still
+entirely unbuilt. It is also still cut-able.
+
+**Unverified.** Nobody has run `python -m fieldops.check_models` on the GB10, so no local model has
+been confirmed to load. Everything in `agent.py` currently runs on its template fallback. Do this
+first: it gates the agent wording and the whole vision phase.
 
 **Nothing triggers the phone from the dashboard.** The dashboard is static HTML from `file://`
 and makes no network calls, so it cannot tell Python to send a message when the spray banner
@@ -51,8 +62,9 @@ fires. Pick one before C starts:
 - **B:** `python -m fieldops.alert --replay` run in a second terminal while clicking Play. Simpler,
   but the two can drift on stage.
 
-**The agent needs a fallback.** Every timeline event already carries a templated `message`. If the
-LLM fails or is slow, `alert.send` that text, so the phone still buzzes.
+**The agent fallback is built.** `agent.write_alert` returns the event's templated `message`
+whenever the LLM errors, exceeds 280 characters, or emits a digit absent from the facts — so a
+hallucinated spray date cannot reach the phone. Verified working with no LLM running.
 
 **"Why Thursday?" has no home.** The runbook answers it by clicking the degree-day clock. A spoken
 or typed Q&A through `agent.answer` is should-have, not must-have.
@@ -60,6 +72,12 @@ or typed Q&A through `agent.answer` is should-have, not must-have.
 **Decisions needed from the team:** which local runtimes for the VLM and LLM; Telegram or SMS;
 trigger option A or B; whether the organizers require OpenClaw or NemoClaw (`agent.py` is the
 plug-in point).
+
+**The phone alert needs the network; the unplug beat says we don't.** `alert.send` posts to
+`api.telegram.org`. Once the cable is out it degrades to a console print, so the buzz and the
+unplug cannot both be live at the same moment. Order the demo so the phone buzzes *before* the
+unplug; what the unplug then proves is that inference and the decision are local, which is the
+honest claim anyway.
 
 **Check before relying on it:** open `dashboard/index.html` against the real `timeline.js` and
 confirm it behaves like the sample.
