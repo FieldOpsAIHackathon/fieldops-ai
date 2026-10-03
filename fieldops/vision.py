@@ -86,7 +86,7 @@ def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("images", nargs="*", type=Path)
     p.add_argument("--serve", action="store_true")
-    p.add_argument("--weights", default="/runs/fieldops-yolo26s-v2.pt")
+    p.add_argument("--weights", default="/work/models/fieldops-yolo26s-v2.pt")
     p.add_argument("--trap-id", default="block-c-04")
     p.add_argument("--to-store", action="store_true", help="also add the records to the SQLite store")
     args = p.parse_args()
