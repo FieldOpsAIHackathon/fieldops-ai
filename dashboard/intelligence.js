@@ -122,15 +122,16 @@
     if(!host)return;
     const active=activeStates.has(voiceState);
     dialog.dataset.voiceState=voiceState;
-    host.querySelector('[data-intel-voice-title]').textContent=voiceState==='idle'&&!canListen()?'Voice is unavailable here':voiceLabels[voiceState];
+    host.querySelector('[data-intel-voice-title]').textContent=voiceLabels[voiceState];
     const defaults={preparing:'Opening the microphone.',listening:'Ask about your orchard.',thinking:'Reading your orchard snapshot.',speaking:'Your orchard, explained.',error:'You can continue using the keyboard.'};
-    host.querySelector('[data-intel-status]').textContent=voiceMessage||defaults[voiceState]||(canListen()?'Tap the mic to talk about your orchard.':'You can still ask a question using the keyboard.');
+    host.querySelector('[data-intel-status]').textContent=voiceMessage||defaults[voiceState]||(canListen()?'Tap the mic to talk about your orchard.':'Type a question, then hear the answer. Microphone input is unavailable in this browser.');
     const mic=host.querySelector('[data-intel-voice]');
     mic.setAttribute('aria-label',active?'Stop voice session':canListen()?'Start voice session':'Voice input unavailable; use Type instead');
     mic.setAttribute('aria-pressed',String(active));
     mic.setAttribute('aria-disabled',String(!canListen()&&!active));
     host.querySelector('[data-intel-stop]').disabled=!active;
-    host.querySelector('[data-intel-connection]').textContent=voiceAdapter?'Voice available':recognition?'On-device voice':'Keyboard available';
+    host.querySelector('[data-intel-hear]').disabled=active;
+    host.querySelector('[data-intel-connection]').textContent=voiceAdapter?'Voice available':recognition?'On-device voice':window.fieldopsVoice?'Voice replies · keyboard input':'Keyboard available';
   }
   function setVoiceState(state,details={}){
     const normalized={ready:'idle',starting:'preparing',processing:'thinking'}[state]||state;
@@ -191,6 +192,7 @@
     host.querySelector('[data-intel-reply-title]').textContent=message.title;
     host.querySelector('[data-intel-reply]').textContent=message.paragraphs[0];
     host.querySelector('[data-intel-latest]').hidden=false;
+    host.querySelector('[data-intel-hear]').hidden=false;
     host.querySelector('[data-intel-show-evidence]').innerHTML='See supporting facts '+ctx.icon('chev',14);
     if(voice){voiceSession=true;speakText([message.title,message.paragraphs[0]].join('. '));}
     else setVoiceState('idle','Answer ready. Open the chat for supporting facts.');
@@ -207,6 +209,7 @@
     host.querySelector('[data-intel-reply-title]').textContent='FieldOps';
     host.querySelector('[data-intel-reply]').textContent=message.paragraphs[0];
     host.querySelector('[data-intel-latest]').hidden=false;
+    host.querySelector('[data-intel-hear]').hidden=false;
     host.querySelector('[data-intel-show-evidence]').innerHTML='Open chat '+ctx.icon('chev',14);
     if(speak){voiceSession=true;speakText(reply);}
     else setVoiceState('idle','Reply ready.');
@@ -262,12 +265,13 @@
     host.innerHTML=`<button class="intel-launcher intel-launcher-voice" type="button" aria-label="Talk to FieldOps" aria-haspopup="dialog" aria-expanded="false" aria-controls="intel-dialog">${orb('small')}<span>Talk to FieldOps</span>${ctx.icon('mic',18)}</button>
       <dialog class="intel-dialog intel-voice-dialog" id="intel-dialog" aria-modal="false" aria-labelledby="intel-dialog-title"><header class="intel-dialog-head"><div><h2 id="intel-dialog-title">FieldOps</h2><span data-intel-connection>Keyboard available</span></div><button class="intel-icon-button" data-intel-close aria-label="Close assistant">${ctx.icon('close',20)}</button></header>
       <div class="intel-context-line"><span class="intel-context-dot"></span><span data-intel-context></span></div>
-      <section class="intel-voice-main" aria-label="Voice assistant"><button type="button" class="intel-voice-primary" data-intel-voice aria-label="Start voice session" aria-pressed="false">${orb()}<span class="intel-mic-symbol">${ctx.icon('mic',23)}</span></button><h3 data-intel-voice-title>Ready when you are</h3><p class="intel-status" data-intel-status role="status" aria-live="polite"></p><div class="intel-voice-actions"><button type="button" class="intel-stop" data-intel-stop disabled><span></span>Stop</button><button type="button" class="intel-chat-toggle" data-intel-chat-toggle aria-expanded="false" aria-controls="intel-chat">${ctx.icon('note',15)}Type instead</button></div>
+      <section class="intel-voice-main" aria-label="Voice assistant"><button type="button" class="intel-voice-primary" data-intel-voice aria-label="Start voice session" aria-pressed="false">${orb()}<span class="intel-mic-symbol">${ctx.icon('mic',23)}</span></button><h3 data-intel-voice-title>Ready when you are</h3><p class="intel-status" data-intel-status role="status" aria-live="polite"></p><div class="intel-voice-actions"><button type="button" class="intel-chat-toggle" data-intel-hear hidden>Hear answer</button><button type="button" class="intel-stop" data-intel-stop disabled><span></span>Stop</button><button type="button" class="intel-chat-toggle" data-intel-chat-toggle aria-expanded="false" aria-controls="intel-chat">${ctx.icon('note',15)}Type instead</button></div>
       <div class="intel-latest" data-intel-latest hidden><p class="intel-latest-question" data-intel-utterance></p><h4 data-intel-reply-title></h4><p data-intel-reply></p><button type="button" class="intel-text-button" data-intel-show-evidence>See supporting facts ${ctx.icon('chev',14)}</button></div></section>
       <section id="intel-chat" class="intel-chat-secondary" data-intel-chat hidden aria-label="Optional chat"><div class="intel-conversation" tabindex="0" aria-label="Conversation"><div class="intel-welcome"><h3>What would you like to know?</h3><p>Answers use the selected date and block from the demo season.</p><div class="intel-quick-list"><button data-intel-question="What should I focus on today?">Give me the briefing ${ctx.icon('chev',15)}</button><button data-intel-question="Which block is next?">Which block is next? ${ctx.icon('chev',15)}</button></div></div></div><form class="intel-composer"><label class="intel-sr-only" for="intel-question">Ask about the selected season snapshot</label><div class="intel-input-row"><textarea id="intel-question" rows="2" maxlength="1000" placeholder="Ask about your orchard…"></textarea><button type="submit" class="intel-submit" aria-label="Send question">${ctx.icon('send',19)}</button></div><p class="intel-privacy-note">Season facts · No messages or alerts are sent.</p></form></section></dialog>`;
     document.body.appendChild(host);dialog=host.querySelector('dialog');launcher=host.querySelector('.intel-launcher');input=host.querySelector('textarea');log=host.querySelector('.intel-conversation');
     launcher.addEventListener('click',()=>open());host.querySelector('[data-intel-close]').addEventListener('click',close);
     host.querySelector('[data-intel-voice]').addEventListener('click',startVoice);host.querySelector('[data-intel-stop]').addEventListener('click',()=>stopVoice());
+    host.querySelector('[data-intel-hear]').addEventListener('click',()=>{stopVoice({announce:false});voiceSession=true;speakText([host.querySelector('[data-intel-reply-title]').textContent,host.querySelector('[data-intel-reply]').textContent].join('. '));});
     host.querySelector('[data-intel-chat-toggle]').addEventListener('click',()=>setChat(!chatVisible));host.querySelector('[data-intel-show-evidence]').addEventListener('click',()=>setChat(true));
     dialog.addEventListener('cancel',event=>{event.preventDefault();close();});
     document.addEventListener('keydown',event=>{if(event.key==='Escape'&&dialog.open){event.preventDefault();event.stopPropagation();close();}},true);
