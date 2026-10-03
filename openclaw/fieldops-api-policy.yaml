@@ -19,5 +19,6 @@ network_policies:
           - allow: { method: GET, path: "/degree_days" }
           - allow: { method: POST, path: "/alert" }
           - allow: { method: POST, path: "/count" }
+          - allow: { method: GET, path: "/vision/**" }
     binaries:
       - { path: /usr/bin/curl }

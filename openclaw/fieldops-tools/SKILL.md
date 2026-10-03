@@ -33,6 +33,17 @@ curl -s --data-binary @"<photo path>" "http://172.18.0.1:8765/count?trap_id=<tra
   `block-<letter>-01`; if nothing, use `unknown-trap` and say so.
 - Reply with the `summary` and `total_pests` from the response, one short line per species.
   Gnats and debris are detected and deliberately not counted. Never change the numbers.
+- **Always send back the annotated photo** (pests boxed) with the counts. Download it into the
+  workspace using the `annotated_url` from the response, then put a Markdown image at the end of
+  your reply. Telegram delivers it as a photo:
+
+  ```sh
+  mkdir -p /sandbox/.openclaw/workspace/fieldops
+  curl -s -o "/sandbox/.openclaw/workspace/fieldops/<annotated_file>" "http://172.18.0.1:8765<annotated_url>"
+  ```
+
+  and end the reply with `![pests counted](/sandbox/.openclaw/workspace/fieldops/<annotated_file>)`.
+  Use the exact file name from the response, so every photo gets its own file.
 - If the response is an error, say the counter is unavailable; do not guess a count.
 
 ## Questions about the data
