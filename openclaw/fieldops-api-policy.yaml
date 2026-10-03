@@ -1,0 +1,22 @@
+# Lets the OpenClaw sandbox reach the FieldOps tool server (python -m fieldops.api) on the host.
+#   nemoclaw fieldops policy add --from-file openclaw/fieldops-api-policy.yaml \
+#     --trusted-private-host 172.18.0.1 --yes
+preset:
+  name: fieldops-api
+  description: "FieldOps tool server on the GB10 host, port 8765, curl only"
+
+network_policies:
+  fieldops-api:
+    name: fieldops-api
+    endpoints:
+      - host: 172.18.0.1
+        port: 8765
+        protocol: rest
+        enforcement: enforce
+        rules:
+          - allow: { method: GET, path: "/status" }
+          - allow: { method: GET, path: "/counts" }
+          - allow: { method: GET, path: "/degree_days" }
+          - allow: { method: POST, path: "/alert" }
+    binaries:
+      - { path: /usr/bin/curl }
