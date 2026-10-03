@@ -41,9 +41,11 @@ The counting is the party trick. The decision is the product.
                                                            phrases it, answers questions
 ```
 
-That's the live path. The season replay is deliberately simpler and file-based —
-`data/season.csv → decide → timeline.json → dashboard` — with no database in it, so the demo is
-byte-identical on any machine and has no state to go stale between runs.
+The store is the single source of truth `decide` reads, and it holds both halves of the
+decision: trap counts and the daily temperatures the degree-day clock runs on. It is rebuilt from
+the committed `data/season.csv`, so a reload is deterministic and the replay comes out identical
+every time. Live counts from the vision layer append to the same store. With no store present,
+`decide` falls back to reading the CSV directly.
 
 Two deliberate splits:
 
@@ -78,13 +80,14 @@ See [PLAN.md](PLAN.md) for the order of work and the open decisions.
 ```bash
 python -m fieldops.check_models                  # do the local LLM and VLM load? run this first
 python -m fieldops.season                        # regenerate data/season.csv
+python -m fieldops.store --load data/season.csv  # build the store: counts + temperatures
 python -m fieldops.decide                        # self-test, then print each block's milestones
 python -m fieldops.decide --replay               # ...and write the dashboard timeline
 python -m fieldops.agent                         # phrase Block C's spray alert (--send to buzz)
 open dashboard/index.html                        # the replay, straight from disk, no server
 open pitch/index.html                            # the deck; arrow keys to advance
 
-python -m fieldops.store --load data/season.csv  # optional: counts into SQLite, for live counting
+python -m fieldops.decide --csv                  # bypass the store and read the CSV directly
 ```
 
 ## Repo map
@@ -100,7 +103,7 @@ python -m fieldops.store --load data/season.csv  # optional: counts into SQLite,
 ## Stack
 
 Python on a Dell/NVIDIA GB10. A local vision-language model for counting, a local LLM for the
-agent layer, SQLite for counts, and a single-page dashboard. No cloud services anywhere in the path.
+agent layer, SQLite for counts and weather, and a single-page dashboard. No cloud services anywhere in the path.
 
 ## License
 
