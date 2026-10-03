@@ -10,6 +10,7 @@ The LLM is Qwen on the GB10's local vLLM server; if it is down, alerts fall back
 """
 import argparse
 import json
+import re
 import time
 import urllib.request
 from datetime import date, timedelta
@@ -30,9 +31,12 @@ ALERT_EVENTS = ("biofix_confirmed", "spray_window_open")
 
 @lru_cache(maxsize=None)
 def _season():
+    """The store if it holds data, else the committed seed CSV: the same rule decide uses."""
+    from . import store
     from .season import load_csv
 
-    return load_csv()
+    records, weather = store.read()
+    return (records, weather) if records and weather else load_csv()
 
 
 def season_days() -> list:
@@ -103,7 +107,7 @@ def get_degree_days(block=None, species=DEFAULT_SPECIES, as_of=None) -> dict:
     return {
         "as_of": end.isoformat(),
         "species": species,
-        "rules": {**cfg["biofix"], **cfg["degree_days"], "method": "daily average, horizontal cutoffs"},
+        "rules": {**{k: cfg[k] for k in decide.THRESHOLD_KEYS}, "method": "daily average, horizontal cutoffs"},
         "blocks": blocks,
     }
 
@@ -117,6 +121,25 @@ def get_status(as_of=None) -> dict:
 
 def send_alert(text: str) -> dict:
     return {"delivered": alert.send(text)}
+
+
+def find_event(day: str, block: str, kind: str):
+    """The decide event for (date, block, kind) if it is one we alert on, else None. kind is a timeline
+    type ("biofix", "spray_window_open") or an agent event name."""
+    name = decide.EVENT_NAMES.get(kind, kind)
+    if name not in ALERT_EVENTS:
+        return None
+    records, weather = _season()
+    return next((e for e in decide.replay(records, weather)
+                 if e["as_of"] == day and e["block"] == block and e["event"] == name), None)
+
+
+def deliver_event(event: dict, dry_run: bool = False) -> None:
+    """Phrase one event, move the replay clock to its day (so the tools answer as of then), and send it."""
+    set_current_day(date.fromisoformat(event["as_of"]))
+    text = write_alert(event)
+    print(f"[agent] {event['as_of']} {event['block']} {event['event']}: {text}")
+    alert.send(text, dry_run=dry_run)
 
 
 # --- LLM -------------------------------------------------------------------------------------
@@ -144,30 +167,36 @@ ALERT_SYSTEM = (
 def _template(d: dict) -> str:
     block = f"block {d['block'].split('-')[-1].upper()}"
     if d["event"] == "biofix_confirmed":
-        text = f"Biofix reached on {block}: codling moth flight confirmed, degree-day clock started."
-        if d.get("projected_open"):
-            text += f" Spray window expected to open {_weekday(d['projected_open'])}."
-        return text
+        # No projected spray date here: it extrapolates last week's warmth and ran weeks off in spring.
+        return f"Biofix reached on {block}: codling moth flight confirmed, degree-day clock started."
     if d["event"] == "spray_window_open":
         return f"Spray window is open on {block}: {d['dd']:.0f} degree-days since biofix. Spray now."
     return f"Spray window closed on {block} at {d['dd']:.0f} degree-days."
 
 
+def _numbers(text: str) -> set:
+    return set(re.findall(r"\d+", text))
+
+
 def write_alert(decision: dict) -> str:
-    """Turn one decide event into a grower-facing sentence. Falls back to a template."""
+    """Turn one decide event into a grower-facing sentence. Falls back to a template.
+
+    The model's text is used only if every number in it appears in the facts it was given.
+    """
     facts = {
         "event": decision["event"],
         "block": decision["block"],
-        "pest": species_cfg.load()["species"][decision["species"]]["display"],
+        "pest": species_cfg.load()["species"][decision["species"]]["display_name"],
         "today": _weekday(decision["as_of"]),
         "biofix_date": _weekday(decision["biofix_date"]),
-        "degree_days_since_biofix": decision["dd"],
-        "spray_window_expected_to_open": _weekday(decision.get("projected_open")),
+        "degree_days_since_biofix": round(decision["dd"]),
     }
+    fact_text = json.dumps(facts)
     try:
-        text = _llm(ALERT_SYSTEM, json.dumps(facts), max_tokens=120)
-        if text and len(text) < 400:
+        text = _llm(ALERT_SYSTEM, fact_text, max_tokens=120)
+        if text and len(text) < 400 and _numbers(text) <= _numbers(fact_text):
             return text
+        print("[llm text failed the checks; using template]")
     except Exception as e:
         print(f"[llm unavailable ({type(e).__name__}); using template]")
     return _template(decision)

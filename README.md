@@ -41,6 +41,12 @@ The counting is the party trick. The decision is the product.
                                                            phrases it, answers questions
 ```
 
+The store is the single source of truth `decide` reads, and it holds both halves of the
+decision: trap counts and the daily temperatures the degree-day clock runs on. It is rebuilt from
+the committed `data/season.csv`, so a reload is deterministic and the replay comes out identical
+every time. Live counts from the vision layer append to the same store. With no store present,
+`decide` falls back to reading the CSV directly.
+
 Two deliberate splits:
 
 - **The decision is plain Python, not a model.** Biofix and degree-day math are deterministic and
@@ -58,19 +64,35 @@ business. You can unplug the network cable and FieldOps keeps working.
 
 **Under construction during the hackathon.**
 
-Working: season data and the decision engine. `fieldops/season.py` generates a season,
-`fieldops/store.py` loads it into SQLite, and `fieldops/decide.py` finds biofix, accumulates
-degree-days and calls the spray window. There's a synthetic trap-image generator with ground-truth
-counts (`fieldops/synth_traps.py`) and the pitch deck (`pitch/index.html`).
+Working end to end: season data, the decision engine, the replay dashboard, and the alert.
+`fieldops/season.py` generates a season, `fieldops/decide.py` finds biofix, accumulates
+degree-days and calls the spray window, and `--replay` writes the timeline the dashboard plays.
+`fieldops/agent.py` turns an event into a sentence for the grower and `fieldops/alert.py` sends it
+to a phone, and `fieldops/api.py` serves both the dashboard trigger and the OpenClaw tools. Also
+here: a synthetic trap-image generator with ground-truth counts
+(`fieldops/synth_traps.py`), the deck (`pitch/index.html`) and the presenter runbook
+(`pitch/DEMO.md`).
 
-Still to come: the live vision layer, the agent and phone alert, and the dashboard — plus the
-emitter that writes the replay timeline the dashboard reads. See [PLAN.md](PLAN.md) for the order
-of work and the open items.
+Still to come: the live vision layer (`ingest.py`, `vision.py`). No local model has been confirmed
+to load on the GB10 yet — run `python -m fieldops.check_models` first; until then the agent runs on
+its template fallback. See [PLAN.md](PLAN.md) for the order of work and the open decisions.
 
 ```bash
+python -m fieldops.check_models                  # do the local LLM and VLM load? run this first
 python -m fieldops.season                        # regenerate data/season.csv
-python -m fieldops.store --load data/season.csv  # load into SQLite
-python -m fieldops.decide                        # self-test, then replay the season
+python -m fieldops.store --load data/season.csv  # build the store: counts + temperatures
+python -m fieldops.decide                        # self-test, then print each block's milestones
+python -m fieldops.decide --replay               # ...and write the dashboard timeline
+python -m fieldops.agent --status                # what the agent's tools return right now
+python -m fieldops.api                           # tool server: dashboard buzz + OpenClaw tools
+open dashboard/index.html                        # the replay, straight from disk, no server
+open pitch/index.html                            # the deck; arrow keys to advance
+
+python -m fieldops.decide --csv                  # bypass the store and read the CSV directly
+
+# ground-truth trap counts as test data. Use a scratch --db: these traps sit in block C on a
+# real season date, so loading them into the demo store spikes its flight curve.
+python -m fieldops.store --db data/test.db --load-traps data/traps/manifest.json
 ```
 
 ## Repo map
@@ -86,7 +108,7 @@ python -m fieldops.decide                        # self-test, then replay the se
 ## Stack
 
 Python on a Dell/NVIDIA GB10. A local vision-language model for counting, a local LLM for the
-agent layer, SQLite for counts, and a single-page dashboard. No cloud services anywhere in the path.
+agent layer, SQLite for counts and weather, and a single-page dashboard. No cloud services anywhere in the path.
 
 ## License
 
