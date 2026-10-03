@@ -80,6 +80,7 @@ its template fallback. See [PLAN.md](PLAN.md) for the order of work and the open
 ```bash
 python -m fieldops.check_models                  # do the local LLM and VLM load? run this first
 python -m fieldops.season                        # regenerate data/season.csv
+python -m fieldops.weather --normals             # refetch the average temperatures behind the spray-date estimate (needs network)
 python -m fieldops.store --load data/season.csv  # build the store: counts + temperatures
 python -m fieldops.decide                        # self-test, then print each block's milestones
 python -m fieldops.decide --replay               # ...and write the dashboard timeline
@@ -93,6 +94,10 @@ python -m fieldops.decide --csv                  # bypass the store and read the
 # ground-truth trap counts as test data. Use a scratch --db: these traps sit in block C on a
 # real season date, so loading them into the demo store spikes its flight curve.
 python -m fieldops.store --db data/test.db --load-traps data/traps/manifest.json
+
+# two seasons of multi-species history in its own store, for exercising queries and the
+# vision path. 4,665 readings, 30 traps, 10 species, irregular check times.
+python -m fieldops.history
 ```
 
 ## Repo map
