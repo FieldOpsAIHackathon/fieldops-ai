@@ -75,3 +75,29 @@ Inspect logs with `journalctl --user -u fieldops-api.service -n 100`; pause auto
 updates during a presentation by setting `FIELDOPS_DEPLOY_ENABLED=false` and letting
 any already-running deployment finish. For manual rollback, point `current` at a
 retained release and restart `fieldops-api.service`.
+
+## Running the whole stack at boot (systemd units in `deploy/systemd/`)
+
+CI deploys only the tools API. The rest of the GB10 stack is packaged as systemd **user** units
+under one target. Lingering is on, so they start at boot without a login:
+
+| Unit | What it runs |
+|---|---|
+| `fieldops-sandbox.service` | Starts the NemoClaw `fieldops` sandbox (OpenClaw + Telegram) if it is stopped, then `nemoclaw fieldops recover` |
+| `fieldops-vision.service` | YOLO26 counting service in the GPU container, `127.0.0.1:8767` |
+| `fieldops-api.service` | Tools API from this checkout, `127.0.0.1` and the sandbox bridge `172.18.0.1`, port 8765 |
+| `fieldops.target` | Pulls in all three |
+
+vLLM (`nemoclaw-vllm`, Docker `unless-stopped`) and the OpenShell gateway
+(`nemoclaw-openshell-gateway.service`) already come back on their own.
+
+```bash
+bash deploy/install.sh                       # copy units, enable and start fieldops.target
+systemctl --user status 'fieldops*'
+journalctl --user -u fieldops-vision -f
+```
+
+`install.sh` copies the units rather than symlinking them, because `deploy_gb10.sh` rewrites
+`fieldops-api.service` in place. It also leaves an API unit that CI installed alone. **Before the
+first CI deploy**, run `systemctl --user stop fieldops-api`: the deploy refuses to start while port
+8765 is in use, and from then on CI owns the API unit.
