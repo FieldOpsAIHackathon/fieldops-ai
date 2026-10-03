@@ -1,5 +1,5 @@
 1
-00:00:00,118 --> 00:00:04,819
+00:00:00,118 --> 00:00:04,768
 Growers check traps by hand. Between visits, pests keep moving--and treatment
 
 2
@@ -7,11 +7,11 @@ Growers check traps by hand. Between visits, pests keep moving--and treatment
 windows can close.
 
 3
-00:00:06,084 --> 00:00:09,519
+00:00:06,084 --> 00:00:09,492
 FieldOps connects trap photos, pest activity, and weather to answer two
 
 4
-00:00:09,497 --> 00:00:14,419
+00:00:09,497 --> 00:00:14,415
 questions: which block needs attention, and when? Our drone concept adds
 
 5
@@ -19,11 +19,11 @@ questions: which block needs attention, and when? Our drone concept adds
 farm-wide visual context.
 
 6
-00:00:17,106 --> 00:00:21,512
+00:00:17,106 --> 00:00:21,473
 Now explore the working dashboard. Six blocks. Eighteen traps. One connected
 
 7
-00:00:21,478 --> 00:00:25,535
+00:00:21,478 --> 00:00:25,517
 orchard. Rotate the three-dimensional farm, follow the simulated survey, and
 
 8
@@ -31,35 +31,35 @@ orchard. Rotate the three-dimensional farm, follow the simulated survey, and
 open each capture without losing the bigger picture.
 
 9
-00:00:28,108 --> 00:00:32,564
-Go closer. The evidence lab links labeled sample images with trap records and
+00:00:28,094 --> 00:00:31,833
+Go closer. Inspect labeled reference images, separate from the season's trap
 
 10
-00:00:32,554 --> 00:00:36,732
-species counts. You can inspect the observation behind the number, instead of
+00:00:31,838 --> 00:00:35,889
+records. Compare species counts, explore the sample annotations, and review
 
 11
-00:00:36,710 --> 00:00:37,731
-trusting a score.
+00:00:35,894 --> 00:00:37,761
+daily observations, block by block.
 
 12
-00:00:38,099 --> 00:00:42,028
-Then watch the season unfold. Flight curves reveal sustained pest activity.
+00:00:38,090 --> 00:00:42,636
+Watch the season unfold. Flight curves reveal sustained pest activity. Compare
 
 13
-00:00:42,503 --> 00:00:46,084
-Block comparisons show where pressure is building. Temperature history starts
+00:00:42,641 --> 00:00:47,085
+pressure across blocks. Sustained catch starts the clock. Temperature advances
 
 14
-00:00:46,044 --> 00:00:49,763
-a biological clock, turning scattered observations into a clear timeline.
+00:00:47,090 --> 00:00:49,747
+it, turning daily observations into a clear timeline.
 
 15
-00:00:50,090 --> 00:00:54,859
+00:00:50,090 --> 00:00:54,825
 Here is the moment that matters. June fourth. Block C. Twenty-six codling
 
 16
-00:00:54,830 --> 00:00:59,269
+00:00:54,830 --> 00:00:59,215
 moths and two hundred sixty-one degree-days since biofix. The treatment window
 
 17
@@ -67,7 +67,7 @@ moths and two hundred sixty-one degree-days since biofix. The treatment window
 is open--and the dashboard makes it impossible to miss.
 
 18
-00:01:02,115 --> 00:01:06,442
+00:01:02,115 --> 00:01:06,400
 Want the reason? Ask FieldOps. The assistant explains the selected facts, with
 
 19
@@ -75,11 +75,11 @@ Want the reason? Ask FieldOps. The assistant explains the selected facts, with
 a natural voice generated right on the G B ten.
 
 20
-00:01:09,224 --> 00:01:11,724
+00:01:09,224 --> 00:01:11,719
 Block C: Spray window open.
 
 21
-00:01:11,724 --> 00:01:15,324
+00:01:11,724 --> 00:01:15,319
 The authoritative timeline records biofix on May 8.
 
 22
@@ -87,7 +87,7 @@ The authoritative timeline records biofix on May 8.
 Block C has 261 degree-days since that recorded start.
 
 23
-00:01:21,119 --> 00:01:24,589
+00:01:21,119 --> 00:01:24,551
 And the grower does not have to sit at a dashboard. Here is
 
 24
@@ -99,11 +99,11 @@ the real Telegram workflow: send a trap photo, get the marked-up image,
 species counts, and block context back on the phone.
 
 26
-00:01:34,094 --> 00:01:38,938
+00:01:34,094 --> 00:01:38,887
 Behind it all: local vision, deterministic timing, and an agent workflow built
 
 27
-00:01:38,892 --> 00:01:43,170
+00:01:38,892 --> 00:01:43,153
 with Nemo Claw, Open Claw, and Open Shell. Inference stays on the Dell
 
 28

@@ -1,82 +1,63 @@
-# FieldOps demo runbook
+# FieldOps final presentation
 
-Three minutes, five beats. Two browser tabs open before you walk up:
-
-1. `pitch/index.html` (the deck), opened from disk.
-2. `dashboard/index.html` (the orchard dashboard), served from the repo root so live mode works:
+Open [the final HTML deck](2026-10-03-fieldops.html). The existing `pitch/index.html`
+entry point opens the same deck. Serve the repository for the most reliable video playback:
 
 ```bash
-cd fieldops-ai && python3 -m http.server 8787        # then open http://localhost:8787/dashboard/index.html
-python3 dashboard/tools/simulate_feed.py --pace 1    # second terminal: readings start arriving
+python3 -m http.server 8789
+# http://127.0.0.1:8789/pitch/
 ```
 
-Both work with the network off (localhost is not the network). The dashboard also opens straight
-from `file://` for the replay alone. Test the unplug once before the pitch, not during it.
+The HTML embeds its static imagery and fonts. Keep `pitch/video/fieldops-demo.mp4`
+beside it at the existing relative path. This is the sole published MP4; the shared
+video URL remains unchanged. Video playback, the deck, and the committed dashboard
+replay do not need the GB10 or internet once the files are local.
 
-## Before you start
+## Three-minute presenter path
 
-- Dashboard tab: load it fresh so the replay starts on April 15. Click **Block C** on the orchard
-  plan once so the curve, the degree-day clock and the analytics follow the lead block.
-- The spine shows **Farm health** (a demo heuristic, say so if asked), the clock, **Ask FieldOps**
-  and the alert log. Below the fold is **Season analytics**: species by region, the weekly catch
-  heatmap, the trap table, the degree-day race and the weather strip, all following the current day.
-- If a real `dashboard/data/timeline.js` exists it overrides the sample automatically. Make sure
-  the one on the demo machine is the one you rehearsed with.
-- Check the badge top right reads "Running locally on ProMaxGB10". When the cable comes out it
-  flips to "Offline, still running" on its own.
-- Optional: tick **Alert sound** so the spray banner chimes. Muted by default.
-- To buzz the phone, start the tool server in a terminal first: `python -m fieldops.api`. Set up
-  Telegram once beforehand with `python -m fieldops.telegram_setup`, which checks the bot token, finds
-  your chat, saves both to `~/.config/fieldops.env` (outside the repo, owner-only) and sends a test
-  message. It texts twice per replay: biofix, then Block C's spray window. If the server
-  is not running the banners still show, so the demo never depends on it. Do not also run
-  `python -m fieldops.agent --replay`.
+1. **Slide 1, 12 seconds:** explain the grower's problem: manual trap checks leave
+   gaps while pest activity and treatment windows change.
+2. **Slide 2, 15 seconds:** state the value: which block needs attention, and when.
+   The committed June 4 replay has Block C at 26 codling moths and 261 degree-days.
+3. **Slide 3, 117 seconds:** play the embedded film. Let its narration carry the demo.
+   The video is a recorded demonstration, with concept drone footage labeled.
+4. **Slide 4, 18 seconds:** explain the local GB10 architecture. Code computes the
+   timing. The agent explains facts. Telegram delivery uses a network connection.
+5. **Slide 5, 18 seconds:** close on the intended grower value and next step: a field
+   pilot to validate counts on real traps and measure time saved.
 
-## The beats
+Slide 6 is an evidence appendix for questions. Arrow/Page keys navigate, F toggles
+fullscreen, and the deck's notes control reveals the speaker notes. Use the native
+video controls on slide 3; navigation does not steal keys while video has focus.
 
-**1. Problem (30 s), deck slides 1 to 2.** The grower, 20 traps, found out Friday. Slide 2 is
-the 50-moth trap photo with "Found 4 days too late."
+## Evidence to keep straight
 
-**2. Why it is hard (20 s), slide 3.** Hand counting, no signal, no subscription per trap.
+- **Replay:** June 4, 2026; Block C; 26 codling moths across three traps (10, 10, 6);
+  261 degree-days after the May 8 biofix. The model confirms sustained catch on May 9.
+  The configured window is 250–350 DD. May 8 itself is excluded from accumulation.
+- **Reference image:** the trap lab shows 12 codling and 3 oriental fruit moths with
+  manifest annotations. It is a synthetic reference, separate from replay counts.
+- **Telegram photo test:** 25 codling and 6 oriental fruit moths, 31 total. Its block
+  context is the May 25 replay (149.5 DD rounded to 150), not the June 4 snapshot.
+- **3D drone:** a simulated survey and virtual aerial previews. Physical drone
+  integration and aerial insect detection are future work.
+- **Dashboard voice:** selected local season facts spoken by GB10 Kokoro. The film
+  uses the authentic recorded reply. Browser-local dictation depends on browser
+  support; the dashboard is not a verified speech-to-speech LLM conversation.
+- **Detector:** working local inference on demo trap photos. No field-validated
+  accuracy, yield improvement, pesticide reduction, or ROI is claimed.
 
-**3. Live demo (90 s), slide 4 is the cue card, then switch to the dashboard tab.**
+## Optional live follow-up
 
-- If the live count is running, show it first: point the webcam at the sparse card, then the
-  dense card. The count jumps. Fifteen seconds, no more.
-- Data arriving: with the simulator running, press **Live**. Readings land in the feed strip under
-  the map, each with its trap photo, and the day advances as they come in. "Every trap reports to
-  the box; nothing leaves the farm." Ten seconds, then press **Play season**, which turns Live off.
-- The replay. Say "a whole season in thirty seconds". Let it run.
-  - Mid May: Block C turns amber, "At risk". "Biofix. First sustained catch. The clock starts."
-  - Early June: Block C's outline flares, the block turns red, "Needs spray", and the signal band
-    reads "Spray window open on Block C." That is the line. Read it off the screen. Thursday,
-    June 4 on the committed season data.
-  - The other blocks follow over the next days; the band and the log update for each.
-- If a judge asks "why Thursday": press **Why is Block C red?** in the Ask panel, or click the
-  clock. Both give the accumulated degree-days against 250 and the biofix date. The curve shows the
-  catch that set the biofix. Scroll to the analytics for which traps and which species.
-- Keyboard if the mouse misbehaves: **space** plays and pauses, **left/right arrows** step one
-  day, **Next event** jumps to the next alert.
-- Deep link if you need to land on the money shot directly:
-  `dashboard/index.html?date=2026-06-04&focus=block-c&fire=1` opens on June 4 with the banner up.
+Open `../dashboard/?date=2026-06-04&focus=block-c` from the repo server. Use
+**Reset demo view** if another block or day was selected. The 3D survey now preserves
+that selection and camera; **Review captures** opens the completed survey gallery.
 
-**4. Why local (20 s), slide 6.** Pull the cable. Point at the badge flipping to "Offline, still
-running". Press play again if you want to prove it.
+For spoken output, first verify `http://127.0.0.1:8790/health` and the GB10 connection.
+Choose **Type instead**, enter a question, then **Hear answer**. If the voice service
+is unavailable, play the recorded response in the film. Do not imply the recording
+is a live connection. Normal dashboard browsing does not send phone notifications.
 
-**5. Platform (20 s), slide 7.** Click the crop chips on the slide. On the dashboard, the species
-key under the curve lists the lookalike and the invasive, and the analytics track them per block.
-Same box, new species list.
-
-Close on slides 8 and 9: what we cut, what is next, the team.
-
-## If something breaks
-
-- Replay stalls or the page is blank: reload the tab. The sample data is baked into the page
-  folder, so a reload always works offline.
-- Banners already shown do not repeat after a rewind. To show them again, scrub back to April 15
-  and press play, or use the deep link above.
-- Live count fails: skip it. Say live counting is in progress and go straight to the replay. The
-  replay is the pitch.
-- Live toggle shows "Live mode needs the page served": the tab was opened from disk. Open it from
-  the localhost address instead, and check the simulator terminal is still printing days.
-- Deck navigation: arrow keys or space. Print to PDF from the browser if you need a fallback copy.
+The core inference can run locally; Telegram cannot deliver messages without a
+network. A stale replay state or old observation is not current farm evidence.
+Always retain the visible snapshot date when explaining a result.

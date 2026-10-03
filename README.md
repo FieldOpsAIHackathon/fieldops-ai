@@ -1,21 +1,22 @@
 # FieldOps
 
-**Counts the moths. Starts the clock. Tells the grower when to spray.** Entirely offline, on one box.
+**Counts the moths. Starts the clock. Shows the grower when the treatment window opens.** Inference and timing run locally on one GB10; Telegram delivery requires connectivity.
 
 Built for the Dell x NVIDIA AI Hackathon, October 3 2026.
 
-**[Watch the two-minute demo](pitch/video/fieldops-demo.mp4)** · [Transcript](pitch/video/transcript.txt)
+**[Open the final presentation](pitch/2026-10-03-fieldops.html)** · [Watch the two-minute demo](pitch/video/fieldops-demo.mp4) · [Transcript](pitch/video/transcript.txt)
 
 ---
 
 ## The problem
 
-A Massachusetts apple grower has 20 sticky traps and checks them once a week. Last season the
-codling moths started flying on a Monday. He found out Friday — and by then the larvae were in
-his fruit.
+Growers inspect trap catches and combine those observations with weather to decide when a
+block needs attention. Manual checks leave gaps between observations, and counts alone do not
+show where a pest is in its development cycle.
 
-Counting traps by hand is slow and inconsistent. Cloud trap cameras exist, but orchards have no
-signal, and nobody wants a subscription per trap.
+FieldOps brings photo counting, season activity, and a deterministic degree-day clock into one
+view. The demo uses a committed synthetic season: six blocks and eighteen traps. It demonstrates
+the workflow; field accuracy and time savings still need validation with growers.
 
 ## What FieldOps does
 
@@ -61,9 +62,10 @@ Two deliberate splits:
 
 ## Why local
 
-Everything runs on the box in the barn — a GB10 — with no internet. No cloud API, no hosted model
-endpoint, no telemetry. Orchards have no signal, and the farm's spray records are the farm's
-business. You can unplug the network cable and FieldOps keeps working.
+Vision inference, the local agent model, speech generation, and deterministic timing run on
+the GB10. The committed season replay also works without internet. Telegram photo transport and
+message delivery require connectivity; using Telegram sends those messages through its service.
+Cloud tools used to produce the narrated film are separate from product inference.
 
 ## Status
 

@@ -1,0 +1,151 @@
+{
+  "sha256": "8889b5ff6440e40c466b5274174b5db8687485b60aaffec4eb5f488d41b48bf6",
+  "file_bytes": 15468800,
+  "all_still_shots_stable": true,
+  "stability_samples": [
+    {
+      "shot": "value",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.1699
+    },
+    {
+      "shot": "survey",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.1862
+    },
+    {
+      "shot": "reference",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.0
+    },
+    {
+      "shot": "trap_records",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.0
+    },
+    {
+      "shot": "flight",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.106
+    },
+    {
+      "shot": "block_pressure",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.0
+    },
+    {
+      "shot": "danger",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.0005
+    },
+    {
+      "shot": "window",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.114
+    },
+    {
+      "shot": "briefing",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.0002
+    },
+    {
+      "shot": "telegram",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.2913
+    },
+    {
+      "shot": "local_input",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.0
+    },
+    {
+      "shot": "local_compute",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.0004
+    },
+    {
+      "shot": "local_all",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.1204
+    },
+    {
+      "shot": "intelligence",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.0005
+    },
+    {
+      "shot": "farm_close",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.0001
+    },
+    {
+      "shot": "close",
+      "translation_px_at_quarter_resolution": [
+        0,
+        0
+      ],
+      "mean_pixel_difference": 0.0008
+    }
+  ],
+  "full_decode_passed": true,
+  "full_decode_errors": "",
+  "video_duration_seconds": 116.966667,
+  "caption_cues": 30,
+  "caption_overlaps": 0,
+  "audio": {
+    "integrated_loudness_lufs": -17.18,
+    "true_peak_dbtp": -3.19,
+    "loudness_range_lu": 2.5
+  },
+  "dashboard_survey": {
+    "camera_static": true,
+    "selected_block_preserved": true,
+    "captures": 6,
+    "pause_resume_verified": true
+  }
+}

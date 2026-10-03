@@ -1,0 +1,64 @@
+{
+  "verified_at": "2026-10-03T18:45:52.786942-04:00",
+  "source_revision": "67323b9",
+  "replay": {
+    "date": "2026-06-04",
+    "block": "block-c",
+    "species": "codling_moth",
+    "count": 26,
+    "trap_counts": [
+      10,
+      10,
+      6
+    ],
+    "degree_days": 261,
+    "biofix_start": "2026-05-08",
+    "biofix_confirmed": "2026-05-09",
+    "accumulation": "after biofix day through selected day",
+    "window_dd": [
+      250,
+      350
+    ],
+    "blocks": 6,
+    "traps": 18,
+    "synthetic_season": true,
+    "days": 139,
+    "records": 5004,
+    "rebuild_matches": true,
+    "sources": [
+      "data/season.csv",
+      "dashboard/data/timeline.json",
+      "fieldops/decide.py"
+    ]
+  },
+  "reference_image": {
+    "codling_moth": 12,
+    "oriental_fruit_moth": 3,
+    "total": 15,
+    "provenance": "Synthetic reference with manifest annotations; separate from daily replay traps",
+    "sources": [
+      "data/traps/manifest.json",
+      "dashboard/panels.js"
+    ]
+  },
+  "telegram_photo": {
+    "codling_moth": 25,
+    "oriental_fruit_moth": 6,
+    "total": 31,
+    "historical_context_date": "2026-05-25",
+    "degree_days_exact": 149.5,
+    "degree_days_displayed": 150,
+    "sources": [
+      "pitch/assets/telegram-trap-count-2.webp",
+      "dashboard/data/timeline.json"
+    ]
+  },
+  "capability_boundaries": {
+    "drone": "Concept footage and simulated 3D survey; no physical drone integration",
+    "dashboard_voice": "Local season-fact responses + authentic recorded GB10 Kokoro TTS; no backend ASR or connected conversational LLM claimed",
+    "telegram_agent": "Local Qwen model and tools via NemoClaw, OpenClaw and OpenShell integrations",
+    "offline": "Local inference and timing; Telegram transport requires connectivity",
+    "validation": "No field accuracy, labor savings, crop-loss reduction or ROI measurement claimed"
+  },
+  "data_freshness": "Historical snapshot dates are explicit. Saved backend replay state can persist; old observations must not be described as current farm data."
+}

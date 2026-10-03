@@ -44,8 +44,9 @@ function syncMission(){const el=$('drone-mission');if(!el)return;const key=[surv
 function startSurvey(){
  if(!state.presentation)update({presentation:true});
  if(!mapController?.startSurvey||mapController.getState().fallback){toast('The drone animation requires 3D graphics. You can review the aerial previews in Drone survey.');return;}
+ // Survey progress must not change the grower’s selected block or camera.
  setMapTour(false);survey={status:'running',progress:0,captures:[],follow:false};syncMission();
- mapController.startSurvey({duration:24000,onProgress:detail=>{survey.progress=detail.progress;survey.status=detail.status;survey.follow=mapController?.getSurveyState?.().follow||false;syncMission()},onCapture:detail=>{if(!survey.captures.includes(detail.blockId))survey.captures.push(detail.blockId);update({block:detail.blockId})},onComplete:()=>{survey.status='complete';survey.progress=1;update({block:'block-c'});mapController?.focus('block-c');syncMission()}});
+ mapController.startSurvey({duration:24000,onProgress:detail=>{survey.progress=detail.progress;survey.status=detail.status;survey.follow=mapController?.getSurveyState?.().follow||false;syncMission()},onCapture:detail=>{if(!survey.captures.includes(detail.blockId))survey.captures.push(detail.blockId);syncMission()},onComplete:()=>{survey.status='complete';survey.progress=1;syncMission()}});
 }
 function surveyPage(ctx){
  const captures=window.FIELDOPS_SURVEY?.captures||[],active=captures.find(x=>x.block_id===ctx.block)||captures[0],b=ctx.blocks.find(x=>x.id===(active?.block_id||ctx.block)),s=ctx.status(b.id),complete=survey.status==='complete';

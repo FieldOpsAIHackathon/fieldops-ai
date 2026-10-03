@@ -1,41 +1,35 @@
-FIELDOPS — SEE THE SIGNAL. ACT IN TIME.
-117-second light-mode cinematic edit
+FIELDOPS — FINAL DEMO FILM
+Runtime: 1 minute 57 seconds
 
-00:00–00:06 | narrator | hook
+00:00–00:06  narrator
 Growers check traps by hand. Between visits, pests keep moving—and treatment windows can close.
 
-00:06–00:17 | narrator | drone
+00:06–00:17  narrator
 FieldOps connects trap photos, pest activity, and weather to answer two questions: which block needs attention, and when? Our drone concept adds farm-wide visual context.
 
-00:17–00:28 | narrator | farm
+00:17–00:28  narrator
 Now explore the working dashboard. Six blocks. Eighteen traps. One connected orchard. Rotate the three-dimensional farm, follow the simulated survey, and open each capture without losing the bigger picture.
 
-00:28–00:38 | narrator | evidence
-Go closer. The evidence lab links labeled sample images with trap records and species counts. You can inspect the observation behind the number, instead of trusting a score.
+00:28–00:38  narrator
+Go closer. Inspect labeled reference images, separate from the season’s trap records. Compare species counts, explore the sample annotations, and review daily observations, block by block.
 
-00:38–00:50 | narrator | analytics
-Then watch the season unfold. Flight curves reveal sustained pest activity. Block comparisons show where pressure is building. Temperature history starts a biological clock, turning scattered observations into a clear timeline.
+00:38–00:50  narrator
+Watch the season unfold. Flight curves reveal sustained pest activity. Compare pressure across blocks. Sustained catch starts the clock. Temperature advances it, turning daily observations into a clear timeline.
 
-00:50–01:02 | narrator | decision
+00:50–01:02  narrator
 Here is the moment that matters. June fourth. Block C. Twenty-six codling moths and two hundred sixty-one degree-days since biofix. The treatment window is open—and the dashboard makes it impossible to miss.
 
-01:02–01:09 | narrator | voice_intro
+01:02–01:09  narrator
 Want the reason? Ask FieldOps. The assistant explains the selected facts, with a natural voice generated right on the GB10.
 
-01:09–01:21 | FieldOps / GB10 | voice_reply
+01:09–01:21  FieldOps / GB10
 Block C: Spray window open. The authoritative timeline records biofix on May 8. Block C has 261.0 degree-days since that recorded start.
 
-01:21–01:34 | narrator | telegram
+01:21–01:34  narrator
 And the grower does not have to sit at a dashboard. Here is the real Telegram workflow: send a trap photo, get the marked-up image, species counts, and block context back on the phone.
 
-01:34–01:48 | narrator | local
+01:34–01:48  narrator
 Behind it all: local vision, deterministic timing, and an agent workflow built with NemoClaw, OpenClaw, and OpenShell. Inference stays on the Dell GB10. Telegram carries the message. The decision comes from the evidence.
 
-01:48–01:57 | narrator | close
+01:48–01:57  narrator
 Less manual counting. Earlier visibility. One clear next action. FieldOps helps growers focus attention where—and when—it matters.
-
-EVIDENCE NOTES
-June 4 dashboard replay: Block C, 26 codling moths, 261 degree-days since biofix.
-Telegram: a separate real photo example with 25 codling moths, 6 oriental fruit moths (31 total), and Block C at 150 of 250 degree-days.
-Generated orchard/drone footage is labeled concept visualization. Dashboard survey flight/captures are simulated. Trap lab sample cards are labeled references.
-Assistant reply uses the actual locally generated GB10 Kokoro audio. External media providers are film-production tools, not FieldOps inference services.

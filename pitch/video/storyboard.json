@@ -1,7 +1,7 @@
 {
   "title": "FieldOps \u2014 See the signal. Act in time.",
   "duration_seconds": 117,
-  "revision": "Light-mode cinematic edit",
+  "revision": "Stable framing, complete panels, verified evidence",
   "segments": [
     {
       "id": "hook",
@@ -28,14 +28,14 @@
       "id": "evidence",
       "start": 28,
       "end": 38,
-      "text": "Go closer. The evidence lab links labeled sample images with trap records and species counts. You can inspect the observation behind the number, instead of trusting a score.",
+      "text": "Go closer. Inspect labeled reference images, separate from the season\u2019s trap records. Compare species counts, explore the sample annotations, and review daily observations, block by block.",
       "speaker": "narrator"
     },
     {
       "id": "analytics",
       "start": 38,
       "end": 50,
-      "text": "Then watch the season unfold. Flight curves reveal sustained pest activity. Block comparisons show where pressure is building. Temperature history starts a biological clock, turning scattered observations into a clear timeline.",
+      "text": "Watch the season unfold. Flight curves reveal sustained pest activity. Compare pressure across blocks. Sustained catch starts the clock. Temperature advances it, turning daily observations into a clear timeline.",
       "speaker": "narrator"
     },
     {

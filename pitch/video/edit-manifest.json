@@ -1,6 +1,7 @@
 {
   "duration_seconds": 117,
   "theme": "light",
+  "framing": "Fixed full-frame UI and complete captured panels; no animated zoom/crop",
   "shots": [
     {
       "id": "problem",
@@ -36,29 +37,24 @@
       "transition": "0.3-second cross-dissolve"
     },
     {
-      "id": "farm_enter",
+      "id": "farm_orbit",
       "start": 15,
       "duration": 3,
-      "source": "production/captures/farm.webm",
-      "source_start": 2.8,
+      "source": "production/captures/farm-orbit.webm",
+      "source_start": 5.4,
       "speed": 1,
       "crop": null,
       "layout": "ui",
       "transition": "0.3-second cross-dissolve"
     },
     {
-      "id": "farm_orbit",
+      "id": "farm_survey",
       "start": 18,
       "duration": 6,
-      "source": "production/captures/farm.webm",
-      "source_start": 5.5,
-      "speed": 1.65,
-      "crop": [
-        280,
-        150,
-        1600,
-        900
-      ],
+      "source": "production/captures/farm-static.webm",
+      "source_start": 10.75,
+      "speed": 3.6,
+      "crop": null,
       "layout": "ui",
       "transition": "0.3-second cross-dissolve"
     },
@@ -66,134 +62,88 @@
       "id": "survey",
       "start": 24,
       "duration": 4,
-      "source": "production/captures/survey.png",
-      "source_start": 0,
-      "speed": 1,
-      "crop": [
-        280,
-        130,
-        1600,
-        900
-      ],
-      "layout": "ui",
-      "transition": "0.3-second cross-dissolve"
-    },
-    {
-      "id": "evidence",
-      "start": 28,
-      "duration": 5,
-      "source": "production/captures/traps.png",
+      "source": "production/art/survey-detail.png",
       "source_start": 0,
       "speed": 1,
       "crop": null,
-      "layout": "ui",
+      "layout": "art",
       "transition": "0.3-second cross-dissolve"
     },
     {
-      "id": "evidence_detail",
-      "start": 33,
+      "id": "reference",
+      "start": 28,
       "duration": 5,
-      "source": "production/captures/traps.png",
+      "source": "production/art/evidence-detail.png",
       "source_start": 0,
       "speed": 1,
-      "crop": [
-        320,
-        310,
-        1440,
-        810
-      ],
-      "layout": "ui",
+      "crop": null,
+      "layout": "art",
+      "transition": "0.3-second cross-dissolve"
+    },
+    {
+      "id": "trap_records",
+      "start": 33,
+      "duration": 5,
+      "source": "production/art/ledger-detail.png",
+      "source_start": 0,
+      "speed": 1,
+      "crop": null,
+      "layout": "art",
       "transition": "0.3-second cross-dissolve"
     },
     {
       "id": "flight",
       "start": 38,
       "duration": 6,
-      "source": "production/captures/pests.png",
+      "source": "production/art/flight-detail.png",
       "source_start": 0,
       "speed": 1,
-      "crop": [
-        290,
-        290,
-        1600,
-        900
-      ],
-      "layout": "ui",
+      "crop": null,
+      "layout": "art",
       "transition": "0.3-second cross-dissolve"
     },
     {
       "id": "block_pressure",
       "start": 44,
       "duration": 6,
-      "source": "production/captures/pests-full.png",
+      "source": "production/art/analytics-detail.png",
       "source_start": 0,
       "speed": 1,
-      "crop": [
-        280,
-        865,
-        1600,
-        900
-      ],
-      "layout": "ui",
+      "crop": null,
+      "layout": "art",
       "transition": "0.3-second cross-dissolve"
     },
     {
       "id": "danger",
       "start": 50,
       "duration": 5,
-      "source": "production/captures/overview.png",
+      "source": "production/art/decision-detail.png",
       "source_start": 0,
       "speed": 1,
-      "crop": [
-        300,
-        325,
-        1580,
-        889
-      ],
-      "layout": "ui",
+      "crop": null,
+      "layout": "art",
       "transition": "0.3-second cross-dissolve"
     },
     {
       "id": "window",
       "start": 55,
-      "duration": 4,
-      "source": "production/captures/timing.png",
+      "duration": 7,
+      "source": "production/art/timing-detail.png",
       "source_start": 0,
       "speed": 1,
-      "crop": [
-        275,
-        305,
-        1580,
-        889
-      ],
-      "layout": "ui",
-      "transition": "0.3-second cross-dissolve"
-    },
-    {
-      "id": "danger_farm",
-      "start": 59,
-      "duration": 3,
-      "source": "production/captures/farm.png",
-      "source_start": 0,
-      "speed": 1,
-      "crop": [
-        400,
-        180,
-        1440,
-        810
-      ],
-      "layout": "ui",
+      "crop": null,
+      "layout": "art",
       "transition": "0.3-second cross-dissolve"
     },
     {
       "id": "briefing",
       "start": 62,
       "duration": 2,
-      "source": "production/captures/intelligence.png",
+      "source": "production/art/intelligence-detail.png",
       "source_start": 0,
       "speed": 1,
       "crop": null,
-      "layout": "ui",
+      "layout": "art",
       "transition": "0.3-second cross-dissolve"
     },
     {
@@ -203,12 +153,7 @@
       "source": "production/captures/voice.webm",
       "source_start": 0.4,
       "speed": 1,
-      "crop": [
-        550,
-        230,
-        1370,
-        771
-      ],
+      "crop": null,
       "layout": "ui",
       "transition": "0.3-second cross-dissolve"
     },
@@ -219,47 +164,15 @@
       "source": "production/captures/voice.webm",
       "source_start": 4.8,
       "speed": 1,
-      "crop": [
-        768,
-        350,
-        1152,
-        648
-      ],
+      "crop": null,
       "layout": "ui",
       "transition": "0.3-second cross-dissolve"
     },
     {
       "id": "telegram",
       "start": 81,
-      "duration": 5,
-      "source": "production/art/telegram.png",
-      "source_start": 0,
-      "speed": 1,
-      "crop": null,
-      "layout": "art",
-      "transition": "0.3-second cross-dissolve"
-    },
-    {
-      "id": "telegram_photo",
-      "start": 86,
-      "duration": 4,
-      "source": "production/art/telegram.png",
-      "source_start": 0,
-      "speed": 1,
-      "crop": [
-        930,
-        110,
-        920,
-        518
-      ],
-      "layout": "detailart",
-      "transition": "0.3-second cross-dissolve"
-    },
-    {
-      "id": "telegram_counts",
-      "start": 90,
-      "duration": 4,
-      "source": "production/art/telegram.png",
+      "duration": 13,
+      "source": "production/art/telegram-v4.png",
       "source_start": 0,
       "speed": 1,
       "crop": null,
@@ -303,24 +216,19 @@
       "id": "intelligence",
       "start": 104,
       "duration": 4,
-      "source": "production/captures/intelligence.png",
+      "source": "production/art/intelligence-detail.png",
       "source_start": 0,
       "speed": 1,
-      "crop": [
-        280,
-        170,
-        1600,
-        900
-      ],
-      "layout": "ui",
+      "crop": null,
+      "layout": "art",
       "transition": "0.3-second cross-dissolve"
     },
     {
       "id": "farm_close",
       "start": 108,
       "duration": 3,
-      "source": "production/captures/farm.webm",
-      "source_start": 25.9,
+      "source": "production/captures/farm-complete.png",
+      "source_start": 0,
       "speed": 1,
       "crop": null,
       "layout": "ui",

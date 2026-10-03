@@ -1,5 +1,5 @@
 {
-  "revision": "117-second light-mode cinematic edit",
+  "revision": "Verified evidence narration; other narration, score, and authentic recorded GB10 reply retained",
   "narrator": {
     "provider": "ElevenLabs",
     "voice_name": "Chris - Charming, Down-to-Earth",
@@ -23,7 +23,7 @@
     "song_id": "CpAL8GEWWab19x7jImra",
     "status": "complete",
     "duration_seconds": 117.028562,
-    "mix_note": "Trim final 0.03s to 117s; duck for dialogue69–81; sidechain narrator. No narration was slowed."
+    "mix_note": "Trim final 0.03s to 117s; duck for dialogue69\u201381; sidechain narrator. No narration was slowed."
   },
   "assistant": {
     "provider": "Local GB10",
@@ -35,5 +35,9 @@
       81
     ]
   },
-  "production_note": "External narration and music generation were used only to produce the film. FieldOps inference is local."
+  "production_note": "External narration and music generation were used only to produce the film. FieldOps inference is local.",
+  "corrected_segments": [
+    "evidence",
+    "analytics"
+  ]
 }

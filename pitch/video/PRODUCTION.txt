@@ -1,37 +1,50 @@
-FIELDOPS — SEE THE SIGNAL. ACT IN TIME.
+FIELDOPS — FINAL FILM AND PRESENTATION
 
-117-second light-mode cinematic cut. Output: 1920x1080, 30fps, H.264/AAC.
+fieldops-demo.mp4 remains the single canonical movie at the same published path.
+Runtime: 116.97 seconds. 1920x1080, 30fps, H.264/AAC stereo.
+Presentation: ../2026-10-03-fieldops.html, with the movie on slide 3.
+The ../index.html presentation entry point opens that final deck.
 
-fieldops-demo.mp4 — stable published filename; existing shared links remain valid.
-Only one MP4 is published. Local backups stay outside the repository.
-index.html — browser player and download links.
-fieldops-demo.srt — timed English captions, also burned into the MP4.
-transcript.txt / storyboard.json — current narration and contiguous 117-second timeline.
-generation-prompts.json — approved prompts and completed concept footage status.
-audio-credits.json — narrator, music, and local assistant audio provenance.
-poster.png — current film poster.
+PICTURE
+22 shots with 0.3-second dissolves. Fixed framing replaces animated zoom/crops.
+Actual full UI recordings show the navigable 3D farm and assistant. Complete
+captured dashboard panels show references, trap rows, analytics and timing,
+retaining headings and footnotes. No partial neighboring panels are enlarged.
+The simulated survey is accelerated 3.6x, with a stationary camera and Block C
+selected throughout. The closing shot shows the completed six-capture survey.
+Both completed Higgsfield orchard clips remain clearly labeled drone concepts.
 
-Production: actual light-mode browser recordings and screenshots, custom cream/
-teal/lime HTML artwork, deliberate detail crops and camera movement, and smooth
-0.3-second dissolves between shots. FFmpeg composition and encoding.
+SOUND AND CAPTIONS
+ElevenLabs Chris narration and generated instrumental music. Speech normalized
+and music ducked beneath narration. The evidence and analytics lines now explain
+reference-versus-replay data and how sustained catch starts the biological clock.
+The assistant at 69–81s uses the authentic prior GB10 Kokoro recording, unchanged.
+A fresh service connection was unavailable during this edit; no speaking state
+or speech-to-speech AI conversation was fabricated. Thirty non-overlapping cues
+are burned in; matching SRT and transcript are supplied.
 
-Narration: enthusiastic ElevenLabs Chris, eleven_multilingual_v2, speed 1.08,
-with selected segments fitted to their slots without slowing the narration.
-Music: new ElevenLabs Music instrumental score, music_v1, requested at 117 seconds,
-normalized and ducked automatically under speech. The assistant response at
-69–81 seconds is the actual locally generated GB10 Kokoro reply.
+EVIDENCE
+Replay: June 4, 2026; Block C; 26 codling moths across traps 10+10+6; 261 DD.
+Biofix starts May 8 and is confirmed May 9. Accumulation excludes May 8. Window
+250–350 DD. The 139-day committed timeline rebuilds exactly from 5,004 CSV counts.
+Reference image: synthetic 12 codling + 3 oriental fruit moths, with manifest
+annotations. These are separate from the season's replay observations.
+Telegram: actual recorded photo test, 25 codling + 6 oriental fruit moths. Its
+historical May 25 block context is 149.5 DD rounded to 150, distinct from June 4.
+Drone: generated concept footage and simulated 3D survey, not physical integration.
+Voice: dashboard local season facts spoken by local GB10 TTS. The Telegram agent
+uses the local model/tool stack; these are separate explanation paths.
+Inference and timing are local. Telegram transport requires connectivity.
+No field-validated accuracy, yield improvement, labor savings, or ROI is asserted.
 
-Both completed Higgsfield concept clips are included: orchard_reveal opens the
-film and visual_sampling illustrates the drone concept. Generated footage is
-labeled concept visualization; actual software footage shows the working UI.
-External providers are film-production tools, not FieldOps inference services.
+VERIFICATION
+Full final-file audio/video decode passed. All 16 still-shot image comparisons
+show zero translation; caption overlap is zero. All source panels and final
+shot frames visually inspected. June 4 facts agree with the decision engine.
+The six-slide deck passed text bounds and screenshots at three desktop sizes,
+mobile layout, keyboard navigation, video controls, pause-on-leave and print checks.
+See validation.json and ../evidence.json for machine-readable verification.
 
-Evidence boundaries: dashboard survey flight and captures are simulated. The
-trap lab uses labeled synthetic sample references. The June 4 Block C replay
-shows 26 codling moths and 261 degree-days. The latest supplied Telegram photos
-are a distinct live photo example showing 25 codling moths + 6 oriental fruit
-moths (31 total), with Block C at 150 of 250 degree-days. These are different
-observations and must not be presented as one matching snapshot.
-
-Inference stays local on the Dell GB10. Telegram delivery requires connectivity.
-No messages or alerts were sent while recording. No credentials are included.
+Production backups, raw recordings, and alternate movies stay outside the repo.
+Cloud narration/music/footage tools were film-production tools, not runtime
+FieldOps inference. No credentials are included. No phone messages were sent.
