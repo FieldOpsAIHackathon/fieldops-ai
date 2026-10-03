@@ -13,10 +13,26 @@ Call the tools with `curl -s` (they return JSON):
 
 | What | Command |
 |---|---|
+| **Whole farm, ranked, with the next step for each block** | `curl -s http://172.18.0.1:8765/farm` |
+| **One block's state and next step** | `curl -s "http://172.18.0.1:8765/block?block=c"` |
 | Current situation for every block, plus the last alerts sent to the grower | `curl -s http://172.18.0.1:8765/status` |
 | Biofix, degree-days since biofix, spray window for one block | `curl -s "http://172.18.0.1:8765/degree_days?block=c"` |
 | Daily trap catches (last N days) | `curl -s "http://172.18.0.1:8765/counts?block=c&days=14"` |
 | Send the grower a phone alert (only when asked to) | `curl -s -X POST http://172.18.0.1:8765/alert -H 'Content-Type: application/json' -d '{"text": "..."}'` |
+
+## "How is my farm?"
+
+Any question about the farm as a whole — how things look, what needs attention, where the problems
+are — is one call to `/farm`. It returns blocks already sorted by urgency with a `line` for each.
+
+Reply with the `summary`, then one line per block that is at `act` or `prepare` level, then a
+single closing line naming the rest. **Keep it short enough to read on a phone.** Do not list all
+six blocks in full, do not restate the thresholds, and do not add advice of your own. Example:
+
+> 1 block needs spraying now: Block C.
+> Block C: spray now — window opened Jun 4, 89 degree-days of window left.
+> Block A: get ready, 4 degree-days short, window around Jun 5.
+> D, E and F are still accumulating.
 
 ## When the user sends a photo
 
@@ -33,9 +49,12 @@ curl -s --data-binary @"<photo path>" "http://172.18.0.1:8765/count?trap_id=<tra
   `block-<letter>-01`; if nothing, use `unknown-trap` and say so.
 - Reply with the `summary` and `total_pests` from the response, one short line per species.
   Gnats and debris are detected and deliberately not counted. Never change the numbers.
-- **Always send back the annotated photo** (pests boxed) with the counts. Download it into the
-  workspace using the `annotated_url` from the response, then put a Markdown image at the end of
-  your reply. Telegram delivers it as a photo:
+- The response also carries `block_report`: that block's current state and next step. **Always add
+  it**, because a count on its own is a number and the grower wants a decision. Two lines after the
+  count: the `headline`, then the `detail`. Nothing more.
+- **Always send back the annotated photo** (pests boxed), last. Download it into the workspace
+  using the `annotated_url` from the response, then end the reply with a Markdown image. Telegram
+  delivers it as a photo:
 
   ```sh
   mkdir -p /sandbox/.openclaw/workspace/fieldops

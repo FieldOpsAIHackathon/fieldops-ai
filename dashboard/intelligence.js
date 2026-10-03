@@ -93,85 +93,188 @@
   }
   function renderMessage(message,ctx) {
     const e=ctx.esc;
+    if(message.kind==='assistant')return `${message.question?`<div class="intel-user-message">${e(message.question)}</div>`:''}<article class="intel-answer"><div class="intel-answer-label">${ctx.icon('spark',14)} FIELDOPS · ASSISTANT REPLY</div>${message.paragraphs.map(p=>`<p>${e(p)}</p>`).join('')}<footer>${e(message.context)}</footer></article>`;
     return `<div class="intel-user-message">${e(message.question)}</div><article class="intel-answer"><div class="intel-answer-label">${ctx.icon('spark',14)} FIELDOPS · SEASON FACTS</div><h3>${e(message.title)}</h3>${message.paragraphs.map(p=>`<p>${e(p)}</p>`).join('')}<details class="intel-answer-evidence"><summary>View supporting facts</summary><dl>${message.evidence.map(x=>`<div><dt>${e(x.label)}</dt><dd>${e(x.value)}</dd></div>`).join('')}</dl><span>Source: committed timeline and species series</span></details><footer>${e(message.context)}</footer></article>`;
   }
+  let voiceAdapter=null, voiceState='idle', voiceMessage='', voiceSession=false, chatVisible=false, turn=0, outputClient=null, outputListener=null;
+  const activeStates=new Set(['preparing','listening','thinking','speaking']);
+  const voiceLabels={idle:'Ready when you are',preparing:'Getting ready',listening:'Listening',thinking:'Thinking',speaking:'Speaking',error:'Voice paused'};
   function updateContext() {
-    if (!host || !getContext()) return;
+    if(!host || !getContext?.())return;
     const ctx=getContext();
-    host.querySelector('[data-intel-context]').textContent=`${ctx.dateLabel(ctx.day.date)} · ${blockName(ctx,ctx.block)} · ${pestName(ctx)}`;
+    host.querySelector('[data-intel-context]').textContent=`${ctx.dateLabel(ctx.day.date)} · ${blockName(ctx,ctx.block)}`;
   }
-  function localVoice() { return window.speechSynthesis?.getVoices().find(v=>v.localService&&/^en/i.test(v.lang)) || window.speechSynthesis?.getVoices().find(v=>v.localService); }
-  function status(text) { host.querySelector('[data-intel-status]').textContent=text; }
-  function readAloud(message) {
+  function localVoice(){return window.speechSynthesis?.getVoices().find(v=>v.localService&&/^en/i.test(v.lang))||window.speechSynthesis?.getVoices().find(v=>v.localService);}
+  function canListen(){return !!voiceAdapter?.start || !!recognition;}
+  function renderVoiceState(){
+    if(!host)return;
+    const active=activeStates.has(voiceState);
+    dialog.dataset.voiceState=voiceState;
+    host.querySelector('[data-intel-voice-title]').textContent=voiceState==='idle'&&!canListen()?'Voice is unavailable here':voiceLabels[voiceState];
+    const defaults={preparing:'Opening the microphone.',listening:'Ask about your orchard.',thinking:'Reading your orchard snapshot.',speaking:'Your orchard, explained.',error:'You can continue using the keyboard.'};
+    host.querySelector('[data-intel-status]').textContent=voiceMessage||defaults[voiceState]||(canListen()?'Tap the mic to talk about your orchard.':'You can still ask a question using the keyboard.');
+    const mic=host.querySelector('[data-intel-voice]');
+    mic.setAttribute('aria-label',active?'Stop voice session':canListen()?'Start voice session':'Voice input unavailable; use Type instead');
+    mic.setAttribute('aria-pressed',String(active));
+    mic.setAttribute('aria-disabled',String(!canListen()&&!active));
+    host.querySelector('[data-intel-stop]').disabled=!active;
+    host.querySelector('[data-intel-connection]').textContent=voiceAdapter?'Voice available':recognition?'On-device voice':'Keyboard available';
+  }
+  function setVoiceState(state,details={}){
+    const normalized={ready:'idle',starting:'preparing',processing:'thinking'}[state]||state;
+    if(!Object.hasOwn(voiceLabels,normalized))return;
+    voiceState=normalized;voiceMessage=typeof details==='string'?details:details.message||'';
+    listening=voiceState==='listening';renderVoiceState();
+  }
+  function emitVoice(action){
+    document.dispatchEvent(new CustomEvent('fieldops:voice-request',{bubbles:true,detail:{action,context:getContext?.()||null}}));
+  }
+  function connectOutput(){
+    const client=window.fieldopsVoice;
+    if(client===outputClient)return client;
+    if(outputClient?.removeEventListener&&outputListener)outputClient.removeEventListener('state',outputListener);
+    outputClient=client||null;
+    outputListener=event=>{
+      if(!voiceSession||!dialog?.open)return;
+      const detail=event.detail||{};
+      setVoiceState(detail.state==='preparing'?'thinking':detail.state,detail);
+    };
+    outputClient?.addEventListener?.('state',outputListener);
+    return outputClient;
+  }
+  function stopVoice({announce=true,emit=true}={}){
+    turn++;voiceSession=false;listening=false;
+    try{recognition?.abort();}catch{}
+    try{voiceAdapter?.stop?.();}catch{}
+    try{window.fieldopsVoice?.stop?.();}catch{}
+    window.speechSynthesis?.cancel();
+    if(emit)emitVoice('stop');
+    setVoiceState('idle',announce?'Stopped. Tap the mic whenever you’re ready.':'');
+  }
+  async function speakText(text){
+    const currentTurn=turn,client=connectOutput();
+    if(client?.speak){
+      setVoiceState('thinking','Preparing your reply.');
+      // The promise covers receiving/scheduling audio; playback ends on the client's idle event.
+      try{await client.speak(text);}
+      catch(error){if(currentTurn===turn&&voiceSession)setVoiceState('error','Audio is unavailable. Your answer is shown below.');}
+      return;
+    }
     const voice=localVoice();
-    if (!voice || !window.SpeechSynthesisUtterance) { status('An on-device reading voice is not available in this browser.'); return; }
+    if(!voice||!window.SpeechSynthesisUtterance){setVoiceState('idle','Your answer is ready. Audio is unavailable in this browser.');return;}
     window.speechSynthesis.cancel();
-    const utterance=new SpeechSynthesisUtterance([message.title,...message.paragraphs].join('. '));
-    utterance.voice=voice;utterance.rate=1;window.speechSynthesis.speak(utterance);
+    const utterance=new SpeechSynthesisUtterance(text);utterance.voice=voice;utterance.rate=1;
+    utterance.onstart=()=>{if(currentTurn===turn)setVoiceState('speaking','');};
+    utterance.onend=()=>{if(currentTurn===turn)setVoiceState('idle','Tap the mic for another question.');};
+    utterance.onerror=event=>{if(currentTurn===turn&&event.error!=='canceled'&&event.error!=='interrupted')setVoiceState('error','Audio is unavailable. Your answer is shown below.');};
+    setVoiceState('speaking','');window.speechSynthesis.speak(utterance);
   }
-  function submit(question) {
-    const text=String(question||'').trim().slice(0,1000), ctx=getContext?.();
-    if (!text || !ctx) return;
-    const message=answer(ctx,text);messages.push(message);
-    if(messages.length>16)messages.shift();
-    log.innerHTML=messages.map(m=>renderMessage(m,ctx)).join('');
-    log.scrollTop=log.scrollHeight;
-    status(`Answer ready. ${message.title}.`);
-    if(host.querySelector('[data-intel-read]').checked)readAloud(message);
+  function submit(question,{voice=false}={}){
+    const text=String(question||'').trim().slice(0,1000),ctx=getContext?.();
+    if(!text||!ctx)return;
+    const message=answer(ctx,text);messages.push(message);if(messages.length>16)messages.shift();
+    log.innerHTML=messages.map(m=>renderMessage(m,ctx)).join('');log.scrollTop=log.scrollHeight;
+    host.querySelector('[data-intel-utterance]').textContent=text;
+    host.querySelector('[data-intel-utterance]').hidden=false;
+    host.querySelector('[data-intel-reply-title]').textContent=message.title;
+    host.querySelector('[data-intel-reply]').textContent=message.paragraphs[0];
+    host.querySelector('[data-intel-latest]').hidden=false;
+    host.querySelector('[data-intel-show-evidence]').innerHTML='See supporting facts '+ctx.icon('chev',14);
+    if(voice){voiceSession=true;speakText([message.title,message.paragraphs[0]].join('. '));}
+    else setVoiceState('idle','Answer ready. Open the chat for supporting facts.');
+    return message;
   }
-  function close() {
+  function presentReply(text,{question='',speak=false}={}){
+    const reply=String(text||'').trim().slice(0,12000),ctx=getContext?.();
+    if(!reply||!ctx||!dialog?.open)return;
+    const asked=String(question||'').trim().slice(0,1000);
+    const message={kind:'assistant',question:asked,paragraphs:reply.split(/\n\s*\n/),context:`${ctx.dateLabel(ctx.day.date)} · ${blockName(ctx,ctx.block)} · Assistant reply`};
+    messages.push(message);if(messages.length>16)messages.shift();
+    log.innerHTML=messages.map(m=>renderMessage(m,ctx)).join('');log.scrollTop=log.scrollHeight;
+    const utterance=host.querySelector('[data-intel-utterance]');utterance.textContent=asked;utterance.hidden=!asked;
+    host.querySelector('[data-intel-reply-title]').textContent='FieldOps';
+    host.querySelector('[data-intel-reply]').textContent=message.paragraphs[0];
+    host.querySelector('[data-intel-latest]').hidden=false;
+    host.querySelector('[data-intel-show-evidence]').innerHTML='Open chat '+ctx.icon('chev',14);
+    if(speak){voiceSession=true;speakText(reply);}
+    else setVoiceState('idle','Reply ready.');
+    return message;
+  }
+  function submitVoice(text){
+    if(!host||!String(text||'').trim())return;
+    if(!dialog.open)open();
+    try{recognition?.stop();}catch{}
+    listening=false;voiceSession=true;setVoiceState('thinking','Reading your orchard snapshot.');
+    return submit(text,{voice:true});
+  }
+  function setVoiceAdapter(adapter){
+    if(activeStates.has(voiceState))stopVoice({announce:false});
+    voiceAdapter=adapter&&typeof adapter.start==='function'?adapter:null;
+    setVoiceState('idle','');
+  }
+  async function startVoice(){
+    if(activeStates.has(voiceState)){stopVoice();return;}
+    if(!canListen()){setVoiceState('error','Voice input is unavailable here. Choose Type instead to ask a question.');return;}
+    turn++;const currentTurn=turn;voiceSession=true;setVoiceState('preparing','Opening the microphone.');
+    emitVoice('start');
+    try{
+      if(voiceAdapter?.start){
+        await voiceAdapter.start({context:getContext(),onTranscript:text=>{if(currentTurn===turn&&voiceSession)submitVoice(text);},onReply:(text,options)=>{if(currentTurn===turn&&voiceSession)presentReply(text,options);},onState:(state,details)=>{if(currentTurn===turn&&voiceSession)setVoiceState(state,details);}});
+      }else recognition.start();
+    }catch(error){
+      if(currentTurn===turn){voiceSession=false;setVoiceState('error','Could not start voice. Check microphone access, or type your question.');}
+    }
+  }
+  function setChat(visible){
+    chatVisible=visible;dialog.classList.toggle('intel-chat-open',visible);
+    host.querySelector('[data-intel-chat]').hidden=!visible;
+    const toggle=host.querySelector('[data-intel-chat-toggle]');toggle.setAttribute('aria-expanded',String(visible));
+    toggle.innerHTML=getContext().icon(visible?'mic':'note',15)+(visible?'Back to voice':'Type instead');
+    if(visible){input.focus();log.scrollTop=log.scrollHeight;}else host.querySelector('[data-intel-voice]').focus();
+  }
+  function close(){
     if(!dialog?.open)return;
-    if(recognition&&listening)recognition.stop();
-    window.speechSynthesis?.cancel();dialog.close();launcher.setAttribute('aria-expanded','false');
+    stopVoice({announce:false});dialog.close();launcher.setAttribute('aria-expanded','false');
     if(returnFocus?.isConnected)returnFocus.focus();else launcher.focus();
   }
-  function open(question) {
+  function open(question){
     if(!dialog)return;
-    if(!dialog.open){returnFocus=document.activeElement;dialog.showModal();launcher.setAttribute('aria-expanded','true');}
-    updateContext();if(question)submit(question);input.focus();
+    if(!dialog.open){returnFocus=document.activeElement;dialog.show();launcher.setAttribute('aria-expanded','true');setChat(false);}
+    updateContext();connectOutput();renderVoiceState();
+    if(question)submit(question);
+    if(chatVisible)input.focus();else host.querySelector('[data-intel-voice]').focus();
   }
-  function mount(contextGetter) {
-    getContext=contextGetter;
-    if(host){updateContext();return;}
-    const ctx=getContext();if(!ctx)return;
+  function mount(contextGetter){
+    getContext=contextGetter;if(host){updateContext();return;}const ctx=getContext();if(!ctx)return;
     host=document.createElement('div');host.className='intel-assistant-root';
-    host.innerHTML=`<button class="intel-launcher" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="intel-dialog">${orb('small')}<span><strong>Ask FieldOps</strong><small>Make sense of your orchard</small></span>${ctx.icon('spark',18)}</button>
-      <dialog class="intel-dialog" id="intel-dialog" aria-labelledby="intel-dialog-title"><header class="intel-dialog-head">${orb('tiny')}<div><h2 id="intel-dialog-title">Ask FieldOps</h2><span>Offline season facts</span></div><button class="intel-icon-button" data-intel-close aria-label="Close assistant">${ctx.icon('close',22)}</button></header>
-      <div class="intel-context-line"><span class="intel-context-dot"></span><span data-intel-context></span></div><div class="intel-conversation" tabindex="0" aria-label="Conversation"><div class="intel-welcome"><span class="intel-eyebrow">YOUR ORCHARD, EXPLAINED</span><h3>From a number<br>to a next step.</h3><p>Explore the committed demo season. Answers use the selected date and block; no language model is connected.</p><div class="intel-quick-list"><button data-intel-question="What should I focus on today?">Give me the briefing ${ctx.icon('chev',15)}</button><button data-intel-question="Why is this block in this status?">Explain this block ${ctx.icon('chev',15)}</button><button data-intel-question="Which block is next?">Which block is next? ${ctx.icon('chev',15)}</button></div></div></div>
-      <form class="intel-composer"><label class="intel-sr-only" for="intel-question">Ask about the selected season snapshot</label><div class="intel-input-row"><textarea id="intel-question" rows="2" maxlength="1000" placeholder="Ask about your orchard…"></textarea><button type="submit" class="intel-submit" aria-label="Send question">${ctx.icon('send',19)}</button></div><div class="intel-composer-tools"><button type="button" class="intel-voice" data-intel-voice hidden>${ctx.icon('mic',15)} On-device voice</button><label class="intel-read-toggle"><input type="checkbox" data-intel-read> Read answers aloud</label></div><p class="intel-privacy-note">Local data. No messages or alerts are sent.</p><p class="intel-status" data-intel-status role="status" aria-live="polite"></p></form></dialog>`;
+    host.innerHTML=`<button class="intel-launcher intel-launcher-voice" type="button" aria-label="Talk to FieldOps" aria-haspopup="dialog" aria-expanded="false" aria-controls="intel-dialog">${orb('small')}<span>Talk to FieldOps</span>${ctx.icon('mic',18)}</button>
+      <dialog class="intel-dialog intel-voice-dialog" id="intel-dialog" aria-modal="false" aria-labelledby="intel-dialog-title"><header class="intel-dialog-head"><div><h2 id="intel-dialog-title">FieldOps</h2><span data-intel-connection>Keyboard available</span></div><button class="intel-icon-button" data-intel-close aria-label="Close assistant">${ctx.icon('close',20)}</button></header>
+      <div class="intel-context-line"><span class="intel-context-dot"></span><span data-intel-context></span></div>
+      <section class="intel-voice-main" aria-label="Voice assistant"><button type="button" class="intel-voice-primary" data-intel-voice aria-label="Start voice session" aria-pressed="false">${orb()}<span class="intel-mic-symbol">${ctx.icon('mic',23)}</span></button><h3 data-intel-voice-title>Ready when you are</h3><p class="intel-status" data-intel-status role="status" aria-live="polite"></p><div class="intel-voice-actions"><button type="button" class="intel-stop" data-intel-stop disabled><span></span>Stop</button><button type="button" class="intel-chat-toggle" data-intel-chat-toggle aria-expanded="false" aria-controls="intel-chat">${ctx.icon('note',15)}Type instead</button></div>
+      <div class="intel-latest" data-intel-latest hidden><p class="intel-latest-question" data-intel-utterance></p><h4 data-intel-reply-title></h4><p data-intel-reply></p><button type="button" class="intel-text-button" data-intel-show-evidence>See supporting facts ${ctx.icon('chev',14)}</button></div></section>
+      <section id="intel-chat" class="intel-chat-secondary" data-intel-chat hidden aria-label="Optional chat"><div class="intel-conversation" tabindex="0" aria-label="Conversation"><div class="intel-welcome"><h3>What would you like to know?</h3><p>Answers use the selected date and block from the demo season.</p><div class="intel-quick-list"><button data-intel-question="What should I focus on today?">Give me the briefing ${ctx.icon('chev',15)}</button><button data-intel-question="Which block is next?">Which block is next? ${ctx.icon('chev',15)}</button></div></div></div><form class="intel-composer"><label class="intel-sr-only" for="intel-question">Ask about the selected season snapshot</label><div class="intel-input-row"><textarea id="intel-question" rows="2" maxlength="1000" placeholder="Ask about your orchard…"></textarea><button type="submit" class="intel-submit" aria-label="Send question">${ctx.icon('send',19)}</button></div><p class="intel-privacy-note">Season facts · No messages or alerts are sent.</p></form></section></dialog>`;
     document.body.appendChild(host);dialog=host.querySelector('dialog');launcher=host.querySelector('.intel-launcher');input=host.querySelector('textarea');log=host.querySelector('.intel-conversation');
     launcher.addEventListener('click',()=>open());host.querySelector('[data-intel-close]').addEventListener('click',close);
+    host.querySelector('[data-intel-voice]').addEventListener('click',startVoice);host.querySelector('[data-intel-stop]').addEventListener('click',()=>stopVoice());
+    host.querySelector('[data-intel-chat-toggle]').addEventListener('click',()=>setChat(!chatVisible));host.querySelector('[data-intel-show-evidence]').addEventListener('click',()=>setChat(true));
     dialog.addEventListener('cancel',event=>{event.preventDefault();close();});
-    dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)close();}});
-    dialog.addEventListener('keydown',event=>{
-      if(event.key!=='Tab')return;
-      const focusable=[...dialog.querySelectorAll('button:not([disabled]):not([hidden]),textarea,input,summary,[tabindex="0"]')].filter(el=>el.getClientRects().length);
-      const first=focusable[0],last=focusable.at(-1);
-      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
-      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
-    });
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&dialog.open){event.preventDefault();event.stopPropagation();close();}},true);
     host.querySelector('form').addEventListener('submit',event=>{event.preventDefault();if(input.value.trim()){submit(input.value);input.value='';input.focus();}});
     input.addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();host.querySelector('form').requestSubmit();}});
-    host.querySelector('[data-intel-read]').addEventListener('change',event=>{if(!event.target.checked)window.speechSynthesis?.cancel();else if(!localVoice()){event.target.checked=false;status('No on-device reading voice is available. Text answers still work.');}});
-    document.addEventListener('click',event=>{
-      const question=event.target.closest('[data-intel-question]');if(question){open(question.dataset.intelQuestion);return;}
-      const nav=event.target.closest('[data-intel-nav]');if(nav)getContext().actions.navigate(nav.dataset.intelNav);
-    });
+    document.addEventListener('click',event=>{const question=event.target.closest('[data-intel-question]');if(question){open(question.dataset.intelQuestion);return;}const nav=event.target.closest('[data-intel-nav]');if(nav)getContext().actions.navigate(nav.dataset.intelNav);});
     window.addEventListener('fieldops:change',updateContext);
+    document.addEventListener('fieldops:voice-transcript',event=>{if(!voiceSession)return;const detail=event.detail||{};if(detail.final===false){host.querySelector('[data-intel-utterance]').textContent=detail.text||'';return;}submitVoice(detail.text||'');});
+    document.addEventListener('fieldops:voice-state',event=>{const detail=event.detail||{};if(voiceSession||detail.state==='idle')setVoiceState(detail.state,detail);});
+    document.addEventListener('fieldops:voice-reply',event=>{if(!voiceSession||!dialog?.open)return;const detail=event.detail||{};presentReply(detail.text||'',{question:detail.question,speak:detail.speak===true});});
+    document.addEventListener('fieldops:voice-adapter',event=>setVoiceAdapter(event.detail?.adapter||event.detail));
     const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-    if(Recognition){
-      const candidate=new Recognition();
-      if('processLocally' in candidate){
-        recognition=candidate;recognition.processLocally=true;recognition.lang='en-US';recognition.interimResults=false;
-        const voiceButton=host.querySelector('[data-intel-voice]');voiceButton.hidden=false;
-        voiceButton.addEventListener('click',()=>{if(listening){recognition.stop();return;}try{recognition.start();}catch(error){status('On-device voice could not start. You can type your question.');}});
-        recognition.onstart=()=>{listening=true;voiceButton.classList.add('intel-listening');voiceButton.setAttribute('aria-pressed','true');status('Listening on this device. Your words will appear in the question box.');};
-        recognition.onresult=event=>{input.value=event.results[0][0].transcript;input.focus();status('Voice input ready. Review it, then send your question.');};
-        recognition.onerror=()=>status('On-device voice is unavailable. Type your question instead.');
-        recognition.onend=()=>{listening=false;voiceButton.classList.remove('intel-listening');voiceButton.setAttribute('aria-pressed','false');};
-      }
-    }
-    updateContext();
+    if(Recognition){try{const candidate=new Recognition();if('processLocally' in candidate){recognition=candidate;recognition.processLocally=true;recognition.lang='en-US';recognition.interimResults=false;
+      recognition.onstart=()=>{if(voiceSession)setVoiceState('listening','Ask about your orchard.');};
+      recognition.onresult=event=>{if(voiceSession)submitVoice(event.results[0][0].transcript);};
+      recognition.onerror=event=>{if(voiceSession&&event.error!=='aborted'){voiceSession=false;setVoiceState('error','On-device voice is unavailable. You can type your question.');}};
+      recognition.onend=()=>{if(voiceState==='listening'||voiceState==='preparing')setVoiceState('idle','Tap the mic to try again.');};
+    }}catch{recognition=null;}}
+    updateContext();connectOutput();renderVoiceState();
   }
-  window.FOIntelligence={render,mount,open};
+  window.FOIntelligence={render,mount,open,submitVoice,presentReply,setVoiceState,setVoiceAdapter};
 })();

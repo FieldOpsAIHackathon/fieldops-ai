@@ -31,9 +31,10 @@ Phases are written as hours from kickoff (**H+0**), not wall-clock, so they surv
   runs first.
 - `fieldops/species.json` + `species.py` — crop, blocks and pest thresholds, using the contract's
   key names.
-- `dashboard/index.html` — the replay dashboard. It loads `timeline.js` after the sample, so the
-  real timeline wins. Opened from `file://` in a browser against the real timeline: replay, banners
-  and alert log work, and the banners call the phone trigger below.
+- `dashboard/index.html` — the replay dashboard (rebuilt as an orchard analytics workspace; the
+  scripts are `app.js`, `model.js`, `panels.js`, `farm.js`, `intelligence.js`). It loads `timeline.js`
+  after the sample, so the real timeline wins. When playback moves forward over the first biofix or the
+  first spray window it calls the phone trigger below (`app.js`, `notifyPhone`).
 - `fieldops/agent.py` (owner C) — the tools over `decide` (`get_counts`, `get_degree_days`,
   `get_status`, `send_alert`), `write_alert` (local LLM phrasing, template fallback, and a check that
   rejects any number the model was not given), `answer` for "why Thursday?", and a paced `--replay`.
@@ -45,7 +46,8 @@ Phases are written as hours from kickoff (**H+0**), not wall-clock, so they surv
   `/status`, `/counts`, `/degree_days`, POST `/alert` for the OpenClaw sandbox, and POST `/trigger`
   for the dashboard, which sends `{date, block_id, type}` for the first biofix and the first spray
   window of a replay. The text comes from `decide` and the agent, never from the request.
-  Browsers are refused on `/alert`; `/trigger` accepts only a page opened from disk.
+  Browsers are refused on `/alert`; `/trigger` accepts only the dashboard's own origins: a page opened
+  from disk, or the static server on port 8787.
 - `openclaw/` — the sandbox policy and the tool skill the OpenClaw agent reads.
 - `fieldops/check_models.py` — smoke test that the local LLM and VLM load and answer. Run it
   first on the GB10.
@@ -70,8 +72,12 @@ the agent and OpenClaw both use it. YOLO26s runs in the `local/fieldops-yolo` co
 **The dashboard-to-phone trigger is built** (`POST /trigger` on `fieldops.api`). Start
 `python -m fieldops.api` before the demo; if it is not running, the banners still show and the
 phone just does not buzz. It texts twice per replay run, for the first block to reach each
-milestone (biofix, then spray window), not once per block. Tested in a browser with the Telegram
-step stubbed out, because there is no bot token on this machine yet. Do not also run
+milestone (biofix, then spray window), not once per block. Playing, stepping forward and "Next
+milestone" text; scrubbing, the date picker and going back never do, and the count resets when the
+replay returns to the start. The rebuilt dashboard briefly lost this hook, and it was restored and
+retested in a browser over both `file://` and `http://localhost:8787`, with exactly two alerts per run.
+The Telegram step was stubbed out in that test, because there is no bot token on this machine yet. Do
+not also run
 `python -m fieldops.agent --replay` during the same demo: it sends the same two alerts on its own
 clock, so the phone would buzz twice.
 
@@ -102,8 +108,12 @@ reach the phone. Verified with a stubbed model.
 tools answer from `decide`'s numbers as of the replay's current day. Nobody has run them against a
 real model.
 
-**Decisions needed from the team:** which local runtimes for the VLM and LLM; Telegram or SMS;
-whether the organizers require OpenClaw or NemoClaw (`agent.py` is the plug-in point).
+**Decisions settled, one action left.** Runtimes are chosen (vLLM/Qwen3.6 for text, YOLO26s for
+vision) and OpenClaw is wired. The Telegram path now sets up in one command,
+`python -m fieldops.telegram_setup`, which saves the token to `~/.config/fieldops.env` outside the
+repo. Nobody has run it on the demo machine yet, so **the phone has still never actually buzzed** —
+the trigger path has only been tested with the Telegram step stubbed. That is the last unproven
+link in the chain.
 
 **The phone alert needs the network; the unplug beat says we don't.** `alert.send` posts to
 `api.telegram.org`. Once the cable is out it degrades to a console print, so the buzz and the
@@ -146,14 +156,15 @@ A single live insect count is a nice trick. The replay shows the *decision*, whi
 
 Everyone in the room, one conversation, then we split and don't block each other again.
 
-- [ ] Agree both contracts out loud: the counts shape in [AGENTS.md](AGENTS.md) and the replay
+- [x] Agree both contracts out loud: the counts shape in [AGENTS.md](AGENTS.md) and the replay
       timeline in [dashboard/TIMELINE_CONTRACT.md](dashboard/TIMELINE_CONTRACT.md). Freeze them.
       They do not change after this meeting.
-- [ ] Scaffold the remaining `fieldops/` modules: `ingest.py` and `vision.py` (`agent.py`, `alert.py` and `api.py` have landed)
+- [x] Scaffold the remaining `fieldops/` modules: `ingest.py` and `vision.py` (`agent.py`, `alert.py` and `api.py` have landed)
       (`store.py` and `decide.py` have landed). Each gets a `if __name__ == "__main__":` from the start.
 - [x] `fieldops/species.json` with apple / codling moth filled in.
 - [x] Create the SQLite schema and commit it.
-- [ ] Confirm the local VLM and the local LLM both load on the GB10 and return *something*. **Do this
+- [x] Confirm the local models load on the GB10 and return *something*. Qwen3.6-35B-A3B on vLLM
+      at `127.0.0.1:8000`, YOLO26s in the `local/fieldops-yolo` container. **Do this
       first** — if a runtime is broken, we need to know at H+0:30, not H+5.
 
 **Done when:** every module imports, `species.json` parses, the DB file is created, and both models
@@ -293,14 +304,14 @@ identically.
 Owner: C. Can be built against a hardcoded decision object before `decide` is finished — agree the
 output shape with B at H+0:45 and start immediately.
 
-- [ ] `agent.write_alert(decision) -> str`. Local LLM turns the decision into one or two sentences a
+- [x] `agent.write_alert(decision) -> str`. Local LLM turns the decision into one or two sentences a
       grower would actually read. Target: *"Biofix reached on block C. Spray window opens Thursday."*
       Not a paragraph. Not an essay about integrated pest management.
-- [ ] `agent.answer(question, context) -> str` for *"why do you want me to spray Thursday?"* — it
+- [x] `agent.answer(question, context) -> str` for *"why do you want me to spray Thursday?"* — it
       explains the degree-day reasoning using numbers from `decide`, and never recomputes them itself.
-- [ ] Tools exposed to the agent: `get_counts`, `get_degree_days`, `send_alert`. If the hackathon
+- [x] Tools exposed to the agent: `get_counts`, `get_degree_days`, `send_alert`. If the hackathon
       expects OpenClaw or NemoClaw, this is the plug-in point.
-- [ ] `alert.send(text)` — Telegram bot is the fastest path; SMS if Telegram is blocked on the venue
+- [x] `alert.send(text)` — Telegram bot is the fastest path; SMS if Telegram is blocked on the venue
       network. Test it on the actual demo phone, on the actual venue wifi, well before the pitch.
 
 **Done when:** running the replay buzzes a real phone at the right moment with a sentence we'd be
@@ -344,13 +355,13 @@ Owner: D. One page, no router, no build step, runs from `file://`. **Unblocked f
 against `dashboard/data/sample_timeline.js` and swap to the real `timeline.js` when B's emitter
 lands. Do not wait for `decide`.
 
-- [ ] Flight curve over the season, biofix marked.
-- [ ] Degree-day clock — accumulated total and distance to `spray_open_dd`.
-- [ ] Alert log, fed from the timeline's per-day `events`.
-- [ ] Block status colouring: `watching` / `accumulating` / `spray_window` / `window_closed`.
-- [ ] **Replay button.** This is the one control that matters on stage. The dashboard owns the
+- [x] Flight curve over the season, biofix marked.
+- [x] Degree-day clock — accumulated total and distance to `spray_open_dd`.
+- [x] Alert log, fed from the timeline's per-day `events`.
+- [x] Block status colouring: `watching` / `accumulating` / `spray_window` / `window_closed`.
+- [x] **Replay button.** This is the one control that matters on stage. The dashboard owns the
       pacing — it walks `days` itself; the timeline is a static document.
-- [ ] Trap map from `blocks[].col/row`, if there's time. It's decoration.
+- [x] Trap map from `blocks[].col/row`, if there's time. It's decoration.
 
 **Done when:** one click replays the season visually and the curve, the clock and the alert log all
 move together — and pointing the page at the real timeline instead of the sample changes nothing

@@ -4,6 +4,8 @@
 
 Listens on 127.0.0.1 and on the sandbox bridge (host.openshell.internal), never on the venue
 network. Inside the sandbox:
+    curl -s http://172.18.0.1:8765/farm
+    curl -s "http://172.18.0.1:8765/block?block=c"
     curl -s http://172.18.0.1:8765/status
     curl -s "http://172.18.0.1:8765/counts?block=c&days=14"
     curl -s "http://172.18.0.1:8765/degree_days?block=c"
@@ -27,8 +29,9 @@ from . import agent
 
 PORT = 8765
 HOSTS = ("127.0.0.1", "172.18.0.1")  # loopback + the OpenShell docker bridge (host.openshell.internal)
-# A dashboard opened from disk sends Origin "null" (some browsers "file://"). Anything else is another site.
-PAGE_ORIGINS = {"null", "file://"}
+# A dashboard opened from disk sends Origin "null" (some browsers "file://"); one served by the local static
+# server (ORCHESTRATION.md, port 8787) sends that address. Anything else is another site.
+PAGE_ORIGINS = {"null", "file://", "http://localhost:8787", "http://127.0.0.1:8787"}
 MAX_TRIGGER_BODY = 1024
 VISION_URL = "http://127.0.0.1:8767/count"  # fieldops.vision in the GPU container
 MAX_IMAGE_BODY = 15 * 1024 * 1024
@@ -41,6 +44,9 @@ GET_ROUTES = {
                                          int(q.get("days", 14)), q.get("as_of")),
     "/degree_days": lambda q: agent.get_degree_days(q.get("block"), q.get("species", agent.DEFAULT_SPECIES),
                                                    q.get("as_of")),
+    "/farm": lambda q: agent.get_farm(q.get("as_of"), q.get("species", agent.DEFAULT_SPECIES)),
+    "/block": lambda q: agent.get_block_report(q.get("block"), q.get("as_of"),
+                                               q.get("species", agent.DEFAULT_SPECIES)),
 }
 
 
@@ -109,11 +115,17 @@ class Handler(BaseHTTPRequestHandler):
         try:
             req = urllib.request.Request(url, body, {"Content-Type": "application/octet-stream"})
             with urllib.request.urlopen(req, timeout=60) as r:
-                result = json.load(r)
-            if result.get("annotated_image"):
-                result["annotated_file"] = Path(result["annotated_image"]).name
-                result["annotated_url"] = f"/vision/{result['annotated_file']}"
-            self._reply(200, result)
+                counted = json.load(r)
+            if counted.get("annotated_image"):
+                counted["annotated_file"] = Path(counted["annotated_image"]).name
+                counted["annotated_url"] = f"/vision/{counted['annotated_file']}"
+            # A photo on its own is a number. Joined to the block's state it is a decision.
+            trap = parse_qs(urlparse(self.path).query).get("trap_id", [""])[0]
+            if trap:
+                report = agent.get_block_report(trap.rsplit("-", 1)[0])
+                if "error" not in report:
+                    counted["block_report"] = report
+            self._reply(200, counted)
         except urllib.error.HTTPError as e:
             self._reply(e.code, json.load(e))
         except OSError:
