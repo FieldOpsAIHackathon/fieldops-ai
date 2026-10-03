@@ -4,6 +4,8 @@
 
 Built for the Dell x NVIDIA AI Hackathon, October 3 2026.
 
+**[Watch the two-minute demo](pitch/video/fieldops-demo.mp4)** · [Backup cut](pitch/video/fieldops-demo-backup.mp4) · [Transcript](pitch/video/transcript.txt)
+
 ---
 
 ## The problem
