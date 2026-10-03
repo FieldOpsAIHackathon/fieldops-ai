@@ -73,15 +73,28 @@ step stubbed out, because there is no bot token on this machine yet. Do not also
 `python -m fieldops.agent --replay` during the same demo: it sends the same two alerts on its own
 clock, so the phone would buzz twice.
 
-**No spray date in the biofix alert.** `decide.evaluate` still returns `projected_open`, an estimate
-from the last week's warmth. In spring it runs weeks late (on May 12 it said Jun 20; the window
-opened Jun 4), so the alert text leaves it out and `answer` / OpenClaw should call it an estimate.
-The pitch line "opens Thursday" is true once the window opens, not at biofix. Showing a real date
-at biofix needs a forecast, which we do not have offline.
+**The spray date at biofix is now a real estimate.** `decide` writes `projected_open` into every
+accumulating block's state in the timeline (a new optional field in `TIMELINE_CONTRACT.md`) and the
+agent tools read it from there. It is today's degree-days plus the 2016–2025 average
+temperatures (`data/climate_normals.csv`, from Open-Meteo, committed) for each later date, so it
+works offline and never sees the future. The old last-week-rate method ran weeks off in spring (on
+May 12 it said Jun 20). Measured against the real window-open date across all six blocks: with real
+2026 temperatures the estimate made when biofix is confirmed is off by 1.5 days on average (worst 3);
+on the committed demo temperatures it is about 3 days early, because those synthetic temperatures run
+warmer than the real averages. So the biofix alert says the window is expected "around May 31", with
+no weekday, and the pitch line "opens Thursday" is still only exact once the window opens. A real
+16-day forecast could sharpen it further but needs the network at demo time.
 
-**The agent's number check is built.** `agent.write_alert` falls back to a template whenever the
-LLM errors, is too long, or uses a number that is not in the facts it was given, so a hallucinated
-degree-day count or date cannot reach the phone. Verified with a stubbed model.
+**The dashboard shows the same estimate.** The degree-day clock and the "how is block C" and
+"which block is next" answers read `projected_open` ("window opens around Jun 1"). If a timeline
+lacks the field, as the sample does, the page falls back to its old rate-based guess, which on the
+demo data is about 16 days late. The estimate is rewritten on every `decide --replay`; the CI check
+fails if the committed timeline is stale.
+
+**The agent's text check is built.** `agent.write_alert` falls back to a template whenever the
+LLM errors, is too long, uses a number, weekday or month that is not in the facts it was given, or
+pairs a weekday with a date the facts do not pair, so a hallucinated degree-day count or date cannot
+reach the phone. Verified with a stubbed model.
 
 **"Why Thursday?" is built but unverified.** `python -m fieldops.agent --ask "..."` and the OpenClaw
 tools answer from `decide`'s numbers as of the replay's current day. Nobody has run them against a
@@ -95,6 +108,14 @@ whether the organizers require OpenClaw or NemoClaw (`agent.py` is the plug-in p
 unplug cannot both be live at the same moment. Order the demo so the phone buzzes *before* the
 unplug; what the unplug then proves is that inference and the decision are local, which is the
 honest claim anyway.
+
+**Test data lives in its own store.** `fieldops/history.py` writes `data/history.csv` and
+`data/history.db`: 2025 and 2026, 30 traps, 10 species, checks every 2-7 days at an arbitrary
+hour, counts accumulating between checks. Deterministic from `--seed`. It is for exercising the
+store, its filters and the vision path — not the demo. `decide` cannot span it in one go, because
+`build_timeline` runs min..max of the codling moth dates and there is no winter weather; slice to
+one season first (`store.query(since="2025-04-01", until="2025-09-30")`), which both years pass
+`decide.validate()` on.
 
 **Don't load trap test data into the demo store.** `data/traps/manifest.json` uses `block-c-04`
 on 2026-05-12. That trap is not in the season, but `block_of()` maps it to block C, which is, so

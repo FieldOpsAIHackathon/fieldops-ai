@@ -11,6 +11,7 @@ import json
 import math
 from collections import defaultdict
 from datetime import date, timedelta
+from functools import lru_cache
 from pathlib import Path
 
 from . import species as species_cfg
@@ -39,9 +40,14 @@ def _pest_key(config: dict) -> str:
     raise ValueError("no species in config has biofix and degree-day thresholds")
 
 
-def build_timeline(records: list, weather: dict, config: dict = None) -> dict:
-    """records: contract dicts. weather: {date: (tmin_f, tmax_f)} for every day in the records."""
+def build_timeline(records: list, weather: dict, config: dict = None, normals: dict = None) -> dict:
+    """records: contract dicts. weather: {date: (tmin_f, tmax_f)} for every day in the records.
+
+    normals feeds each block's projected_open: None uses the committed ten-year averages, {} forces the
+    last-week-rate fallback.
+    """
     config = config or species_cfg.load()
+    normals = _default_normals() if normals is None else normals
     pest = _pest_key(config)
     cfg = config["species"][pest]
     th = {k: cfg[k] for k in THRESHOLD_KEYS}
@@ -119,6 +125,8 @@ def build_timeline(records: list, weather: dict, config: dict = None) -> dict:
                 "status": s["status"],
                 "biofix_date": s["biofix"].isoformat() if s["biofix"] else None,
                 "dd_since_biofix": round(s["dd"], 1),
+                "projected_open": _estimate_open(d, th["spray_open_dd"] - s["dd"], th, normals, dd_by_day)
+                if s["status"] == "accumulating" else None,
             }
             day["events"] += [{"block_id": bid, "type": t, "title": ti, "message": m} for t, ti, m in events]
 
@@ -138,6 +146,11 @@ def validate(tl: dict) -> None:
         assert all(isinstance(x["counts"][bid], int) and x["counts"][bid] >= 0 for x in tl["days"])
         dds = [x["blocks"][bid]["dd_since_biofix"] for x in tl["days"]]
         assert all(a <= c for a, c in zip(dds, dds[1:])), f"degree-days decreased in {bid}"
+        for x in tl["days"]:  # projected_open is optional: absent or null means no estimate
+            guess = x["blocks"][bid].get("projected_open")
+            if guess is not None:
+                assert x["blocks"][bid]["status"] == "accumulating", f"estimate outside accumulating: {bid} {x['date']}"
+                assert date.fromisoformat(guess) > date.fromisoformat(x["date"]), f"estimate in the past: {bid} {x['date']}"
     assert all(x["tmin_f"] < x["tmax_f"] for x in tl["days"])
     assert json.loads(json.dumps(tl)) == tl, "JSON round trip"
 
@@ -154,40 +167,66 @@ EVENT_NAMES = {"biofix": "biofix_confirmed", "spray_window_open": "spray_window_
                "spray_window_close": "spray_window_closed"}
 
 
+@lru_cache(maxsize=None)
+def _default_normals() -> dict:
+    """The committed ten-year averages (python -m fieldops.weather --normals), or {} if absent."""
+    from .weather import load_normals
+
+    return load_normals()
+
+
+def _project_open(day: date, left: float, th: dict, normals: dict):
+    """First date the remaining degree-days are used up, if every later day has its normal temperatures."""
+    total = 0.0
+    for n in range(1, 181):
+        d = day + timedelta(days=n)
+        tmin, tmax = normals[(d.month, d.day)]
+        total += daily_dd(tmin, tmax, th["dd_base_f"], th["dd_upper_f"])
+        if total >= left:
+            return d.isoformat()
+    return None
+
+
+def _estimate_open(day: date, left: float, th: dict, normals: dict, dd_by_day: dict):
+    """Estimated date the window opens, as an ISO string, or None.
+
+    With normals it adds each later day's average temperatures; without them it repeats the last week's
+    rate, which runs weeks late in spring because the weather is still warming.
+    """
+    if normals:
+        return _project_open(day, left, th, normals)
+    recent = [dd_by_day[day - timedelta(days=k)] for k in range(7) if day - timedelta(days=k) in dd_by_day]
+    rate = sum(recent) / len(recent)
+    return (day + timedelta(days=math.ceil(left / rate))).isoformat() if rate > 0 else None
+
+
 def _status(tl: dict, i: int, block_id: str) -> dict:
     """One block's state at the end of day i, with the dates its milestones happened."""
     day, state = tl["days"][i], tl["days"][i]["blocks"][block_id]
     so_far = {"days": tl["days"][: i + 1]}
-    out = {
+    return {
         "species": tl["farm"]["pest"], "block": block_id, "as_of": day["date"], "status": state["status"],
         "biofix_date": state["biofix_date"], "dd": state["dd_since_biofix"],
         "confirmed_on": event_date(so_far, block_id, "biofix"),
         "opened_on": event_date(so_far, block_id, "spray_window_open"),
         "closed_on": event_date(so_far, block_id, "spray_window_close"),
-        "projected_open": None,
+        "projected_open": state.get("projected_open"),
     }
-    if state["status"] == "accumulating":
-        recent = [x["dd_today"] for x in tl["days"][max(0, i - 6): i + 1]]  # same 7-day rate the dashboard shows
-        rate = sum(recent) / len(recent)
-        if rate > 0:
-            left = tl["thresholds"]["spray_open_dd"] - state["dd_since_biofix"]
-            out["projected_open"] = (date.fromisoformat(day["date"]) + timedelta(days=math.ceil(left / rate))).isoformat()
-    return out
 
 
-def evaluate(records: list, weather: dict, as_of: date, config: dict = None) -> list:
-    """Status of every block using only data up to as_of. projected_open is an estimate, not a forecast."""
+def evaluate(records: list, weather: dict, as_of: date, config: dict = None, normals: dict = None) -> list:
+    """Status of every block using only data up to as_of. normals as in build_timeline."""
     seen = [r for r in records if r["timestamp"][:10] <= as_of.isoformat()]
     try:
-        tl = build_timeline(seen, weather, config)
+        tl = build_timeline(seen, weather, config, normals)
     except ValueError:
         return []  # nothing counted yet
     return [_status(tl, len(tl["days"]) - 1, b["id"]) for b in tl["blocks"]]
 
 
-def replay(records: list, weather: dict, config: dict = None) -> list:
+def replay(records: list, weather: dict, config: dict = None, normals: dict = None) -> list:
     """One event per milestone, in date order, each carrying that block's status on the day."""
-    tl = build_timeline(records, weather, config)
+    tl = build_timeline(records, weather, config, normals)
     return [
         dict(_status(tl, i, e["block_id"]), event=EVENT_NAMES[e["type"]])
         for i, day in enumerate(tl["days"]) for e in day["events"]
@@ -257,10 +296,26 @@ def selftest() -> None:
 
     # The agent's views read the same timeline: May 6 is biofix day, and the estimate matches what happens.
     records, weather = inputs([0, 5, 0, 0, 3, 4, 0, 0, 0])
-    assert evaluate(records[:1], weather, date(2026, 5, 1), cfg)[0]["status"] == "watching"
-    s = evaluate(records, weather, date(2026, 5, 6), cfg)[0]
+    assert evaluate(records[:1], weather, date(2026, 5, 1), cfg, normals={})[0]["status"] == "watching"
+    s = evaluate(records, weather, date(2026, 5, 6), cfg, normals={})[0]  # {} = the last-week-rate fallback
     assert (s["status"], s["biofix_date"], s["dd"], s["opened_on"]) == ("accumulating", "2026-05-05", 10, None)
     assert s["projected_open"] == "2026-05-08"  # 15 DD to go at 10 a day, rounded up to 2 days
+
+    # With normals, each later day adds its own average temperatures: a flat 19 DD (50 / 88) a day is 1 day for 15 DD.
+    hot = {(m, d): (50.0, 95.0) for m in range(1, 13) for d in range(1, 32)}
+    assert evaluate(records, weather, date(2026, 5, 6), cfg, normals=hot)[0]["projected_open"] == "2026-05-07"
+    cool = {(m, d): (40.0, 60.0) for m in range(1, 13) for d in range(1, 32)}  # (60 + 50) / 2 - 50 = 5 DD a day
+    assert evaluate(records, weather, date(2026, 5, 6), cfg, normals=cool)[0]["projected_open"] == "2026-05-09"
+    assert evaluate(records, weather, date(2026, 5, 4), cfg, normals=hot)[0]["projected_open"] is None  # no biofix yet
+
+    # The same estimate rides in the timeline, only while a block is accumulating.
+    tl_hot = build_timeline(records, weather, cfg, normals=hot)
+    est = lambda i: tl_hot["days"][i]["blocks"]["block-x"]["projected_open"]
+    assert est(4) is None  # May 5: run not complete yet, still watching
+    assert est(5) == "2026-05-07"  # May 6: biofix confirmed, 15 DD to go at 19 a day
+    assert est(7) is None  # May 8: window open, nothing left to estimate
+    validate(tl_hot)
+
     assert [e["event"] for e in replay(records, weather, cfg)] == [
         "biofix_confirmed", "spray_window_open", "spray_window_closed"]
 
