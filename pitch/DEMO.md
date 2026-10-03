@@ -25,9 +25,10 @@ from `file://` for the replay alone. Test the unplug once before the pitch, not 
 - Check the badge top right reads "Running locally on ProMaxGB10". When the cable comes out it
   flips to "Offline, still running" on its own.
 - Optional: tick **Alert sound** so the spray banner chimes. Muted by default.
-- To buzz the phone, start the tool server in a terminal first: `python -m fieldops.api`. Put the
-  Telegram token and chat ID in `~/.config/fieldops.env` (or the environment) beforehand; the file
-  stays out of the repo. It texts twice per replay: biofix, then Block C's spray window. If the server
+- To buzz the phone, start the tool server in a terminal first: `python -m fieldops.api`. Set up
+  Telegram once beforehand with `python -m fieldops.telegram_setup`, which checks the bot token, finds
+  your chat, saves both to `~/.config/fieldops.env` (outside the repo, owner-only) and sends a test
+  message. It texts twice per replay: biofix, then Block C's spray window. If the server
   is not running the banners still show, so the demo never depends on it. Do not also run
   `python -m fieldops.agent --replay`.
 

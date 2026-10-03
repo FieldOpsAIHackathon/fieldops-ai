@@ -90,6 +90,7 @@ the overfitting we caught and fixed are in [fieldops/yolo/README.md](fieldops/yo
 
 ```bash
 python -m fieldops.check_models                  # do the local LLM and VLM load? run this first
+python -m fieldops.telegram_setup                # one-time: connect the phone alert to your Telegram bot
 python -m fieldops.season                        # regenerate data/season.csv
 python -m fieldops.weather --normals             # refetch the average temperatures behind the spray-date estimate (needs network)
 python -m fieldops.store --load data/season.csv  # build the store: counts + temperatures

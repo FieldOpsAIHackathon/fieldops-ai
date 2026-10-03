@@ -1,0 +1,10 @@
+**
+!voice/
+!voice/**
+!dashboard/
+!dashboard/**
+**/__pycache__/
+
+!data/
+!data/traps/
+!data/traps/**

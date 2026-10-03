@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FieldOps · Voice studio</title><link rel="icon" href="assets/fieldops-mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="voice.css">
+</head>
+<body>
+<main>
+  <header><a class="brand" href="index.html" aria-label="Back to FieldOps dashboard"><span class="mark">F</span> FIELDOPS <span class="muted">/ VOICE</span></a><span class="connection" id="connection">Connecting to local voice…</span></header>
+  <section class="intro"><p class="eyebrow">YOUR ORCHARD. IN A MORE HUMAN VOICE.</p><h1>A little less screen.<br>A little more <em>conversation.</em></h1><p class="lede">Listen to the day's briefing, or give your dashboard a voice.<br>Generated on your GB10. Ready without the internet.</p></section>
+  <section class="studio" aria-label="Voice studio">
+    <div class="voice-side"><p class="eyebrow">01 / CHOOSE A VOICE</p><div id="voices" class="voices">
+      <button class="voice selected" data-voice="orchard" aria-pressed="true"><span class="avatar">O</span><span><strong>Orchard</strong><small>Warm, clear and conversational</small></span><span class="choice">●</span></button>
+      <button class="voice" data-voice="heart" aria-pressed="false"><span class="avatar">H</span><span><strong>Heart</strong><small>The familiar Coach voice</small></span><span class="choice">○</span></button>
+      <button class="voice" data-voice="bella" aria-pressed="false"><span class="avatar">B</span><span><strong>Bella</strong><small>Soft and relaxed</small></span><span class="choice">○</span></button>
+      <button class="voice" data-voice="fenrir" aria-pressed="false"><span class="avatar">F</span><span><strong>Fenrir</strong><small>Measured and grounded</small></span><span class="choice">○</span></button>
+    </div><label class="pace" for="speed">Speaking pace <output id="speedValue">1.00×</output></label><input id="speed" type="range" min="0.85" max="1.15" step="0.05" value="1"><div class="range-label"><span>Unhurried</span><span>Brisk</span></div><p class="small-note">Orchard blends Heart and Bella. Heart uses the same voice identity as Coach, for an easy comparison.</p></div>
+    <div class="text-side"><div class="section-row"><label class="eyebrow" for="text">02 / GIVE IT SOMETHING TO SAY</label><span class="count" id="count">0 / 2400</span></div>
+      <div class="presets"><button id="briefing">Season briefing</button><button id="sample">Conversation sample</button></div>
+      <label class="day-label" for="day">Replay day <select id="day"></select></label>
+      <textarea id="text" maxlength="2400" spellcheck="false" aria-describedby="textNote"></textarea>
+      <p id="textNote" class="small-note">Briefings use the committed replay's numbers and states.</p>
+      <div class="play-row"><button id="play" class="primary" disabled><span>▶</span> Listen to preview</button><button id="stop" class="stop" disabled aria-label="Stop speaking">■ Stop</button><span id="status" role="status" aria-live="polite">Checking voice service</span></div>
+    </div>
+  </section>
+  <section class="metrics" aria-label="Measured playback timing"><div><span>FIRST AUDIO</span><strong id="latency">—</strong><small>Measured in this browser</small></div><div><span>AUDIO LENGTH</span><strong id="duration">—</strong><small>Full generated utterance</small></div><div><span>GENERATION</span><strong id="generation">—</strong><small>Includes cached sentences</small></div><div><span>RUNNING ON</span><strong id="device">Checking</strong><small id="engine">Local inference only</small></div></section>
+  <footer><span>A voice for the facts. The decision engine still calls the window.</span><a href="index.html">Open dashboard ↗</a></footer>
+</main>
+<script src="data/timeline.js"></script><script src="voice.js"></script>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const player = window.fieldopsVoice;
+if (location.port === '8790') player.endpoint = location.origin;
+const timeline = window.FIELDOPS_TIMELINE;
+let ready = false;
+for (const day of timeline.days) { const o = document.createElement('option'); o.value = day.date; o.textContent = new Date(day.date+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}); $('day').append(o); }
+$('day').value = timeline.days.find(d=>d.date==='2026-06-04')?.date || timeline.days[0].date;
+function count() { $('count').textContent = $('text').value.length + ' / 2400'; }
+function briefing() {
+ const day = timeline.days.find(d=>d.date===$('day').value);
+ const open = timeline.blocks.filter(b=>day.blocks[b.id].status==='spray_window');
+ const accumulating = timeline.blocks.filter(b=>day.blocks[b.id].status==='accumulating');
+ let text = `Here's your orchard update for ${day.date}. `;
+ if (open.length) text += `The codling moth treatment window is open in ${open.map(b=>b.name).join(', ')}. `;
+ else text += 'No blocks have an open codling moth treatment window today. ';
+ const focus = open[0] || accumulating[0] || timeline.blocks[0];
+ const state = day.blocks[focus.id];
+ if (state.biofix_date) text += `${focus.name} has accumulated ${state.dd_since_biofix} DD since biofix. `;
+ if (accumulating.length) text += `${accumulating.length} ${accumulating.length===1?'block is':'blocks are'} still accumulating degree days. `;
+ text += 'You can follow each block in the season replay.';
+ $('text').value = text; count(); player.stop();
+}
+briefing();
+$('briefing').onclick = briefing; $('day').onchange = briefing;
+$('sample').onclick = () => { player.stop(); $('text').value = "Good morning. Let's take a quick look at your orchard. I'll walk you through what's changed, which blocks need a closer look, and where we are in the season. When you're ready, pick a block and we'll take it from there."; count(); };
+$('text').oninput = count;
+for (const button of document.querySelectorAll('[data-voice]')) button.onclick = () => {
+ player.stop(); player.voice = button.dataset.voice; player.savePreferences();
+ for (const item of document.querySelectorAll('[data-voice]')) { const selected = item===button; item.classList.toggle('selected',selected); item.setAttribute('aria-pressed',selected); item.querySelector('.choice').textContent = selected?'●':'○'; }
+};
+document.querySelector(`[data-voice="${player.voice}"]`).click();
+$('speed').value = player.speed; $('speedValue').value = player.speed.toFixed(2)+'×';
+$('speed').oninput = () => { player.speed = Number($('speed').value); $('speedValue').value = player.speed.toFixed(2)+'×'; player.savePreferences(); };
+$('play').onclick = () => { $('latency').textContent='—'; $('duration').textContent='—'; $('generation').textContent='—'; player.speak($('text').value).catch(()=>{}); };
+$('stop').onclick = () => player.stop();
+player.addEventListener('state', ({detail}) => {
+ const active = ['preparing','speaking'].includes(detail.state);
+ $('stop').disabled = !active; $('play').disabled = !ready || active;
+ $('status').textContent = {idle:'Ready when you are',preparing:'Finding its voice…',speaking:'Speaking',error:detail.message}[detail.state];
+ if (detail.firstAudioMs != null) $('latency').textContent = detail.firstAudioMs+' ms';
+});
+player.addEventListener('metrics', ({detail}) => { $('duration').textContent=detail.audio_seconds.toFixed(1)+' s'; $('generation').textContent=detail.synthesis_ms+' ms'; });
+player.health().then(h=> { ready=h.ready; $('play').disabled=!ready; $('connection').textContent='● Local voice connected'; $('connection').classList.add('online'); $('device').textContent=h.device==='cuda'?'GB10 GPU':'CPU'; $('engine').textContent=h.engine+' · offline'; $('status').textContent='Ready when you are'; }).catch(()=>{ $('connection').textContent='Voice service unavailable'; $('status').textContent='Start the voice service and refresh this page.'; $('device').textContent='Disconnected'; });
+</script>
+</body></html>
