@@ -31,9 +31,12 @@ ALERT_EVENTS = ("biofix_confirmed", "spray_window_open")
 
 @lru_cache(maxsize=None)
 def _season():
+    """The store if it holds data, else the committed seed CSV: the same rule decide uses."""
+    from . import store
     from .season import load_csv
 
-    return load_csv()
+    records, weather = store.read()
+    return (records, weather) if records and weather else load_csv()
 
 
 def season_days() -> list:
