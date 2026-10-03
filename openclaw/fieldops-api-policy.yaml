@@ -3,7 +3,7 @@
 #     --trusted-private-host 172.18.0.1 --yes
 preset:
   name: fieldops-api
-  description: "FieldOps tool server on the GB10 host, port 8765, curl only"
+  description: "FieldOps tool server on the GB10 host, port 8765, curl only (incl. photo counting)"
 
 network_policies:
   fieldops-api:
@@ -18,5 +18,6 @@ network_policies:
           - allow: { method: GET, path: "/counts" }
           - allow: { method: GET, path: "/degree_days" }
           - allow: { method: POST, path: "/alert" }
+          - allow: { method: POST, path: "/count" }
     binaries:
       - { path: /usr/bin/curl }

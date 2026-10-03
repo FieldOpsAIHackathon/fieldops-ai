@@ -22,10 +22,23 @@ PESTS = ("codling_moth", "oriental_fruit_moth", "spotted_lanternfly")
 CONF, IOU, IMGSZ = 0.35, 0.5, 960
 
 
-def count(model: YOLO, image) -> dict:
+def load_model(weights: str) -> YOLO:
+    return YOLO(weights)
+
+
+def count_result(model: YOLO, image) -> tuple:
+    """Pest counts plus an RGB PIL image with only the pest boxes drawn."""
+    from PIL import Image
+
     result = model.predict(image, imgsz=IMGSZ, conf=CONF, iou=IOU, verbose=False)[0]
     names = [model.names[int(c)] for c in result.boxes.cls.tolist()]
-    return {p: names.count(p) for p in PESTS}
+    pest_ids = [i for i, n in enumerate(names) if n in PESTS]
+    annotated = Image.fromarray(result[pest_ids].plot(labels=False, conf=False, line_width=3)[..., ::-1])
+    return {p: names.count(p) for p in PESTS}, annotated
+
+
+def count(model: YOLO, image) -> dict:
+    return count_result(model, image)[0]
 
 
 def records(counts: dict, trap_id: str, timestamp: str) -> list:
