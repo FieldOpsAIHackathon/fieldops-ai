@@ -12,10 +12,11 @@ seconds, most of it the agent's turn.
                        reply: "50 codling moth, 12 oriental fruit moth"  ◀── counts + boxed image
 ```
 
-On a phone, a photo with its section name comes back as counts, that section's status and the
-boxed photo (17:47, October 3, the real Telegram bot):
+On a phone (the real Telegram bot, 18:00 on October 3): a photo on its own comes back boxed with
+the counts and a question about which section it is in. Answering "C" adds that section's status.
+The whole farm is reported only when asked:
 
-<img src="../../pitch/assets/telegram-trap-count.webp" alt="Telegram: a trap photo sent with 'Section C' returns the boxed photo, 27 codling moth, 7 oriental fruit moth, 0 spotted lanternfly, total 34, and Block C's degree-day status" width="320">
+<img src="../../pitch/assets/telegram-trap-count-1.webp" alt="Telegram: a trap photo sent alone returns the boxed photo with 25 codling moth, 6 oriental fruit moth, 0 spotted lanternfly, total 31, and asks which section the trap is in" width="300"> <img src="../../pitch/assets/telegram-trap-count-2.webp" alt="Telegram: after answering C, the bot returns the boxed photo, the counts and Block C's status (150 of 250 degree-days, window around June 2); then 'How's my farm doing?' gets a farm summary" width="300">
 
 ## The model
 
