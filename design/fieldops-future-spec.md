@@ -108,15 +108,19 @@ python3 -m http.server 8789 --bind 127.0.0.1
 ```
 
 Open `http://127.0.0.1:8789/dashboard/`. The default snapshot is June 4, 2026,
-with Block C selected. Date, block, species, tab and film chapter are shareable
+with Block C selected. Date, block, species, tab and 3D mode are shareable
 through the URL. No database setup or package install is required.
 
 - Use the workspace rail for Overview, Pest analytics, Orchard blocks, Trap lab,
   Weather & timing, and Intelligence.
-- Select **Cinematic mode** for three recording chapters: Detect, Understand,
-  and Act. Arrow keys move between chapters; Escape returns to the workspace.
-- Select **Ask FieldOps** to open the assistant. It answers from the selected
-  snapshot and committed data; no language model is connected by this build.
+- Select **3D farm** to explore the orchard. Drag to orbit, scroll/pinch to zoom,
+  and Shift/right-drag to pan. Choose a block to inspect it. R resets the view;
+  T selects overhead; Escape returns to the workspace. Orbit tour rotates slowly
+  for recording and stops when you interact with the map.
+- Select **Talk to FieldOps** to open the voice panel. **Type instead** reveals
+  optional chat and supporting facts. The panel remains open while you explore.
+  The independent voice pipeline connects through `dashboard/VOICE_UI.md`;
+  the built-in answer fallback reads committed season facts.
 - **Export snapshot** downloads the selected date/species as a six-block CSV.
 - **Play season** replays the committed 139-day dataset; no feed simulation runs.
 
@@ -130,3 +134,37 @@ Jennifer's optional `projected_open` is used in accumulating-block timing cards,
 assistant answers and exports. Display it as an estimate “around” a date, without
 a weekday. The committed climate normals supply this estimate; the dashboard
 never computes a replacement spray date or changes decision states.
+
+## October 3 refinement: 3D farm and voice-first agent
+
+Explicit user direction: push all current work, replace cinematic chapters with an
+interactive navigable 3D farm, make the floating agent voice-first with an optional
+chat view. The independent voice session owns AI/audio service and voice.js; this
+build owns its minimal UI, state display, cancellation and integration hooks.
+Insects should look more imposing and detailed while remaining recognizable.
+
+3D: locally bundled Three.js, no runtime CDN; classic script works from file://.
+Natural grassy irregular terrain with tree rows, hedges, paths, pond, barn, six
+selectable labeled blocks and 18 trap markers. Drag to orbit, wheel/pinch zoom,
+right-drag/shift-drag pan; explicit home/top/angled view, +/- and keyboard controls.
+Selecting a block updates dashboard focus and a compact inspector. Minimal overlay
+chrome, full-height viewport, optional auto-orbit for recording with clear stop.
+Real block statuses/counts from current snapshot; schematic geometry clearly labeled.
+WebGL failure gets a working 2D map fallback. Release all renderer resources on exit.
+
+Farm module API: window.FOFarm3D.mount(container,ctx) -> controller with
+update(ctx), destroy(), home(), focus(blockId), setView('orbit'|'top'), zoom(delta),
+setAutoRotate(boolean), getState(). Selection invokes ctx.actions.update({block:id}).
+Mount owns canvas and projected DOM block labels only. Labels must be clickable and
+accessible. Preserve camera across update calls. Root app owns toolbar/inspector.
+THREE and THREE.OrbitControls are provided locally before farm3d.js.
+
+Voice UI: compact floating orb/mic launcher; on opening, a small clean voice panel
+with one primary mic button, status (ready/listening/thinking/speaking/error), latest
+utterance/brief reply, explicit Stop, and secondary keyboard/chat toggle. Chat is
+hidden initially and accessible when requested. Never claim to hear/understand audio
+without input support. Keep mic permission tied to a user gesture and stop mic/audio
+on close. Local-browser recognition only if available; otherwise show unavailable
+honestly while exposing hooks for the voice session. Preserve local-facts fallback,
+block/date context and evidence in optional chat. Speech output uses fieldopsVoice
+when installed, else supported local browser voice. No automatic network polling.
