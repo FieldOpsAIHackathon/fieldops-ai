@@ -1,0 +1,57 @@
+(function () {
+'use strict';
+let sequence = 0;
+const species = {
+  codling_moth: ['Codling moth', 'Cydia pomonella'],
+  oriental_fruit_moth: ['Oriental fruit moth', 'Grapholita molesta'],
+  spotted_lanternfly: ['Spotted lanternfly', 'Lycorma delicatula']
+};
+const statusName = {watching:'Watching', accumulating:'DD accumulating', spray_window:'Window open', window_closed:'Window closed', post_window:'Past window'};
+const plots = [
+  {d:'M178 103 Q228 70 290 89 L322 174 305 218 132 231 117 190 147 127Z', x:213,y:150, traps:[[147,127],[287,120],[281,209]]},
+  {d:'M309 85 Q381 64 438 82 L490 100 466 204 337 217 344 173Z',x:404,y:144,traps:[[337,114],[464,111],[438,199]]},
+  {d:'M508 106 Q566 85 620 111 L702 157 728 213 684 238 493 208Z',x:597,y:172,traps:[[537,123],[683,178],[639,228]]},
+  {d:'M132 253 L298 243 318 335 290 410 Q212 433 151 388 L112 335Z',x:210,y:307,traps:[[142,274],[282,268],[254,386]]},
+  {d:'M325 243 L464 230 503 303 463 406 328 408 346 337Z',x:410,y:308,traps:[[344,262],[468,278],[442,386]]},
+  {d:'M494 239 L680 258 692 308 648 378 586 409 490 400 529 303Z',x:593,y:311,traps:[[523,262],[663,280],[564,384]]}
+];
+const boundary = 'M141 93 C174 65 217 51 263 60 C302 66 329 44 376 54 C420 48 444 66 484 73 C530 81 566 64 612 85 C653 100 674 122 709 143 C748 167 750 198 766 218 C787 246 764 270 738 279 C716 288 730 320 704 345 C684 363 690 399 657 422 C616 451 571 450 531 443 C485 436 450 455 403 444 C369 434 335 445 298 445 C250 464 197 449 169 431 C130 413 105 400 96 370 C85 343 70 316 83 285 C88 265 79 242 91 217 C104 192 93 160 108 140 C116 120 125 111 141 93Z';
+function pest(id, size=72) {
+  const item = species[id] || ['Pest reference','Stylized illustration'];
+  const lantern = id === 'spotted_lanternfly';
+  const oriental = id === 'oriental_fruit_moth';
+  let wings;
+  if (lantern) wings = `<path d="M47 38C27 26 7 41 8 66Q26 79 46 53M53 38C73 26 93 41 92 66Q74 79 54 53" fill="#e06a56" stroke="#342e34" stroke-width="1.5"/><path d="M46 27C31 7 12 16 15 37Q15 58 43 69L49 42M54 27C69 7 88 16 85 37Q85 58 57 69L51 42" fill="#b7b8af" stroke="#4d5351" stroke-width="1.5"/><path d="m18 45 21 20m-17-27 23 20m37-13L61 65m17-27L55 58" stroke="#505653" stroke-width="2"/>${[[26,27],[34,37],[23,39],[38,23],[74,27],[66,37],[77,39],[62,23],[31,49],[69,49]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="2.3" ry="3.1" fill="#303a39"/>`).join('')}`;
+  else wings = `<path d="M47 31C38 18 23 16 11 27L6 59Q23 67 45 56L50 43M53 31C62 18 77 16 89 27L94 59Q77 67 55 56L50 43" fill="${oriental?'#857b71':'#a7a294'}" stroke="#514d45" stroke-width="1.5"/><path d="M10 48Q24 35 40 45M9 55Q28 44 42 51M90 48Q76 35 60 45M91 55Q72 44 58 51M16 29l20 6m48-6-20 6" fill="none" stroke="${oriental?'#c4b6a2':'#ded9bb'}" stroke-width="2" opacity=".8"/><path d="M9 50Q19 43 24 53L21 61 7 59ZM91 50Q81 43 76 53L79 61 93 59Z" fill="${oriental?'#514b49':'#966645'}"/><path d="M45 48 28 67Q42 80 49 62M55 48 72 67Q58 80 51 62" fill="#777a73" stroke="#424d49"/>`;
+  return `<svg class="farm-pest" width="${Number(size)||72}" height="${Number(size)||72}" viewBox="0 0 100 90" role="img" aria-label="${item[0]} — stylized reference illustration"><title>${item[0]} · ${item[1]} · reference illustration</title><g stroke-linecap="round">${wings}<path d="M45 43 36 51m19-8 9 8M46 50l-9 12m17-12 9 12M46 33 39 21m15 12 7-12" stroke="#c1c8b9" stroke-width="1.4"/><ellipse cx="50" cy="48" rx="5" ry="18" fill="${lantern?'#c7a850':'#595a4c'}" stroke="#343f39"/><path d="M47 49h6m-6 6h6m-5 6h4" stroke="#303e37"/><ellipse cx="50" cy="30" rx="5.5" ry="7" fill="#434c42"/><path d="M47 25Q39 15 38 11m15 14q8-10 9-14" fill="none" stroke="#a7b29e" stroke-width="1.5"/></g></svg>`;
+}
+function legend(ctx) {
+  return `<div class="farm-species-legend" aria-label="Pest references and farm counts">${Object.entries(species).map(([id,[name,latin]])=>`<div class="farm-species-item${ctx.species===id?' farm-species-current':''}">${pest(id,64)}<div><strong>${name}</strong><em>${latin}</em><span><b>${ctx.num(ctx.total(ctx.index,id))}</b> counted today · farm total</span></div></div>`).join('')}</div><p class="farm-reference-note">Illustrated species references · counts from the demo season, not detections on this map.</p>`;
+}
+function map(ctx,{large=false}={}) {
+  const uid = `farm-${++sequence}`;
+  const esc=ctx.esc;
+  const selected=ctx.blocks.find(b=>b.id===ctx.block)||ctx.blocks[0];
+  const selectedStatus=ctx.status(selected.id);
+  const open=selectedStatus.status==='spray_window';
+  const tree=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cy="4" rx="10" ry="7" fill="#081e1c" opacity=".3"/><circle cx="-4" cy="-2" r="7" fill="#355c45"/><circle cx="4" cy="-4" r="7.5" fill="#416d4b"/><circle cy="-7" r="6.5" fill="#5a8052"/><circle cx="-2" cy="-9" r="3" fill="#74935b" opacity=".6"/></g>`;
+  const trees = [[138,98],[158,82],[181,70],[206,64],[232,64],[258,70],[284,69],[311,61],[338,59],[365,61],[395,59],[425,69],[454,78],[478,86],[503,86],[531,81],[557,81],[585,86],[612,97],[639,112],[663,127],[690,145],[717,165],[730,187],[743,211],[753,239],[737,257],[714,279],[714,303],[699,327],[686,351],[676,379],[661,404],[638,424],[613,437],[583,439],[554,434],[526,433],[501,430],[475,439],[448,445],[419,438],[390,436],[364,432],[337,437],[307,433],[280,445],[251,446],[225,438],[198,430],[174,417],[150,405],[130,388],[115,369],[104,347],[95,324],[96,301],[101,276],[98,249],[107,224],[110,199],[111,173],[119,148],[127,124]];
+  const blocks=ctx.blocks.slice(0,6).map((b,i)=>{
+    const p=plots[i], s=ctx.status(b.id), active=b.id===ctx.block, win=s.status==='spray_window';
+    const title=`${b.name}, ${b.variety}, ${ctx.num(b.acres,1)} acres. ${ctx.num(ctx.count(b.id))} ${species[ctx.species]?.[0]||ctx.species} counted today. ${statusName[s.status]||s.status}. ${ctx.num(s.dd_since_biofix,1)} degree-days since biofix.`;
+    const traps=(b.traps||[]).map((id,j)=>{const [x,y]=p.traps[j%3];const count=ctx.species==='codling_moth'?ctx.day.traps?.[id]:null;return `<g class="farm-trap" transform="translate(${x} ${y})"><title>${esc(id)}${count==null?'':` · ${count} codling moths today`}. Position schematic.</title><circle r="8"/><path d="m-3 2 3-6 3 6Z"/><circle r="1.1" cy="5"/></g>`}).join('');
+    return `<g class="farm-block${active?' farm-block-selected':''}${win?' farm-block-open':''}" data-block="${esc(b.id)}" role="button" tabindex="0" aria-label="${esc(title)}" aria-pressed="${active}"><title>${esc(title)}</title><path class="farm-block-ground" d="${p.d}"/><path fill="url(#${uid}-rows)" clip-path="url(#${uid}-clip-${i})" d="${p.d}"/><path class="farm-block-outline" d="${p.d}"/>${traps}<g class="farm-block-label" transform="translate(${p.x} ${p.y})"><rect x="-72" y="-19" width="144" height="64" rx="8"/><text class="farm-block-name" text-anchor="middle" y="0">${esc(b.name)}<tspan class="farm-block-count"> · ${ctx.num(ctx.count(b.id))}</tspan></text><text class="farm-block-meta" text-anchor="middle" y="17">${esc(b.variety)} · ${ctx.num(b.acres,1)} ac</text><text class="farm-block-state" text-anchor="middle" y="33">${win?'WINDOW OPEN':s.status==='window_closed'?'Window closed · '+ctx.num(s.dd_since_biofix,0)+' DD':s.biofix_date?ctx.num(s.dd_since_biofix,0)+' DD · accumulating':'Watching flight'}</text></g></g>`;
+  }).join('');
+  return `<div class="farm-atlas${large?' farm-atlas-large':''}"><div class="farm-atlas-top"><span><i></i> ORCHARD ATLAS</span><span>DEMO SEASON · ${esc(ctx.dateLabel(ctx.day.date))}</span></div><div class="farm-count-context">Daily ${esc(species[ctx.species]?.[0]||ctx.species)} counts <span>· Codling moth timing</span></div><svg class="farm-map-svg" viewBox="45 25 755 465" role="group" aria-label="${esc(ctx.timeline.farm?.name||'Orchard')} schematic. Select one of six orchard blocks."><defs><linearGradient id="${uid}-grass" x2=".8" y2="1"><stop stop-color="#527345"/><stop offset=".5" stop-color="#3e613e"/><stop offset="1" stop-color="#274b39"/></linearGradient><linearGradient id="${uid}-water" x2="1" y2="1"><stop stop-color="#548c8c"/><stop offset="1" stop-color="#29565e"/></linearGradient><pattern id="${uid}-meadow" width="29" height="23" patternUnits="userSpaceOnUse"><path d="m4 9 2-3m12 12 1-4m7-7 2-2" stroke="#a1ba68" stroke-width=".8" opacity=".21"/><circle cx="12" cy="6" r=".8" fill="#cad783" opacity=".3"/></pattern><pattern id="${uid}-rows" width="24" height="25" patternUnits="userSpaceOnUse" patternTransform="rotate(-14)"><path d="M0 13H24" stroke="#9cac63" stroke-width="9" opacity=".1"/><path d="M0 13H24" stroke="#122f27" stroke-width="1" opacity=".25"/>${tree(7,12,.56)}${tree(20,12,.56)}</pattern><filter id="${uid}-shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity=".3"/></filter>${plots.map((p,i)=>`<clipPath id="${uid}-clip-${i}"><path d="${p.d}"/></clipPath>`).join('')}</defs>
+      <g class="farm-contours" fill="none"><path d="M20 260C110 40 287 0 474 41S800 89 837 290 577 530 335 493 22 444 20 260Z"/><path d="M1 262C90 13 294-27 480 13S830 64 866 290 585 557 327 521 1 459 1 262Z"/><path d="M42 259C119 66 284 29 470 64S774 113 809 288 575 504 341 468 49 417 42 259Z"/></g>
+      <path d="${boundary}" fill="url(#${uid}-grass)" filter="url(#${uid}-shadow)"/><path d="${boundary}" fill="url(#${uid}-meadow)"/><path d="${boundary}" class="farm-boundary"/>
+      <path d="M77 245C197 236 287 227 366 225S524 217 594 240 689 246 773 271M305 75C341 153 330 173 321 216S343 290 332 343 309 409 313 450M494 96C473 167 475 196 483 220S527 286 515 319 483 384 476 443" fill="none" stroke="#162f27" stroke-width="12" opacity=".35"/><path d="M77 245C197 236 287 227 366 225S524 217 594 240 689 246 773 271M305 75C341 153 330 173 321 216S343 290 332 343 309 409 313 450M494 96C473 167 475 196 483 220S527 286 515 319 483 384 476 443" fill="none" stroke="#b4af83" stroke-width="7"/>
+      ${blocks}
+      <path d="M707 216C722 204 747 212 753 231S737 260 721 256 697 231 707 216Z" fill="#213e33" stroke="#95a574" stroke-width="3"/><path d="M710 219C725 209 744 216 748 231S735 253 723 250 703 232 710 219Z" fill="url(#${uid}-water)"/><path d="M716 228q12-7 23 2m-19 8q9-4 17 0" stroke="#9bbeb5" opacity=".5" fill="none"/>
+      ${trees.map(([x,y],i)=>tree(x,y,.7+(i%3)*.1)).join('')}
+      <g transform="translate(340 444)"><path d="m-22-10 21-12 21 12v19h-42Z" fill="#9b8261"/><path d="m-27-10 26-15 27 15-27-3Z" fill="#40595c" stroke="#789496" stroke-width="1"/><path d="M-5-6H6V9H-5Z" fill="#384239"/><path d="M-18-5h8v6h-8m21-6h8v6H3" fill="#d4c795"/></g>
+      <g class="farm-compass" transform="translate(764 70)"><path d="M0-20 6 0 0-4-6 0Z"/><path d="M0-4V17"/><text y="-28" text-anchor="middle">N</text></g><text class="farm-landmark" x="343" y="478" text-anchor="middle">FARM ACCESS</text>
+    </svg><div class="farm-atlas-bottom"><span class="farm-map-key"><i class="farm-key-trap"></i> ${ctx.blocks.reduce((n,b)=>n+(b.traps?.length||0),0)} traps <i class="farm-key-window"></i> Spray window</span><span>Schematic · positions illustrative</span></div><div class="farm-selection${open?' farm-selection-open':''}"><span class="farm-selection-dot"></span><strong>${esc(selected.name)}</strong><span>${esc(statusName[selectedStatus.status]||selectedStatus.status)}</span><span class="farm-selection-reading">${ctx.num(selectedStatus.dd_since_biofix,1)} <small>DD since biofix</small></span></div></div>`;
+}
+window.FOFarm = {map,pest,legend};
+})();
