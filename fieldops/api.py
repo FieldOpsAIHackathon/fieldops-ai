@@ -26,8 +26,9 @@ from . import agent
 
 PORT = 8765
 HOSTS = ("127.0.0.1", "172.18.0.1")  # loopback + the OpenShell docker bridge (host.openshell.internal)
-# A dashboard opened from disk sends Origin "null" (some browsers "file://"). Anything else is another site.
-PAGE_ORIGINS = {"null", "file://"}
+# A dashboard opened from disk sends Origin "null" (some browsers "file://"); one served by the local static
+# server (ORCHESTRATION.md, port 8787) sends that address. Anything else is another site.
+PAGE_ORIGINS = {"null", "file://", "http://localhost:8787", "http://127.0.0.1:8787"}
 MAX_TRIGGER_BODY = 1024
 VISION_URL = "http://127.0.0.1:8767/count"  # fieldops.vision in the GPU container
 MAX_IMAGE_BODY = 15 * 1024 * 1024

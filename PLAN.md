@@ -31,9 +31,10 @@ Phases are written as hours from kickoff (**H+0**), not wall-clock, so they surv
   runs first.
 - `fieldops/species.json` + `species.py` — crop, blocks and pest thresholds, using the contract's
   key names.
-- `dashboard/index.html` — the replay dashboard. It loads `timeline.js` after the sample, so the
-  real timeline wins. Opened from `file://` in a browser against the real timeline: replay, banners
-  and alert log work, and the banners call the phone trigger below.
+- `dashboard/index.html` — the replay dashboard (rebuilt as an orchard analytics workspace; the
+  scripts are `app.js`, `model.js`, `panels.js`, `farm.js`, `intelligence.js`). It loads `timeline.js`
+  after the sample, so the real timeline wins. When playback moves forward over the first biofix or the
+  first spray window it calls the phone trigger below (`app.js`, `notifyPhone`).
 - `fieldops/agent.py` (owner C) — the tools over `decide` (`get_counts`, `get_degree_days`,
   `get_status`, `send_alert`), `write_alert` (local LLM phrasing, template fallback, and a check that
   rejects any number the model was not given), `answer` for "why Thursday?", and a paced `--replay`.
@@ -45,7 +46,8 @@ Phases are written as hours from kickoff (**H+0**), not wall-clock, so they surv
   `/status`, `/counts`, `/degree_days`, POST `/alert` for the OpenClaw sandbox, and POST `/trigger`
   for the dashboard, which sends `{date, block_id, type}` for the first biofix and the first spray
   window of a replay. The text comes from `decide` and the agent, never from the request.
-  Browsers are refused on `/alert`; `/trigger` accepts only a page opened from disk.
+  Browsers are refused on `/alert`; `/trigger` accepts only the dashboard's own origins: a page opened
+  from disk, or the static server on port 8787.
 - `openclaw/` — the sandbox policy and the tool skill the OpenClaw agent reads.
 - `fieldops/check_models.py` — smoke test that the local LLM and VLM load and answer. Run it
   first on the GB10.
@@ -70,8 +72,12 @@ the agent and OpenClaw both use it. YOLO26s runs in the `local/fieldops-yolo` co
 **The dashboard-to-phone trigger is built** (`POST /trigger` on `fieldops.api`). Start
 `python -m fieldops.api` before the demo; if it is not running, the banners still show and the
 phone just does not buzz. It texts twice per replay run, for the first block to reach each
-milestone (biofix, then spray window), not once per block. Tested in a browser with the Telegram
-step stubbed out, because there is no bot token on this machine yet. Do not also run
+milestone (biofix, then spray window), not once per block. Playing, stepping forward and "Next
+milestone" text; scrubbing, the date picker and going back never do, and the count resets when the
+replay returns to the start. The rebuilt dashboard briefly lost this hook, and it was restored and
+retested in a browser over both `file://` and `http://localhost:8787`, with exactly two alerts per run.
+The Telegram step was stubbed out in that test, because there is no bot token on this machine yet. Do
+not also run
 `python -m fieldops.agent --replay` during the same demo: it sends the same two alerts on its own
 clock, so the phone would buzz twice.
 
