@@ -221,3 +221,5 @@ __marimo__/
 
 # FieldOps runtime store
 data/*.db
+data/alerts.jsonl
+data/replay_state.json
