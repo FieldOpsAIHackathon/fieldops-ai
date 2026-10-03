@@ -208,15 +208,25 @@ def selftest() -> None:
 
 
 def main() -> None:
+    from . import store
     from .season import CSV_PATH, load_csv
 
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--season", type=Path, default=CSV_PATH, help="season CSV to read")
+    p.add_argument("--db", type=Path, default=store.DEFAULT_DB, help="store to read instead of the CSV")
+    p.add_argument("--csv", action="store_true", help="read the CSV even if the store has data")
     p.add_argument("--replay", action="store_true", help="write dashboard/data/timeline.json and .js")
     args = p.parse_args()
 
     selftest()
-    records, weather = load_csv(args.season)
+    records, weather = (None, None) if args.csv else store.read(args.db)
+    if records and weather:
+        print(f"reading {args.db}")
+    else:
+        if not args.csv:
+            print(f"{args.db} is empty; reading {args.season}"
+                  f" (load it with: python -m fieldops.store --load {args.season})")
+        records, weather = load_csv(args.season)
     tl = build_timeline(records, weather)
     validate(tl)
     print_summary(tl)
