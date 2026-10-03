@@ -72,7 +72,12 @@ def build_timeline(records: list, weather: dict, config: dict = None, normals: d
         for b in config["blocks"]
     ]
 
-    all_days = {d for per_day in by_trap.values() for d in per_day}
+    # A timeline only spans days we can accumulate degree-days over. Live photos are stamped with
+    # their upload time, which falls outside the season, so a stored upload must not stretch the
+    # replay to today or fail it for want of winter weather. Gaps *inside* the span still raise.
+    all_days = {d for per_day in by_trap.values() for d in per_day} & set(weather)
+    if not all_days:
+        raise ValueError("no counts fall on a day with weather; cannot build a timeline")
     first, last = min(all_days), max(all_days)
     state = {b["id"]: {"run": [], "biofix": None, "dd": 0.0, "status": "watching"} for b in blocks}
     prev = {b["id"]: 0 for b in blocks}

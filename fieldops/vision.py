@@ -27,6 +27,9 @@ MAX_BYTES = 15 * 1024 * 1024
 
 
 def count_image(model, image: Image.Image, trap_id: str, to_store: bool = False) -> dict:
+    # An uploaded photo is a point-in-time reading, so the upload is its origination date. We never
+    # backdate one into the season: decide spans only days it has weather for, so a stored upload
+    # cannot stretch or break the replay.
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     counts, annotated = count_result(model, image)
     recs = records(counts, trap_id, stamp)
