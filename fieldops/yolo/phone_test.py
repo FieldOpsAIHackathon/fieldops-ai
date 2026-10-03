@@ -132,7 +132,7 @@ def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--n", type=int, default=200)
     p.add_argument("--severity", type=float, default=1.0)
-    p.add_argument("--weights", default="/runs/fieldops-yolo26s-v1.pt")
+    p.add_argument("--weights", default="/runs/fieldops-yolo26s-v2.pt")
     p.add_argument("--out", type=Path, default=Path("/runs/phone_test"))
     args = p.parse_args()
 
