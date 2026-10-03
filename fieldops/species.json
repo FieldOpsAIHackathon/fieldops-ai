@@ -1,0 +1,16 @@
+{
+  "crop": "apple",
+  "species": {
+    "codling_moth": {
+      "display": "Codling moth",
+      "biofix": {"min_count": 3, "consecutive_days": 3},
+      "degree_days": {"lower_f": 50, "upper_f": 88, "spray_open": 250, "spray_close": 350}
+    },
+    "oriental_fruit_moth": {
+      "display": "Oriental fruit moth"
+    },
+    "spotted_lanternfly": {
+      "display": "Spotted lanternfly"
+    }
+  }
+}
