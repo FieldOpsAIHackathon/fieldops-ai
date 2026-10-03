@@ -1,16 +1,29 @@
 {
+  "farm": {"name": "Nashoba Ridge Orchard", "location": "Bolton, MA", "season": 2026},
   "crop": "apple",
+  "blocks": [
+    {"id": "block-a", "name": "Block A", "variety": "Honeycrisp", "acres": 4.2, "col": 0, "row": 0},
+    {"id": "block-b", "name": "Block B", "variety": "McIntosh", "acres": 5.6, "col": 1, "row": 0},
+    {"id": "block-c", "name": "Block C", "variety": "Gala", "acres": 3.4, "col": 2, "row": 0},
+    {"id": "block-d", "name": "Block D", "variety": "Cortland", "acres": 6.0, "col": 0, "row": 1},
+    {"id": "block-e", "name": "Block E", "variety": "Macoun", "acres": 2.5, "col": 1, "row": 1},
+    {"id": "block-f", "name": "Block F", "variety": "Fuji", "acres": 3.1, "col": 2, "row": 1}
+  ],
   "species": {
     "codling_moth": {
-      "display": "Codling moth",
-      "biofix": {"min_count": 3, "consecutive_days": 3},
-      "degree_days": {"lower_f": 50, "upper_f": 88, "spray_open": 250, "spray_close": 350}
+      "display_name": "Codling moth",
+      "dd_base_f": 50,
+      "dd_upper_f": 88,
+      "biofix_min_count": 2,
+      "biofix_consecutive_checks": 2,
+      "spray_open_dd": 250,
+      "spray_close_dd": 350
     },
     "oriental_fruit_moth": {
-      "display": "Oriental fruit moth"
+      "display_name": "Oriental fruit moth"
     },
     "spotted_lanternfly": {
-      "display": "Spotted lanternfly"
+      "display_name": "Spotted lanternfly"
     }
   }
 }

@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FieldOps season replay</title>
+<link rel="icon" href="data:,">
+<style>
+  :root {
+    color-scheme: light;
+    --paper: #f6f3ea;
+    --paper-2: #ece7d8;
+    --paper-3: #e2dcc9;
+    --rule: #cfc8b2;
+    --ink: #1e2a1c;
+    --ink-2: #4f5a4b;
+    --ink-3: #7f877a;
+    --leaf: #2f6b2f;
+    --leaf-wash: #dde9d2;
+    --amber-wash: #f4e4a6;
+    --amber-ink: #6b4e00;
+    --alarm: #c0301b;
+    --alarm-wash: #f7d9d2;
+    --closed: #b8b4a6;
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --s6: #008300;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, "Segoe UI", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+  }
+  button, select, input { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--leaf); outline-offset: 2px; }
+
+  .app {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    gap: 14px;
+    height: 100vh;
+    padding: 16px 20px 18px;
+  }
+
+  /* Masthead */
+  .mast {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 8px;
+  }
+  .mast .brand { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .mast .brand span { color: var(--ink-2); font-weight: 400; }
+  .mast .farm { color: var(--ink-2); font-size: 16px; }
+  .mast .farm b { color: var(--ink); font-weight: 600; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 14px; font-weight: 600; color: var(--leaf);
+    background: var(--leaf-wash); border-radius: 999px; padding: 4px 12px 4px 8px;
+    white-space: nowrap;
+  }
+  .badge i { width: 9px; height: 9px; border-radius: 50%; background: var(--leaf); display: inline-block; }
+  .badge.off { color: var(--amber-ink); background: var(--amber-wash); }
+  .badge.off i { background: var(--amber-ink); }
+
+  /* Dateline + controls */
+  .dateline {
+    display: grid; grid-template-columns: auto 1fr; align-items: end; gap: 28px;
+  }
+  .hero-date { font-family: var(--serif); font-size: 58px; line-height: 1; font-weight: 500; letter-spacing: -0.015em; white-space: nowrap; }
+  .hero-sub { color: var(--ink-2); font-size: 14px; margin-top: 6px; }
+  .today { display: flex; gap: 22px; margin-top: 8px; }
+  .today div { font-size: 14px; color: var(--ink-2); }
+  .today div b { display: block; font-size: 20px; font-weight: 600; color: var(--ink); line-height: 1.1; }
+
+  .controls { display: grid; grid-template-rows: auto auto; gap: 8px; align-self: end; }
+  .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    border: 1.5px solid var(--ink); background: transparent; border-radius: 6px;
+    padding: 7px 14px; font-weight: 600; font-size: 14px; line-height: 1;
+  }
+  .btn.primary { background: var(--ink); color: var(--paper); min-width: 96px; }
+  .btn:hover { background: var(--paper-2); }
+  .btn.primary:hover { background: #0f1a0e; }
+  .seg { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden; }
+  .seg button { border: 0; background: transparent; padding: 7px 11px; font-size: 14px; font-weight: 600; }
+  .seg button + button { border-left: 1.5px solid var(--ink); }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .sound { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--ink-2); margin-left: auto; }
+  .scrub { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; }
+  input[type="range"] { width: 100%; accent-color: var(--leaf); height: 24px; margin: 0; }
+  .progress { font-size: 14px; color: var(--ink-2); white-space: nowrap; min-width: 92px; text-align: right; }
+  .hint { font-size: 13px; color: var(--ink-3); }
+
+  /* Main */
+  .main {
+    display: grid; grid-template-columns: 470px 1fr; gap: 16px; min-height: 0;
+  }
+  .panel { border: 1px solid var(--rule); border-radius: 8px; background: #faf8f1; padding: 12px 14px; min-height: 0; display: flex; flex-direction: column; }
+  .panel h2 { margin: 0 0 8px; font-size: 15px; font-weight: 600; color: var(--ink-2); display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .panel h2 small { font-weight: 400; color: var(--ink-3); font-size: 14px; }
+  .left { display: grid; grid-template-rows: 1fr auto; gap: 16px; min-height: 0; }
+  .right { display: grid; grid-template-rows: 1.15fr 1fr; gap: 16px; min-height: 0; }
+  .bottom { display: grid; grid-template-columns: 300px 1fr; gap: 16px; min-height: 0; }
+
+  /* Orchard map */
+  .map { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 1fr; gap: 10px; flex: 1; min-height: 0; }
+  .tile {
+    border: 1.5px solid var(--rule); border-radius: 8px; background: var(--paper-2);
+    padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between;
+    text-align: left; position: relative; transition: background .25s, border-color .25s;
+  }
+  .tile .nm { font-family: var(--serif); font-size: 20px; font-weight: 600; line-height: 1; }
+  .tile .vr { font-size: 14px; color: var(--ink-2); margin-top: 3px; }
+  .tile .ct { font-size: 28px; font-weight: 600; line-height: 1; margin-top: 8px; white-space: nowrap; }
+  .tile .ct small { font-size: 14px; font-weight: 500; color: var(--ink-2); margin-left: 4px; }
+  .tile .st { font-size: 14px; font-weight: 600; margin-top: 6px; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .tile { overflow: hidden; }
+  .tile .dd { font-size: 14px; opacity: .85; margin-top: 1px; white-space: nowrap; }
+  .tile .st i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: currentColor; }
+  .tile .key { position: absolute; top: 10px; right: 10px; width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 2px #faf8f1; }
+  .tile[data-status="watching"] { color: var(--ink-2); }
+  .tile[data-status="accumulating"] { background: var(--amber-wash); border-color: #d9c35a; color: var(--ink); }
+  .tile[data-status="accumulating"] .st { color: var(--amber-ink); }
+  .tile[data-status="spray_window"] { background: var(--alarm); border-color: var(--alarm); color: #fff; }
+  .tile[data-status="spray_window"] .vr, .tile[data-status="spray_window"] .ct small { color: rgba(255,255,255,.85); }
+  .tile[data-status="spray_window"] .st { color: #fff; }
+  .tile[data-status="window_closed"] { background: #e9e6db; border-color: var(--closed); color: var(--ink-2); }
+  .tile[aria-pressed="true"] { outline: 3px solid var(--ink); outline-offset: 1px; }
+  .map-legend { display: flex; gap: 14px; font-size: 14px; color: var(--ink-2); margin-top: 10px; flex-wrap: wrap; }
+  .map-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .map-legend i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--rule); display: inline-block; }
+
+  /* Crop selector */
+  .crop h2 { margin-bottom: 6px; }
+  .crop select { width: 100%; padding: 7px 10px; border: 1.5px solid var(--ink); border-radius: 6px; background: #fff; font-weight: 600; }
+  .thresh { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px 12px; margin-top: 10px; font-size: 14px; color: var(--ink-2); }
+  .thresh b { display: block; font-size: 17px; color: var(--ink); font-weight: 600; }
+  .crop .note { font-size: 14px; color: var(--ink-3); margin-top: 8px; }
+  .crop .warn { font-size: 14px; color: var(--amber-ink); background: var(--amber-wash); border-radius: 6px; padding: 6px 10px; margin-top: 8px; display: none; }
+
+  /* Chart */
+  .chart-wrap { flex: 1; min-height: 0; position: relative; }
+  .chart-wrap svg { display: block; width: 100%; height: 100%; }
+  .legend { display: flex; gap: 4px 14px; flex-wrap: wrap; font-size: 15px; }
+  .legend button { border: 0; background: transparent; padding: 2px 4px; display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); border-radius: 4px; }
+  .legend button i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+  .legend button[aria-pressed="true"] { color: var(--ink); font-weight: 600; background: var(--paper-2); }
+  .tip {
+    position: absolute; pointer-events: none; background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 8px 10px; font-size: 14px; line-height: 1.35; display: none; min-width: 170px; z-index: 3;
+  }
+  .tip b { display: block; font-size: 15px; margin-bottom: 4px; }
+  .tip .r { display: flex; justify-content: space-between; gap: 12px; }
+  .tip .r i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  svg text { font-family: var(--sans); fill: var(--ink-2); font-size: 14px; }
+  .grid line { stroke: var(--paper-3); stroke-width: 1; }
+  .axis line { stroke: var(--rule); stroke-width: 1; }
+
+  /* DD clock */
+  .clock { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; flex: 1; min-height: 0; text-align: center; }
+  .clock svg { width: 100%; max-width: 230px; height: auto; }
+  .clock .big { font-size: 44px; font-weight: 600; line-height: 1; }
+  .clock .big small { font-size: 15px; font-weight: 500; color: var(--ink-2); }
+  .clock .msg { font-size: 15px; color: var(--ink); max-width: 260px; }
+  .clock .msg.alarm { color: var(--alarm); font-weight: 600; }
+  .clock .meta { font-size: 14px; color: var(--ink-3); }
+
+  /* Alert log */
+  .log { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
+  .ev { border-left: 4px solid var(--rule); padding: 6px 10px; background: var(--paper-2); border-radius: 0 6px 6px 0; }
+  .ev .h { display: flex; justify-content: space-between; gap: 10px; font-size: 15px; }
+  .ev .h b { font-weight: 600; }
+  .ev .h span { color: var(--ink-3); white-space: nowrap; }
+  .ev p { margin: 3px 0 0; font-size: 14px; color: var(--ink-2); }
+  .ev.biofix { border-color: #d9b43a; }
+  .ev.spray_window_open { border-color: var(--alarm); background: var(--alarm-wash); }
+  .ev.spray_window_close { border-color: var(--closed); }
+  .empty { color: var(--ink-3); font-size: 14px; padding: 8px 2px; }
+
+  /* Banners stack top right, newest at the bottom */
+  .banners { position: fixed; right: 20px; top: 66px; display: flex; flex-direction: column; gap: 10px; z-index: 10; width: min(600px, calc(100vw - 40px)); }
+  .banner {
+    background: var(--alarm); color: #fff; border-radius: 10px; padding: 14px 18px 14px 16px;
+    box-shadow: 0 12px 32px rgba(30,42,28,.28);
+    display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start;
+    animation: bannerIn .35s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes bannerIn { from { transform: translateY(-16px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .banner.soft { background: #8a6a00; }
+  .banner .ico { font-size: 26px; line-height: 1; }
+  .banner b { font-size: 18px; display: block; margin-bottom: 2px; }
+  .banner p { margin: 0; font-size: 15px; opacity: .95; }
+  .banner button { background: rgba(255,255,255,.18); color: #fff; border: 0; border-radius: 6px; padding: 6px 10px; font-size: 14px; }
+  @media (prefers-reduced-motion: reduce) { .banner { animation: none; } .tile { transition: none; } }
+
+  /* Empty state */
+  .nodata { margin: auto; max-width: 560px; border: 1.5px solid var(--ink); border-radius: 10px; padding: 24px 28px; background: #faf8f1; }
+  .nodata h1 { font-family: var(--serif); font-size: 28px; margin: 0 0 8px; }
+  .nodata code { background: var(--paper-2); padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+
+  /* Narrow screens */
+  @media (max-width: 1100px) {
+    .app { height: auto; min-height: 100vh; }
+    .main { grid-template-columns: 1fr; }
+    .left, .right { grid-template-rows: auto; }
+    .bottom { grid-template-columns: 1fr; }
+    .chart-wrap { height: 300px; }
+    .map { min-height: 280px; }
+    .log { max-height: 320px; }
+    .dateline { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .app { padding: 12px 16px; gap: 12px; }
+    .hero-date { font-size: 38px; white-space: normal; }
+    .mast { flex-wrap: wrap; }
+    .today { gap: 14px; flex-wrap: wrap; }
+    .map { grid-template-columns: repeat(2, 1fr); }
+    .tile { grid-column: auto !important; grid-row: auto !important; }
+    .tile .nm { font-size: 17px; } .tile .ct { font-size: 24px; }
+    .scrub { grid-template-columns: 1fr; gap: 4px; }
+    .progress { text-align: left; }
+    .controls .row { gap: 6px; }
+    .mast .farm { flex-basis: 100%; }
+    .thresh { grid-template-columns: 1fr 1fr; }
+    .btn.primary { min-width: 0; }
+  }
+</style>
+</head>
+<body>
+<script src="data/sample_timeline.js"></script>
+<script src="data/timeline.js"></script>
+
+<div id="app" class="app" hidden>
+  <header class="mast">
+    <div class="brand">FieldOps <span>season replay</span></div>
+    <div class="farm"><b id="farmName"></b><span id="farmLoc"></span><span id="farmCrop"></span></div>
+    <div class="badge" id="badge"><i></i><span id="badgeText">Running locally on ProMaxGB10</span></div>
+  </header>
+
+  <section class="dateline">
+    <div>
+      <div class="hero-date" id="heroDate">Wednesday, April 15</div>
+      <div class="hero-sub" id="heroSub"></div>
+      <div class="today">
+        <div><b id="tHigh">52</b>high °F</div>
+        <div><b id="tLow">33</b>low °F</div>
+        <div><b id="tDD">1.0</b>degree-days today</div>
+        <div><b id="tMoths">0</b>moths trapped today</div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="row">
+        <button class="btn primary" id="play">Play season</button>
+        <button class="btn" id="stepBack" title="Back one day">&larr; Day</button>
+        <button class="btn" id="stepFwd" title="Forward one day">Day &rarr;</button>
+        <button class="btn" id="nextEvent">Next event</button>
+        <div class="seg" id="speed" role="group" aria-label="Replay speed">
+          <button data-s="0.5">0.5x</button><button data-s="1" aria-pressed="true">1x</button><button data-s="2">2x</button>
+        </div>
+        <label class="sound"><input type="checkbox" id="sound"> Alert sound</label>
+      </div>
+      <div class="scrub">
+        <input type="range" id="scrub" min="0" max="0" value="0" aria-label="Season day">
+        <div class="progress" id="progress"></div>
+      </div>
+      <div class="hint">Space plays or pauses. Arrow keys step one day. Click a block to focus it.</div>
+    </div>
+  </section>
+
+  <main class="main">
+    <div class="left">
+      <section class="panel">
+        <h2>Orchard blocks <small id="mapSub">Click a block to focus</small></h2>
+        <div class="map" id="map" role="group" aria-label="Orchard blocks"></div>
+        <div class="map-legend">
+          <span><i style="background:var(--paper-2)"></i>Watching</span>
+          <span><i style="background:var(--amber-wash)"></i>Biofix set, accumulating</span>
+          <span><i style="background:var(--alarm)"></i>Spray window open</span>
+          <span><i style="background:#e9e6db"></i>Window closed</span>
+        </div>
+      </section>
+      <section class="panel crop">
+        <h2>Crop and pest model <small>Same box, new species list</small></h2>
+        <select id="crop" aria-label="Crop"></select>
+        <div class="thresh" id="thresh"></div>
+        <div class="warn" id="cropWarn"></div>
+        <div class="note" id="cropNote"></div>
+      </section>
+    </div>
+
+    <div class="right">
+      <section class="panel">
+        <h2>Flight curve, moths per block per day <small id="chartSub"></small></h2>
+        <div class="legend" id="legend"></div>
+        <div class="chart-wrap" id="chartWrap">
+          <svg id="chart" role="img" aria-label="Daily moth counts per block"></svg>
+          <div class="tip" id="tip"></div>
+        </div>
+      </section>
+      <div class="bottom">
+        <section class="panel">
+          <h2>Degree-day clock <small id="clockSub"></small></h2>
+          <div class="clock" id="clock"></div>
+        </section>
+        <section class="panel">
+          <h2>Alerts <small id="logSub"></small></h2>
+          <div class="log" id="log"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="nodata" id="nodata" hidden>
+  <h1>No timeline found</h1>
+  <p>The dashboard plays back a timeline written by <code>decide</code>. Nothing loaded from
+  <code>data/timeline.js</code> or <code>data/sample_timeline.js</code>.</p>
+  <p>Generate one with <code>python dashboard/tools/make_sample_timeline.py</code> or
+  <code>python -m fieldops.decide --replay</code>, then reload this page.</p>
+</div>
+
+<div class="banners" id="banners" aria-live="polite"></div>
+
+<script>
+(function () {
+  'use strict';
+  var T = window.FIELDOPS_TIMELINE;
+  var $ = function (id) { return document.getElementById(id); };
+  if (!T || !T.days || !T.days.length) { $('nodata').hidden = false; return; }
+  $('app').hidden = false;
+
+  var SERIES = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300'];
+  var STATUS_LABEL = { watching: 'Watching', accumulating: 'Biofix set', spray_window: 'Spray now', window_closed: 'Window closed' };
+  var CROPS = {
+    apple:      { label: 'Apple', pest: 'Codling moth', live: true },
+    cranberry:  { label: 'Cranberry', pest: 'Cranberry fruitworm', base: 50, upper: 86, open: 300, close: 400, biofix: 'First sustained catch' },
+    blueberry:  { label: 'Blueberry', pest: 'Spotted wing drosophila', base: 50, upper: 86, open: 100, close: 200, biofix: 'First fly in trap' },
+    sweet_corn: { label: 'Sweet corn', pest: 'European corn borer', base: 50, upper: 86, open: 375, close: 450, biofix: 'First sustained catch' },
+    vineyard:   { label: 'Vineyard', pest: 'Grape berry moth', base: 47, upper: 86, open: 810, close: 900, biofix: 'Wild grape bloom' }
+  };
+
+  var days = T.days, blocks = T.blocks, th = T.thresholds;
+  var n = days.length;
+  var color = {}; blocks.forEach(function (b, i) { color[b.id] = SERIES[i % SERIES.length]; });
+  var yMax = 0; days.forEach(function (d) { blocks.forEach(function (b) { yMax = Math.max(yMax, d.counts[b.id] || 0); }); });
+  yMax = Math.ceil(yMax / 10) * 10 || 10;
+  var dateIdx = {}; days.forEach(function (d, i) { dateIdx[d.date] = i; });
+
+  var state = { i: 0, focus: blocks[0].id, playing: false, speed: 1, timer: null, crop: 'apple' };
+  var PLAY_MS = 30000;
+
+  function parseDate(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  var fmtLong = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  var fmtShort = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' });
+  function longDate(s) { return fmtLong.format(parseDate(s)); }
+  function shortDate(s) { return fmtShort.format(parseDate(s)); }
+  function blockName(id) { for (var k = 0; k < blocks.length; k++) if (blocks[k].id === id) return blocks[k].name; return id; }
+
+  /* ---------- masthead ---------- */
+  $('farmName').textContent = T.farm.name;
+  $('farmLoc').textContent = T.farm.location ? ', ' + T.farm.location + '.' : '';
+  $('farmCrop').textContent = ' ' + cap(T.farm.crop) + ', ' + (T.farm.pest_name || T.farm.pest).toLowerCase() + ', ' + T.farm.season + ' season.';
+  function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+  function setOnline() {
+    var on = navigator.onLine;
+    $('badge').classList.toggle('off', !on);
+    $('badgeText').textContent = on ? 'Running locally on ProMaxGB10' : 'Offline, still running';
+  }
+  window.addEventListener('online', setOnline); window.addEventListener('offline', setOnline); setOnline();
+
+  /* ---------- map ---------- */
+  var map = $('map');
+  blocks.forEach(function (b) {
+    var t = document.createElement('button');
+    t.className = 'tile'; t.type = 'button'; t.dataset.id = b.id;
+    t.style.gridColumn = (b.col + 1); t.style.gridRow = (b.row + 1);
+    t.innerHTML = '<span class="key" style="background:' + color[b.id] + '"></span>' +
+      '<div><div class="nm">' + b.name + '</div><div class="vr">' + (b.variety || b.traps.length + ' traps') + '</div></div>' +
+      '<div><div class="ct"><span class="n">0</span><small>moths</small></div><div class="st"><i></i><span class="s">Watching</span></div><div class="dd">&nbsp;</div></div>';
+    t.addEventListener('click', function () { setFocus(b.id); });
+    map.appendChild(t);
+  });
+  function renderMap(d) {
+    var tiles = map.children;
+    for (var k = 0; k < tiles.length; k++) {
+      var t = tiles[k], id = t.dataset.id, bs = d.blocks[id] || { status: 'watching', dd_since_biofix: 0 };
+      t.dataset.status = bs.status;
+      t.setAttribute('aria-pressed', id === state.focus ? 'true' : 'false');
+      t.querySelector('.n').textContent = d.counts[id] || 0;
+      t.querySelector('.s').textContent = STATUS_LABEL[bs.status] || bs.status;
+      t.querySelector('.dd').textContent = bs.status === 'watching' ? ' ' : Math.round(bs.dd_since_biofix) + ' DD since biofix';
+    }
+  }
+
+  /* ---------- legend ---------- */
+  var legend = $('legend');
+  blocks.forEach(function (b) {
+    var btn = document.createElement('button'); btn.type = 'button'; btn.dataset.id = b.id;
+    btn.innerHTML = '<i style="background:' + color[b.id] + '"></i>' + b.name;
+    btn.addEventListener('click', function () { setFocus(b.id); });
+    legend.appendChild(btn);
+  });
+  function renderLegend() {
+    var bs = legend.children;
+    for (var k = 0; k < bs.length; k++) bs[k].setAttribute('aria-pressed', bs[k].dataset.id === state.focus ? 'true' : 'false');
+  }
+
+  /* ---------- chart ---------- */
+  var svg = $('chart'), wrap = $('chartWrap'), tip = $('tip');
+  var M = { l: 38, r: 18, t: 14, b: 26 };
+  var W = 0, H = 0;
+  function sx(i) { return M.l + (W - M.l - M.r) * (n > 1 ? i / (n - 1) : 0); }
+  function sy(v) { return M.t + (H - M.t - M.b) * (1 - v / yMax); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function renderChart() {
+    var r = wrap.getBoundingClientRect(); W = Math.max(200, r.width); H = Math.max(120, r.height);
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    var cur = state.i, out = [];
+    // gridlines + y ticks
+    out.push('<g class="grid">');
+    var step = yMax >= 40 ? 10 : 5;
+    for (var v = 0; v <= yMax; v += step) {
+      out.push('<line x1="' + M.l + '" x2="' + (W - M.r) + '" y1="' + sy(v) + '" y2="' + sy(v) + '"/>');
+      out.push('<text x="' + (M.l - 8) + '" y="' + (sy(v) + 4) + '" text-anchor="end">' + v + '</text>');
+    }
+    out.push('</g>');
+    // x ticks at first of month
+    out.push('<g class="axis"><line x1="' + M.l + '" x2="' + (W - M.r) + '" y1="' + sy(0) + '" y2="' + sy(0) + '"/>');
+    days.forEach(function (d, i) {
+      if (d.date.slice(8) === '01') {
+        out.push('<line x1="' + sx(i) + '" x2="' + sx(i) + '" y1="' + sy(0) + '" y2="' + (sy(0) + 5) + '"/>');
+        out.push('<text x="' + sx(i) + '" y="' + (H - 7) + '" text-anchor="middle">' + fmtMonth(d.date) + '</text>');
+      }
+    });
+    out.push('</g>');
+    // spray band + biofix marker for focused block
+    var fb = focusInfo(cur);
+    if (fb.openIdx != null) {
+      var endIdx = fb.closeIdx != null ? Math.min(fb.closeIdx, cur) : cur;
+      out.push('<rect x="' + sx(fb.openIdx) + '" y="' + M.t + '" width="' + Math.max(2, sx(endIdx) - sx(fb.openIdx)) + '" height="' + (sy(0) - M.t) + '" fill="#c0301b" opacity="0.12"/>');
+      out.push('<text x="' + (sx(fb.openIdx) + 5) + '" y="' + (M.t + 12) + '" style="fill:#c0301b;font-weight:600">Spray window</text>');
+    }
+    if (fb.biofixIdx != null) {
+      out.push('<line x1="' + sx(fb.biofixIdx) + '" x2="' + sx(fb.biofixIdx) + '" y1="' + M.t + '" y2="' + sy(0) + '" stroke="#1e2a1c" stroke-width="1.5"/>');
+      out.push('<text x="' + (sx(fb.biofixIdx) - 5) + '" y="' + (M.t + 12) + '" text-anchor="end" style="fill:#1e2a1c;font-weight:600">Biofix</text>');
+    }
+    // lines, focused last
+    var order = blocks.filter(function (b) { return b.id !== state.focus; }).concat(blocks.filter(function (b) { return b.id === state.focus; }));
+    order.forEach(function (b) {
+      var p = '';
+      for (var i = 0; i <= cur; i++) p += (i ? 'L' : 'M') + sx(i).toFixed(1) + ' ' + sy(days[i].counts[b.id] || 0).toFixed(1);
+      var f = b.id === state.focus;
+      out.push('<path d="' + p + '" fill="none" stroke="' + color[b.id] + '" stroke-width="' + (f ? 2.5 : 1.5) + '" stroke-linejoin="round" stroke-linecap="round" opacity="' + (f ? 1 : 0.32) + '"/>');
+      if (f) {
+        var cx = sx(cur), cy = sy(days[cur].counts[b.id] || 0);
+        out.push('<circle cx="' + cx + '" cy="' + cy + '" r="5" fill="' + color[b.id] + '" stroke="#faf8f1" stroke-width="2"/>');
+        if (cur > 0) out.push('<text x="' + (cx + (cx > W - 60 ? -9 : 9)) + '" y="' + (cy + 4) + '" text-anchor="' + (cx > W - 60 ? 'end' : 'start') + '" style="font-weight:600;fill:#1e2a1c">' + (days[cur].counts[b.id] || 0) + '</text>');
+      }
+    });
+    // today line
+    out.push('<line x1="' + sx(cur) + '" x2="' + sx(cur) + '" y1="' + sy(0) + '" y2="' + (sy(0) + 5) + '" stroke="#1e2a1c" stroke-width="2"/>');
+    out.push('<rect id="hit" x="' + M.l + '" y="' + M.t + '" width="' + (W - M.l - M.r) + '" height="' + (H - M.t - M.b) + '" fill="transparent"/>');
+    out.push('<g id="cross"></g>');
+    svg.innerHTML = out.join('');
+  }
+  function fmtMonth(s) { return new Intl.DateTimeFormat('en-US', { month: 'short' }).format(parseDate(s)); }
+  function focusInfo(cur) {
+    var r = { biofixIdx: null, openIdx: null, closeIdx: null };
+    for (var i = 0; i <= cur; i++) {
+      var ev = days[i].events || [];
+      for (var k = 0; k < ev.length; k++) {
+        if (ev[k].block_id !== state.focus) continue;
+        if (ev[k].type === 'biofix') r.biofixIdx = dateIdx[days[i].blocks[state.focus].biofix_date] != null ? dateIdx[days[i].blocks[state.focus].biofix_date] : i;
+        if (ev[k].type === 'spray_window_open') r.openIdx = i;
+        if (ev[k].type === 'spray_window_close') r.closeIdx = i;
+      }
+    }
+    return r;
+  }
+  svg.addEventListener('mousemove', function (e) {
+    var r = svg.getBoundingClientRect();
+    var x = (e.clientX - r.left) * (W / r.width);
+    var i = Math.round((x - M.l) / (W - M.l - M.r) * (n - 1));
+    if (i < 0 || i > state.i) { hideTip(); return; }
+    var d = days[i];
+    var cross = svg.querySelector('#cross');
+    if (cross) cross.innerHTML = '<line x1="' + sx(i) + '" x2="' + sx(i) + '" y1="' + M.t + '" y2="' + sy(0) + '" stroke="#7f877a" stroke-width="1"/>';
+    var rows = blocks.map(function (b) { return '<div class="r"><span><i style="background:' + color[b.id] + '"></i>' + b.name + '</span><span>' + (d.counts[b.id] || 0) + '</span></div>'; }).join('');
+    tip.innerHTML = '<b>' + longDate(d.date) + '</b>' + rows + '<div class="r" style="margin-top:4px;opacity:.8"><span>High / low</span><span>' + d.tmax_f + ' / ' + d.tmin_f + ' °F</span></div><div class="r" style="opacity:.8"><span>Degree-days</span><span>+' + d.dd_today + '</span></div>';
+    tip.style.display = 'block';
+    var px = e.clientX - r.left, py = e.clientY - r.top;
+    tip.style.left = (px > r.width - 190 ? px - 180 : px + 14) + 'px';
+    tip.style.top = Math.max(0, py - 20) + 'px';
+  });
+  svg.addEventListener('mouseleave', hideTip);
+  function hideTip() { tip.style.display = 'none'; var c = svg.querySelector('#cross'); if (c) c.innerHTML = ''; }
+
+  /* ---------- degree-day clock ---------- */
+  function renderClock(d) {
+    var id = state.focus, bs = d.blocks[id] || { status: 'watching', dd_since_biofix: 0, biofix_date: null };
+    var dd = bs.dd_since_biofix || 0, target = th.spray_open_dd, frac = Math.min(1, dd / target);
+    var fill = bs.status === 'spray_window' ? '#c0301b' : bs.status === 'window_closed' ? '#8c897c' : '#2f6b2f';
+    // Half-circle gauge: the sweep never exceeds 180 degrees, so the large-arc flag stays 0.
+    // Cap just under a full half so the two endpoints are never diametrically opposite.
+    var R = 92, cx = 110, cy = 104, start = Math.PI, end = Math.PI + Math.PI * Math.min(frac, 0.9995);
+    var x1 = cx + R * Math.cos(start), y1 = cy + R * Math.sin(start), x2 = cx + R * Math.cos(end), y2 = cy + R * Math.sin(end);
+    var arc = frac > 0.001 ? '<path d="M' + x1 + ' ' + y1 + ' A' + R + ' ' + R + ' 0 0 1 ' + x2 + ' ' + y2 + '" fill="none" stroke="' + fill + '" stroke-width="16" stroke-linecap="round"/>' : '';
+    var gauge = '<svg viewBox="0 0 220 126" role="img" aria-label="Degree days since biofix"><path d="M' + (cx - R) + ' ' + cy + ' A' + R + ' ' + R + ' 0 0 1 ' + (cx + R) + ' ' + cy + '" fill="none" stroke="#e2dcc9" stroke-width="16" stroke-linecap="round"/>' + arc +
+      '<text x="' + (cx - R) + '" y="' + (cy + 16) + '" text-anchor="middle">0</text><text x="' + (cx + R) + '" y="' + (cy + 16) + '" text-anchor="middle">' + target + '</text></svg>';
+    var msg = '', cls = '', meta = '';
+    if (bs.status === 'watching') {
+      msg = 'Waiting for biofix on ' + blockName(id) + '.';
+      meta = 'Clock starts at the first sustained catch.';
+    } else {
+      var rate = trailingRate(state.i);
+      meta = 'Biofix ' + shortDate(bs.biofix_date) + '. Accumulating ' + rate.toFixed(1) + ' DD per day this week.';
+      if (bs.status === 'accumulating') {
+        var left = target - dd, est = rate > 0 ? Math.ceil(left / rate) : null;
+        msg = est == null ? 'Spray window opens at ' + target + ' DD.' : 'Estimate: spray window opens in about ' + (est <= 1 ? 'a day' : est + ' days') + '.';
+      } else if (bs.status === 'spray_window') {
+        msg = 'Spray window open on ' + blockName(id) + '. Treat before ' + th.spray_close_dd + ' DD.'; cls = 'alarm';
+      } else {
+        msg = 'First-generation window closed on ' + blockName(id) + '.';
+      }
+    }
+    $('clock').innerHTML = gauge + '<div class="big">' + Math.round(dd) + '<small> of ' + target + ' DD</small></div><div class="msg ' + cls + '">' + msg + '</div><div class="meta">' + meta + '</div>';
+    $('clockSub').textContent = blockName(id);
+  }
+  function trailingRate(i) {
+    var s = 0, c = 0;
+    for (var k = Math.max(0, i - 6); k <= i; k++) { s += days[k].dd_today; c++; }
+    return c ? s / c : 0;
+  }
+
+  /* ---------- alert log ---------- */
+  function renderLog() {
+    var items = [];
+    for (var i = state.i; i >= 0; i--) {
+      var ev = days[i].events || [];
+      for (var k = ev.length - 1; k >= 0; k--) items.push({ d: days[i].date, e: ev[k] });
+    }
+    $('logSub').textContent = items.length ? items.length + ' so far' : '';
+    if (!items.length) { $('log').innerHTML = '<div class="empty">No alerts yet. Traps are being watched.</div>'; return; }
+    $('log').innerHTML = items.map(function (it) {
+      return '<div class="ev ' + it.e.type + '"><div class="h"><b>' + esc(it.e.title) + '</b><span>' + shortDate(it.d) + '</span></div><p>' + esc(it.e.message) + '</p></div>';
+    }).join('');
+  }
+
+  /* ---------- banners + chime ---------- */
+  var banners = $('banners'), bannerTimers = [], firedKeys = {}, phoneSent = {};
+  // Asks the local tool server (python -m fieldops.api) to text the phone. no-cors keeps a file:// page
+  // free of CORS preflights; if the server is down the banner still shows and nothing else happens.
+  function notifyPhone(date, ev) {
+    try {
+      fetch('http://127.0.0.1:8765/trigger', { method: 'POST', mode: 'no-cors', body: JSON.stringify({ date: date, block_id: ev.block_id, type: ev.type }) }).catch(function () {});
+    } catch (e) { /* no server; ignore */ }
+  }
+  // One text per milestone type per replay run, for the first block to reach it, not one per block.
+  // Scrubbing (force) never texts.
+  function notifyOnce(date, ev, force) {
+    if (force || phoneSent[ev.type]) return;
+    phoneSent[ev.type] = true; notifyPhone(date, ev);
+  }
+  function showBanner(ev, soft) {
+    var b = document.createElement('div');
+    b.className = 'banner' + (soft ? ' soft' : ''); b.setAttribute('role', 'status');
+    b.innerHTML = '<div class="ico">' + (soft ? '&#9679;' : '&#9888;') + '</div><div><b></b><p></p></div><button type="button">Dismiss</button>';
+    b.querySelector('b').textContent = ev.title; b.querySelector('p').textContent = ev.message;
+    b.querySelector('button').addEventListener('click', function () { b.remove(); });
+    banners.appendChild(b);
+    while (banners.children.length > 4) banners.firstChild.remove();
+    bannerTimers.push(setTimeout(function () { b.remove(); }, soft ? 4500 : 20000));
+  }
+  function clearBanners() { bannerTimers.forEach(clearTimeout); bannerTimers = []; banners.innerHTML = ''; }
+  var audio = null;
+  function chime() {
+    if (!$('sound').checked) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      [[880, 0], [1175, 0.16], [1480, 0.32]].forEach(function (p) {
+        var o = audio.createOscillator(), g = audio.createGain();
+        o.type = 'sine'; o.frequency.value = p[0];
+        g.gain.setValueAtTime(0.0001, audio.currentTime + p[1]);
+        g.gain.exponentialRampToValueAtTime(0.25, audio.currentTime + p[1] + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + p[1] + 0.3);
+        o.connect(g); g.connect(audio.destination);
+        o.start(audio.currentTime + p[1]); o.stop(audio.currentTime + p[1] + 0.32);
+      });
+    } catch (e) { /* audio unavailable; banner still shows */ }
+  }
+  // Shows a banner for every event in (from, to], in contract order. Each event fires once per
+  // replay run (keyed by date, block and type); force=true re-shows a day the user scrubbed to.
+  function fireEvents(from, to, force) {
+    var chimed = false;
+    for (var i = from + 1; i <= to; i++) (days[i].events || []).forEach(function (ev) {
+      var key = days[i].date + '|' + ev.block_id + '|' + ev.type;
+      if (firedKeys[key] && !force) return;
+      firedKeys[key] = true;
+      if (ev.type === 'spray_window_open') {
+        showBanner(ev, false);
+        if (!chimed) { chime(); chimed = true; }
+        notifyOnce(days[i].date, ev, force);
+      }
+      else if (ev.type === 'biofix') { showBanner(ev, true); notifyOnce(days[i].date, ev, force); }
+    });
+  }
+
+  /* ---------- crop selector ---------- */
+  var cropSel = $('crop');
+  Object.keys(CROPS).forEach(function (k) {
+    var o = document.createElement('option'); o.value = k; o.textContent = CROPS[k].label + ' (' + CROPS[k].pest.toLowerCase() + ')';
+    cropSel.appendChild(o);
+  });
+  cropSel.value = 'apple';
+  cropSel.addEventListener('change', function () { state.crop = cropSel.value; renderCrop(); });
+  function renderCrop() {
+    var c = CROPS[state.crop], live = !!c.live;
+    var o = live ? th.spray_open_dd : c.open, cl = live ? th.spray_close_dd : c.close, base = live ? th.dd_base_f : c.base, up = live ? th.dd_upper_f : c.upper;
+    $('thresh').innerHTML =
+      '<div><b>' + base + ' / ' + up + ' °F</b>DD base and cutoff</div>' +
+      '<div><b>' + o + ' DD</b>Spray window opens</div>' +
+      '<div><b>' + cl + ' DD</b>Window closes</div>' +
+      '<div style="grid-column:1/-1"><b style="font-size:15px">' + (live ? th.biofix_min_count + '+ moths on ' + th.biofix_consecutive_checks + ' consecutive checks' : c.biofix) + '</b>Biofix rule</div>';
+    $('cropNote').textContent = live ? 'Thresholds from the species config. Codling moth values follow the UC IPM model.' : 'Illustrative thresholds for the pitch. Verify against extension guidance before use.';
+    $('cropWarn').style.display = live ? 'none' : 'block';
+    $('cropWarn').textContent = live ? '' : 'No traps configured yet for ' + c.label.toLowerCase() + '. The replay below is still the apple orchard.';
+    $('mapSub').textContent = live ? 'Click a block to focus' : 'Showing apple blocks';
+  }
+
+  /* ---------- state + replay ---------- */
+  function setFocus(id) { state.focus = id; render(); }
+  function setIndex(i, fire) {
+    var prev = state.i;
+    state.i = Math.max(0, Math.min(n - 1, i));
+    if (state.i < prev) clearBanners();
+    if (state.i === 0 && prev !== 0) { firedKeys = {}; phoneSent = {}; }
+    render();
+    if (fire && state.i > prev) fireEvents(prev, state.i);
+  }
+  function render() {
+    var d = days[state.i];
+    $('heroDate').textContent = longDate(d.date);
+    $('heroSub').textContent = 'Day ' + (state.i + 1) + ' of ' + n + ' in the ' + T.farm.season + ' season';
+    $('tHigh').textContent = d.tmax_f; $('tLow').textContent = d.tmin_f; $('tDD').textContent = (+d.dd_today).toFixed(1);
+    var tot = 0; blocks.forEach(function (b) { tot += d.counts[b.id] || 0; }); $('tMoths').textContent = tot;
+    $('scrub').value = state.i; $('progress').textContent = shortDate(days[0].date) + ' to ' + shortDate(days[n - 1].date);
+    $('chartSub').textContent = 'Through ' + shortDate(d.date);
+    renderMap(d); renderLegend(); renderChart(); renderClock(d); renderLog();
+  }
+  function tick() {
+    if (state.i >= n - 1) { pause(); return; }
+    setIndex(state.i + 1, true);
+  }
+  function play() {
+    if (state.i >= n - 1) setIndex(0, false);
+    state.playing = true; $('play').textContent = 'Pause';
+    clearInterval(state.timer);
+    state.timer = setInterval(tick, (PLAY_MS / n) / state.speed);
+  }
+  function pause() { state.playing = false; $('play').textContent = state.i >= n - 1 ? 'Replay season' : 'Play season'; clearInterval(state.timer); }
+  $('play').addEventListener('click', function () { state.playing ? pause() : play(); });
+  $('stepFwd').addEventListener('click', function () { setIndex(state.i + 1, true); });
+  $('stepBack').addEventListener('click', function () { setIndex(state.i - 1, false); });
+  $('nextEvent').addEventListener('click', function () {
+    for (var i = state.i + 1; i < n; i++) if ((days[i].events || []).length) { setIndex(i, true); return; }
+    setIndex(n - 1, false);
+  });
+  $('scrub').max = n - 1;
+  $('scrub').addEventListener('input', function () { setIndex(+this.value, false); });
+  $('scrub').addEventListener('change', function () { if (state.i > 0) fireEvents(state.i - 1, state.i, true); });
+  Array.prototype.forEach.call($('speed').children, function (b) {
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call($('speed').children, function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true'); state.speed = +b.dataset.s;
+      if (state.playing) play();
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT' && e.target.type !== 'range') return;
+    if (e.code === 'Space') { e.preventDefault(); state.playing ? pause() : play(); }
+    else if (e.code === 'ArrowRight') { e.preventDefault(); setIndex(state.i + 1, true); }
+    else if (e.code === 'ArrowLeft') { e.preventDefault(); setIndex(state.i - 1, false); }
+  });
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(renderChart, 80); });
+
+  // Deep links for the demo: ?day=50&focus=block-c&fire=1 opens on that day (fire shows that day's banner).
+  var q = {}; location.search.slice(1).split('&').forEach(function (kv) { var p = kv.split('='); if (p[0]) q[decodeURIComponent(p[0])] = decodeURIComponent(p[1] || ''); });
+  if (q.focus && color[q.focus]) state.focus = q.focus;
+  if (q.date && dateIdx[q.date] != null) state.i = dateIdx[q.date];
+  else if (q.day) state.i = Math.max(0, Math.min(n - 1, parseInt(q.day, 10) || 0));
+  renderCrop();
+  render();
+  if (q.fire && state.i > 0) fireEvents(state.i - 1, state.i);
+})();
+</script>
+</body>
+</html>

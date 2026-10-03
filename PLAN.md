@@ -19,29 +19,92 @@ Phases are written as hours from kickoff (**H+0**), not wall-clock, so they surv
 - `dashboard/tools/make_sample_timeline.py` + `dashboard/data/sample_timeline.{json,js}` — the
   stand-in timeline, so the dashboard is unblocked.
 - `fieldops/season.py` + `data/season.csv` — season generator and committed output
-  (`date,tmax_f,tmin_f,trap_id,species,count`).
-- `fieldops/store.py` — validate / add / query over SQLite, `--load` a season CSV.
-- `fieldops/decide.py` — degree-days, biofix, spray window, per-(species, block) status, plus
-  `replay()` and a self-test.
-- `fieldops/species.json` + `species.py` — crop and pest config.
+  (`date,tmin_f,tmax_f,trap_id,species,count`): six blocks of three traps, Apr 15 to Aug 31, two flight
+  peaks, and a one-day blip on Apr 28 that must not set biofix.
+- `fieldops/store.py` — the single source of truth `decide` reads, plus `--load-traps` to push a
+  synth_traps manifest in as test data (use a scratch `--db`; see the warning below): `counts` and `temps` tables,
+  the contract validator, and `--load` to rebuild both from the committed season CSV. Reloading is
+  idempotent and the store path yields a byte-identical timeline to the CSV path. `decide --csv`
+  bypasses it; an empty store falls back to the CSV automatically.
+- `fieldops/decide.py` — degree-days, biofix, spray window and the contract-shaped timeline.
+  `python -m fieldops.decide --replay` writes `dashboard/data/timeline.{json,js}`; a self-test
+  runs first.
+- `fieldops/species.json` + `species.py` — crop, blocks and pest thresholds, using the contract's
+  key names.
+- `dashboard/index.html` — the replay dashboard. It loads `timeline.js` after the sample, so the
+  real timeline wins. Opened from `file://` in a browser against the real timeline: replay, banners
+  and alert log work, and the banners call the phone trigger below.
+- `fieldops/agent.py` (owner C) — the tools over `decide` (`get_counts`, `get_degree_days`,
+  `get_status`, `send_alert`), `write_alert` (local LLM phrasing, template fallback, and a check that
+  rejects any number the model was not given), `answer` for "why Thursday?", and a paced `--replay`.
+  `find_event` / `deliver_event` serve the dashboard trigger.
+- `fieldops/alert.py` (owner C) — Telegram sender with several chat IDs; credentials in the
+  environment or `~/.config/fieldops.env`, outside the repo. Logs every alert to `data/alerts.jsonl`.
+  Never raises.
+- `fieldops/api.py` (owner C) — the one tool server (`python -m fieldops.api`, port 8765): GET
+  `/status`, `/counts`, `/degree_days`, POST `/alert` for the OpenClaw sandbox, and POST `/trigger`
+  for the dashboard, which sends `{date, block_id, type}` for the first biofix and the first spray
+  window of a replay. The text comes from `decide` and the agent, never from the request.
+  Browsers are refused on `/alert`; `/trigger` accepts only a page opened from disk.
+- `openclaw/` — the sandbox policy and the tool skill the OpenClaw agent reads.
+- `fieldops/check_models.py` — smoke test that the local LLM and VLM load and answer. Run it
+  first on the GB10.
+- `pitch/DEMO.md` — the presenter runbook.
 - `pitch/index.html` — the five-beat deck, single offline file.
 
-## ⚠ Open divergences — resolve before wiring the dashboard
+## Open gaps and decisions
 
-`decide.py` and `TIMELINE_CONTRACT.md` do not currently agree. These are cheap to fix now and
-expensive to fix at H+8. One person should pick a side for each and make both files match.
+`decide.py` and `TIMELINE_CONTRACT.md` now agree: same thresholds, status names, accumulation
+rule and output shape, and the real timeline matches `sample_timeline.json` field for field.
+What is still open:
 
-| | Contract | `decide.py` / `species.json` |
-|---|---|---|
-| Biofix threshold | `min_count` 2, `consecutive` 2 | 3 and 3 |
-| Status names | `watching`, `accumulating` | `no_biofix`, `biofix` |
-| DD accumulation starts | the day **after** `biofix_date` | on `biofix_date` itself |
-| Config keys | `dd_base_f`, `spray_open_dd` … | `degree_days.lower_f`, `spray_open` … |
-| Output | one timeline document, `days[]` | flat list of event dicts |
+**Not started.** `ingest.py` and `vision.py` do not exist — the live counting path is still
+entirely unbuilt. It is also still cut-able.
 
-**The timeline emitter does not exist yet.** `decide.py` has `replay()` returning events, but
-nothing writes `dashboard/data/timeline.json` or its JS twin — so the dashboard still cannot consume
-real output. That is the critical-path gap; see [1d](#1d-timeline-emitter--owner-b).
+**Unverified.** Nobody has run `python -m fieldops.check_models` on the GB10, so no local model has
+been confirmed to load. Everything in `agent.py` currently runs on its template fallback. Do this
+first: it gates the agent wording and the whole vision phase.
+
+**The dashboard-to-phone trigger is built** (`POST /trigger` on `fieldops.api`). Start
+`python -m fieldops.api` before the demo; if it is not running, the banners still show and the
+phone just does not buzz. It texts twice per replay run, for the first block to reach each
+milestone (biofix, then spray window), not once per block. Tested in a browser with the Telegram
+step stubbed out, because there is no bot token on this machine yet. Do not also run
+`python -m fieldops.agent --replay` during the same demo: it sends the same two alerts on its own
+clock, so the phone would buzz twice.
+
+**No spray date in the biofix alert.** `decide.evaluate` still returns `projected_open`, an estimate
+from the last week's warmth. In spring it runs weeks late (on May 12 it said Jun 20; the window
+opened Jun 4), so the alert text leaves it out and `answer` / OpenClaw should call it an estimate.
+The pitch line "opens Thursday" is true once the window opens, not at biofix. Showing a real date
+at biofix needs a forecast, which we do not have offline.
+
+**The agent's number check is built.** `agent.write_alert` falls back to a template whenever the
+LLM errors, is too long, or uses a number that is not in the facts it was given, so a hallucinated
+degree-day count or date cannot reach the phone. Verified with a stubbed model.
+
+**"Why Thursday?" is built but unverified.** `python -m fieldops.agent --ask "..."` and the OpenClaw
+tools answer from `decide`'s numbers as of the replay's current day. Nobody has run them against a
+real model.
+
+**Decisions needed from the team:** which local runtimes for the VLM and LLM; Telegram or SMS;
+whether the organizers require OpenClaw or NemoClaw (`agent.py` is the plug-in point).
+
+**The phone alert needs the network; the unplug beat says we don't.** `alert.send` posts to
+`api.telegram.org`. Once the cable is out it degrades to a console print, so the buzz and the
+unplug cannot both be live at the same moment. Order the demo so the phone buzzes *before* the
+unplug; what the unplug then proves is that inference and the decision are local, which is the
+honest claim anyway.
+
+**Don't load trap test data into the demo store.** `data/traps/manifest.json` uses `block-c-04`
+on 2026-05-12. That trap is not in the season, but `block_of()` maps it to block C, which is, so
+the counts land in the demo. Measured: no milestone date moves, but block C's 12 May count goes
+from 5 to 99 against a season peak of 43 — a spike beside the biofix marker that reads as a bug
+on camera. Load it into `data/test.db` instead. Rebuild the demo store with
+`python -m fieldops.store --load data/season.csv` before recording.
+
+**Check before relying on it:** open `dashboard/index.html` against the real `timeline.js` and
+confirm it behaves like the sample.
 
 ---
 
@@ -63,8 +126,8 @@ Everyone in the room, one conversation, then we split and don't block each other
 - [ ] Agree both contracts out loud: the counts shape in [AGENTS.md](AGENTS.md) and the replay
       timeline in [dashboard/TIMELINE_CONTRACT.md](dashboard/TIMELINE_CONTRACT.md). Freeze them.
       They do not change after this meeting.
-- [x] Scaffold `fieldops/` with modules: `ingest.py`, `vision.py`, `store.py`, `decide.py`,
-      `agent.py`, `alert.py`. Each gets a `if __name__ == "__main__":` from the start.
+- [ ] Scaffold the remaining `fieldops/` modules: `ingest.py` and `vision.py` (`agent.py`, `alert.py` and `api.py` have landed)
+      (`store.py` and `decide.py` have landed). Each gets a `if __name__ == "__main__":` from the start.
 - [x] `fieldops/species.json` with apple / codling moth filled in.
 - [x] Create the SQLite schema and commit it.
 - [ ] Confirm the local VLM and the local LLM both load on the GB10 and return *something*. **Do this
@@ -108,27 +171,28 @@ the timeline.
 
 ### Config shape
 
-Landed as `fieldops/species.json`:
+Landed as `fieldops/species.json`, with the contract's key names. Besides `species` it holds the
+`farm` and the six `blocks` (id, name, variety, acres, grid position) that the timeline carries:
 
 ```json
 {
   "crop": "apple",
   "species": {
     "codling_moth": {
-      "display": "Codling moth",
-      "biofix": {"min_count": 3, "consecutive_days": 3},
-      "degree_days": {"lower_f": 50, "upper_f": 88, "spray_open": 250, "spray_close": 350}
+      "display_name": "Codling moth",
+      "dd_base_f": 50, "dd_upper_f": 88,
+      "biofix_min_count": 2, "biofix_consecutive_checks": 2,
+      "spray_open_dd": 250, "spray_close_dd": 350
     }
   }
 }
 ```
 
-Only species carrying a `biofix` block get evaluated, so the other two pests can sit in the config
-as display entries for the platform beat without breaking anything.
+`decide` evaluates the first species that carries all six thresholds, so the other two pests can sit
+in the config as display entries for the platform beat without breaking anything.
 
 Base 50 °F, upper 88 °F and 250/350 DD follow the UC IPM codling moth model. Treat them as demo
-values — **say so if a judge asks, and don't present them as agronomic advice.** The biofix
-threshold still disagrees with the contract; see the divergence table above.
+values — **say so if a judge asks, and don't present them as agronomic advice.**
 
 ---
 
@@ -140,10 +204,10 @@ Three people in parallel. This is the phase that must not slip.
 
 - [x] `fieldops/season.py` generates one season of daily records: date, per-trap catch, tmin_f,
       tmax_f. Trap IDs and block grouping must match the `blocks` list the timeline will carry.
-- [ ] Flight curve is a realistic shape, not noise: near-zero through early spring, a sharp first-flight
+- [x] Flight curve is a realistic shape, not noise: near-zero through early spring, a sharp first-flight
       rise in late May, a dip, then a smaller second flight in July. Add per-trap variation so the
       traps don't move in lockstep.
-- [ ] Temperatures warm through the season with day-to-day jitter, consistent with the flight timing.
+- [x] Temperatures warm through the season with day-to-day jitter, consistent with the flight timing.
 - [x] **Ran once, `data/season.csv` committed.** The demo reads the committed file. Generating data
       live on stage is a failure mode.
 
@@ -188,13 +252,13 @@ running DD total and spray window — and the dates are defensible when someone 
 The dashboard never computes anything; it plays back one JSON document that `decide` writes. Pacing
 is the dashboard's job, not a stream's.
 
-- [ ] `python -m fieldops.decide --replay` writes `dashboard/data/timeline.json` **and** its JS twin
+- [x] `python -m fieldops.decide --replay` writes `dashboard/data/timeline.json` **and** its JS twin
       `dashboard/data/timeline.js` (`window.FIELDOPS_TIMELINE = {...};`), so the page runs from
       `file://` with no server and no fetch.
-- [ ] Shape must validate against [TIMELINE_CONTRACT.md](dashboard/TIMELINE_CONTRACT.md): `days`
+- [x] Shape must validate against [TIMELINE_CONTRACT.md](dashboard/TIMELINE_CONTRACT.md): `days`
       ascending, one entry per calendar day, no gaps, every block present every day.
-- [ ] D's stand-in `dashboard/tools/make_sample_timeline.py` already emits the same shape — diff
-      against its output to confirm the real emitter matches before wiring the dashboard over.
+- [x] D's stand-in `dashboard/tools/make_sample_timeline.py` already emits the same shape — diffed
+      against it: same fields and types, same 139 days, same thresholds.
 
 **Done when:** the dashboard, pointed at the real `timeline.js` instead of the sample, behaves
 identically.
