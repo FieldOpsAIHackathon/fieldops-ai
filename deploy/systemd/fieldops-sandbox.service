@@ -1,0 +1,14 @@
+[Unit]
+Description=FieldOps OpenClaw sandbox (NemoClaw 'fieldops': agent + Telegram)
+After=nemoclaw-openshell-gateway.service
+Wants=nemoclaw-openshell-gateway.service
+PartOf=fieldops.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# The sandbox container does not restart on its own: start it only if it is not running, then repair
+# host forwards ('recover' never restarts a healthy gateway).
+ExecStart=/usr/bin/sg docker -c '. %h/hackathon-stack/env.sh; docker ps -q --filter name=openshell-default--fieldops | grep -q . || nemoclaw fieldops start; nemoclaw fieldops recover'
+ExecStop=/usr/bin/sg docker -c '. %h/hackathon-stack/env.sh; nemoclaw fieldops stop'
+TimeoutStartSec=600

@@ -1,0 +1,12 @@
+[Unit]
+Description=FieldOps tools API for OpenClaw and the dashboard (127.0.0.1 + sandbox bridge, :8765)
+After=fieldops-sandbox.service fieldops-vision.service
+PartOf=fieldops.target
+
+[Service]
+WorkingDirectory=%h/hackathon-stack/fieldops-ai
+# The sandbox reaches the host on the OpenShell bridge; wait until that address exists.
+ExecStartPre=/bin/bash -c 'for i in $(seq 120); do ip -4 addr | grep -q "inet 172.18.0.1/" && exit 0; sleep 2; done; echo "bridge 172.18.0.1 missing" >&2; exit 1'
+ExecStart=%h/hackathon-stack/venv/bin/python -m fieldops.api
+Restart=on-failure
+RestartSec=5

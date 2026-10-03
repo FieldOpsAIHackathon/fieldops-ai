@@ -26,11 +26,13 @@ def main() -> None:
     p.add_argument("--batch", type=int, default=16)
     p.add_argument("--project", default="/runs")
     p.add_argument("--name", default="traps")
+    p.add_argument("--lr0", type=float, default=0.01, help="lower (e.g. 0.002) when fine-tuning an existing model")
     args = p.parse_args()
 
     YOLO(args.model).train(
         data=args.data, epochs=args.epochs, time=args.hours, imgsz=args.imgsz, batch=args.batch,
         project=args.project, name=args.name, exist_ok=True,
+        lr0=args.lr0, warmup_epochs=1 if args.lr0 < 0.01 else 3,
         seed=0, deterministic=True, workers=8, cache="ram", patience=10,
         degrees=15, perspective=0.0005, scale=0.5, translate=0.1,
         fliplr=0.5, flipud=0.5, mosaic=1.0, close_mosaic=5,
