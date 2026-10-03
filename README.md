@@ -65,13 +65,15 @@ counts (`fieldops/synth_traps.py`), the pitch deck (`pitch/index.html`), the sea
 dashboard (`dashboard/index.html`) and the presenter runbook (`pitch/DEMO.md`).
 
 The replay timeline the dashboard plays comes from `python -m fieldops.decide --replay`, which
-writes `dashboard/data/timeline.json` and its JS twin. Still to come: the live vision layer and the
-agent and phone alert. See [PLAN.md](PLAN.md) for the order of work and the open items.
+writes `dashboard/data/timeline.json` and its JS twin; the dashboard prefers it over the committed
+sample. Still to come: the live vision layer, and the agent and phone alert (including how the
+dashboard triggers the buzz). See [PLAN.md](PLAN.md) for the order of work and the open decisions.
 
 ```bash
 python -m fieldops.season                        # regenerate data/season.csv
 python -m fieldops.store --load data/season.csv  # load into SQLite
-python -m fieldops.decide                        # self-test, then replay the season
+python -m fieldops.decide                        # self-test, then print each block's milestones
+python -m fieldops.decide --replay               # ...and write the dashboard timeline
 open dashboard/index.html                        # the replay, straight from disk, no server
 open pitch/index.html                            # the deck; arrow keys to advance
 ```
