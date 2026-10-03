@@ -73,6 +73,11 @@ def _weekday(iso):
     return f"{date.fromisoformat(iso):%A %b %-d}" if iso else None
 
 
+def _approx(iso):
+    """An estimated date, shown without a weekday because the estimate is good to a few days."""
+    return f"{date.fromisoformat(iso):%b} {date.fromisoformat(iso).day}" if iso else None
+
+
 # --- tools (also served to OpenClaw by fieldops.api) -----------------------------------------
 
 def get_counts(block=None, species=DEFAULT_SPECIES, days=14, as_of=None) -> dict:
@@ -101,13 +106,16 @@ def get_degree_days(block=None, species=DEFAULT_SPECIES, as_of=None) -> dict:
     for s in decide.evaluate(records, weather, end):
         if s["species"] == species and (block is None or s["block"] == block):
             s = dict(s)
-            for key in ("biofix_date", "confirmed_on", "opened_on", "closed_on", "projected_open"):
+            for key in ("biofix_date", "confirmed_on", "opened_on", "closed_on"):
                 s[key + "_weekday"] = _weekday(s[key])
+            s["projected_open_approx"] = _approx(s["projected_open"])
             blocks.append(s)
     return {
         "as_of": end.isoformat(),
         "species": species,
         "rules": {**{k: cfg[k] for k in decide.THRESHOLD_KEYS}, "method": "daily average, horizontal cutoffs"},
+        "projection_note": "projected_open is an estimate: today's degree-days plus the 2016-2025 average "
+                           "temperatures for each later date. Typically within a few days; not a forecast.",
         "blocks": blocks,
     }
 
@@ -160,15 +168,19 @@ def _llm(system: str, user: str, max_tokens: int = 200) -> str:
 ALERT_SYSTEM = (
     "You write SMS alerts for an apple grower. One or two short sentences, plain words, no emoji, "
     "no greeting, no advice beyond what the facts say. Use only the facts given; never invent a "
-    "number or date. Refer to the block by its letter, e.g. 'block C'."
+    "number or date. Refer to the block by its letter, e.g. 'block C'. If the facts include "
+    "spray_window_expected_around, say the window is expected to open 'around' that date; it is an "
+    "estimate, so do not give it a weekday."
 )
 
 
 def _template(d: dict) -> str:
     block = f"block {d['block'].split('-')[-1].upper()}"
     if d["event"] == "biofix_confirmed":
-        # No projected spray date here: it extrapolates last week's warmth and ran weeks off in spring.
-        return f"Biofix reached on {block}: codling moth flight confirmed, degree-day clock started."
+        text = f"Biofix reached on {block}: codling moth flight confirmed, degree-day clock started."
+        if d.get("projected_open"):
+            text += f" Spray window expected to open around {_approx(d['projected_open'])}."
+        return text
     if d["event"] == "spray_window_open":
         return f"Spray window is open on {block}: {d['dd']:.0f} degree-days since biofix. Spray now."
     return f"Spray window closed on {block} at {d['dd']:.0f} degree-days."
@@ -178,10 +190,31 @@ def _numbers(text: str) -> set:
     return set(re.findall(r"\d+", text))
 
 
+# Capitalised only, so the verb "may" is not read as the month.
+_DATE_WORDS = re.compile(
+    r"\b(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thu|Fri|Sat|Sun|"
+    r"January|February|March|April|May|June|July|August|September|October|November|December|"
+    r"Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b")
+
+
+def _date_words(text: str) -> set:
+    return set(_DATE_WORDS.findall(text))
+
+
+_WEEKDAY_DATE = re.compile(
+    r"\b(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),? [A-Z][a-z]+\.? \d{1,2}\b")
+
+
+def _weekday_dates_stated(text: str, fact_text: str) -> bool:
+    """Every 'Thursday Jun 4' in the text must appear exactly so in the facts, or the weekday may be wrong."""
+    return all(m.replace(",", "").replace(".", "") in fact_text for m in _WEEKDAY_DATE.findall(text))
+
+
 def write_alert(decision: dict) -> str:
     """Turn one decide event into a grower-facing sentence. Falls back to a template.
 
-    The model's text is used only if every number in it appears in the facts it was given.
+    The model's text is used only if every number, weekday and month name in it appears in the facts it
+    was given, and every weekday-with-date appears there with the same pairing.
     """
     facts = {
         "event": decision["event"],
@@ -191,10 +224,13 @@ def write_alert(decision: dict) -> str:
         "biofix_date": _weekday(decision["biofix_date"]),
         "degree_days_since_biofix": round(decision["dd"]),
     }
+    if decision["event"] == "biofix_confirmed" and decision.get("projected_open"):
+        facts["spray_window_expected_around"] = _approx(decision["projected_open"])
     fact_text = json.dumps(facts)
     try:
         text = _llm(ALERT_SYSTEM, fact_text, max_tokens=120)
-        if text and len(text) < 400 and _numbers(text) <= _numbers(fact_text):
+        if (text and len(text) < 400 and _numbers(text) <= _numbers(fact_text)
+                and _date_words(text) <= _date_words(fact_text) and _weekday_dates_stated(text, fact_text)):
             return text
         print("[llm text failed the checks; using template]")
     except Exception as e:
