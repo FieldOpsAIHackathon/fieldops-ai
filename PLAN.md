@@ -21,7 +21,8 @@ Phases are written as hours from kickoff (**H+0**), not wall-clock, so they surv
 - `fieldops/season.py` + `data/season.csv` — season generator and committed output
   (`date,tmin_f,tmax_f,trap_id,species,count`): six blocks of three traps, Apr 15 to Aug 31, two flight
   peaks, and a one-day blip on Apr 28 that must not set biofix.
-- `fieldops/store.py` — the single source of truth `decide` reads: `counts` and `temps` tables,
+- `fieldops/store.py` — the single source of truth `decide` reads, plus `--load-traps` to push a
+  synth_traps manifest in as test data (use a scratch `--db`; see the warning below): `counts` and `temps` tables,
   the contract validator, and `--load` to rebuild both from the committed season CSV. Reloading is
   idempotent and the store path yields a byte-identical timeline to the CSV path. `decide --csv`
   bypasses it; an empty store falls back to the CSV automatically.
@@ -94,6 +95,13 @@ whether the organizers require OpenClaw or NemoClaw (`agent.py` is the plug-in p
 unplug cannot both be live at the same moment. Order the demo so the phone buzzes *before* the
 unplug; what the unplug then proves is that inference and the decision are local, which is the
 honest claim anyway.
+
+**Don't load trap test data into the demo store.** `data/traps/manifest.json` uses `block-c-04`
+on 2026-05-12. That trap is not in the season, but `block_of()` maps it to block C, which is, so
+the counts land in the demo. Measured: no milestone date moves, but block C's 12 May count goes
+from 5 to 99 against a season peak of 43 — a spike beside the biofix marker that reads as a bug
+on camera. Load it into `data/test.db` instead. Rebuild the demo store with
+`python -m fieldops.store --load data/season.csv` before recording.
 
 **Check before relying on it:** open `dashboard/index.html` against the real `timeline.js` and
 confirm it behaves like the sample.
