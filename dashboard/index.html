@@ -547,7 +547,7 @@ svg { display: block; }
     if (s.status === 'watching') { msg = 'Waiting for biofix on ' + byId[id].name + '.'; meta = 'The clock starts at the first sustained catch.'; }
     else {
       var rate = trailingRate(state.i); meta = 'Biofix ' + shortDate(s.biofix_date) + '. ' + rate.toFixed(1) + ' DD per day this week.';
-      if (s.status === 'accumulating') { var est = rate > 0 ? Math.ceil((OPEN - dd) / rate) : null; msg = est == null ? 'Spray window opens at ' + OPEN + ' DD.' : 'Estimate: window opens in about ' + (est <= 1 ? 'a day' : est + ' days') + '.'; }
+      if (s.status === 'accumulating') { var est = rate > 0 ? Math.ceil((OPEN - dd) / rate) : null; msg = s.projected_open ? 'Estimate: window opens around ' + shortDate(s.projected_open) + '.' : est == null ? 'Spray window opens at ' + OPEN + ' DD.' : 'Estimate: window opens in about ' + (est <= 1 ? 'a day' : est + ' days') + '.'; }
       else if (s.status === 'spray_window') { msg = 'Spray window open on ' + byId[id].name + '. Treat before ' + CLOSE + ' DD.'; cls = 'hot'; }
       else msg = 'First-generation window closed on ' + byId[id].name + '.';
     }
@@ -635,16 +635,16 @@ svg { display: block; }
     var base = b.name + ' (' + b.variety + ', ' + b.acres + ' acres) is ' + h.text.toLowerCase() + ' with ' + c + ' codling moths in its ' + (b.traps || []).length + ' traps today.';
     if (s.status === 'watching') return base + ' No sustained catch yet, so the degree-day clock has not started.';
     var dd = Math.round(s.dd_since_biofix);
-    if (s.status === 'accumulating') { var rate = trailingRate(state.i), est = rate > 0 ? Math.ceil((th.spray_open_dd - dd) / rate) : null; return base + ' Biofix was ' + shortDate(s.biofix_date) + '; it has ' + dd + ' of ' + th.spray_open_dd + ' degree-days' + (est != null ? ', so the spray window should open in about ' + est + ' days at this week’s rate.' : '.'); }
+    if (s.status === 'accumulating') { if (s.projected_open) return base + ' Biofix was ' + shortDate(s.biofix_date) + '; it has ' + dd + ' of ' + th.spray_open_dd + ' degree-days, and average temperatures put the spray window around ' + shortDate(s.projected_open) + ' (an estimate).'; var rate = trailingRate(state.i), est = rate > 0 ? Math.ceil((th.spray_open_dd - dd) / rate) : null; return base + ' Biofix was ' + shortDate(s.biofix_date) + '; it has ' + dd + ' of ' + th.spray_open_dd + ' degree-days' + (est != null ? ', so the spray window should open in about ' + est + ' days at this week’s rate.' : '.'); }
     if (s.status === 'spray_window') return base + ' Biofix was ' + shortDate(s.biofix_date) + ' and it passed ' + th.spray_open_dd + ' degree-days (now ' + dd + '), which is when first-generation eggs hatch. Treat before ' + th.spray_close_dd + ' DD.';
     return base + ' Its first-generation window closed at ' + dd + ' DD after biofix on ' + shortDate(s.biofix_date) + '.';
   }
   function nextBlock(d) {
     var best = null, rate = trailingRate(state.i);
-    blocks.forEach(function (b) { var s = bstate(d, b.id); if (s.status !== 'accumulating') return; var left = th.spray_open_dd - s.dd_since_biofix; if (!best || left < best.left) best = { b: b, left: left }; });
+    blocks.forEach(function (b) { var s = bstate(d, b.id); if (s.status !== 'accumulating') return; var left = th.spray_open_dd - s.dd_since_biofix; if (!best || left < best.left) best = { b: b, left: left, s: s }; });
     if (!best) { var open = blocks.filter(function (b) { return bstate(d, b.id).status === 'spray_window'; }); return open.length ? open.map(function (b) { return b.name; }).join(' and ') + ' already need spraying. No other block is accumulating toward its window.' : 'No block is accumulating degree-days yet, so none is close to a spray window.'; }
     var est = rate > 0 ? Math.ceil(best.left / rate) : null;
-    return best.b.name + ' is next: ' + Math.round(best.left) + ' degree-days short of the ' + th.spray_open_dd + ' threshold' + (est != null ? ', about ' + est + ' days at ' + rate.toFixed(1) + ' DD per day.' : '.');
+    return best.b.name + ' is next: ' + Math.round(best.left) + ' degree-days short of the ' + th.spray_open_dd + ' threshold' + (best.s.projected_open ? ', expected around ' + shortDate(best.s.projected_open) + '.' : est != null ? ', about ' + est + ' days at ' + rate.toFixed(1) + ' DD per day.' : '.');
   }
   function catchToday(d) {
     var parts = blocks.map(function (b) { return letter(b.id) + ' ' + (d.counts[b.id] || 0); });
