@@ -17,6 +17,10 @@ before the pitch, not during it.
 - Check the badge top right reads "Running locally on ProMaxGB10". When the cable comes out it
   flips to "Offline, still running" on its own.
 - Optional: tick **Alert sound** so the spray banner chimes. Muted by default.
+- To buzz the phone, start the listener in a terminal first: `python -m fieldops.trigger` (check with
+  `curl localhost:8765/health`, which answers `ok`). Set `FIELDOPS_TG_TOKEN` and
+  `FIELDOPS_TG_CHAT_ID` in that same terminal. It texts once per replay, when Block C's spray window
+  opens. If the listener is not running the banner still shows, so the demo never depends on it.
 
 ## The beats
 
