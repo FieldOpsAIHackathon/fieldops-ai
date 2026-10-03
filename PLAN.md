@@ -28,7 +28,12 @@ Phases are written as hours from kickoff (**H+0**), not wall-clock, so they surv
 - `fieldops/species.json` + `species.py` — crop, blocks and pest thresholds, using the contract's
   key names.
 - `dashboard/index.html` — the replay dashboard. It loads `timeline.js` after the sample, so the
-  real timeline wins. Not yet checked in a browser against real data.
+  real timeline wins. Opened from `file://` in a browser against the real timeline: replay, banners
+  and alert log work, and the spray banner now calls the phone trigger below.
+- `fieldops/trigger.py` — loopback listener (`python -m fieldops.trigger`, port 8765). The dashboard
+  POSTs `{date, block_id, type}` when the first spray banner of a replay fires; the listener looks
+  the event up in `timeline.json`, has `agent` phrase it and `alert` send it. Message text never
+  comes from the request. Rejects unknown events, foreign origins and bad bodies.
 - `fieldops/agent.py` — phrases a timeline event for the grower via a local OpenAI-compatible
   LLM. Falls back to the event's templated `message` if the model is down, slow, or invents a
   number. `python -m fieldops.agent [--send]`.
@@ -52,15 +57,10 @@ entirely unbuilt. It is also still cut-able.
 been confirmed to load. Everything in `agent.py` currently runs on its template fallback. Do this
 first: it gates the agent wording and the whole vision phase.
 
-**Nothing triggers the phone from the dashboard.** The dashboard is static HTML from `file://`
-and makes no network calls, so it cannot tell Python to send a message when the spray banner
-fires. Pick one before C starts:
-
-- **A (recommended):** a tiny stdlib localhost listener the dashboard POSTs to when a
-  `spray_window_open` event fires. Works offline. Use a plain `text/plain` POST so there is no CORS
-  preflight.
-- **B:** `python -m fieldops.alert --replay` run in a second terminal while clicking Play. Simpler,
-  but the two can drift on stage.
+**The dashboard-to-phone trigger is built** (`fieldops/trigger.py`, option A). Start it before the
+demo; if it is not running, the banner still shows and the phone just does not buzz. It texts once
+per replay run, for the first block to open (Block C), not once per block. Tested end to end in a
+browser with the Telegram step stubbed out, because there is no bot token on this machine yet.
 
 **The agent fallback is built.** `agent.write_alert` returns the event's templated `message`
 whenever the LLM errors, exceeds 280 characters, or emits a digit absent from the facts — so a
@@ -70,8 +70,7 @@ hallucinated spray date cannot reach the phone. Verified working with no LLM run
 or typed Q&A through `agent.answer` is should-have, not must-have.
 
 **Decisions needed from the team:** which local runtimes for the VLM and LLM; Telegram or SMS;
-trigger option A or B; whether the organizers require OpenClaw or NemoClaw (`agent.py` is the
-plug-in point).
+whether the organizers require OpenClaw or NemoClaw (`agent.py` is the plug-in point).
 
 **The phone alert needs the network; the unplug beat says we don't.** `alert.send` posts to
 `api.telegram.org`. Once the cable is out it degrades to a console print, so the buzz and the
