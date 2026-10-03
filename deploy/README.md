@@ -45,11 +45,28 @@ Deployment needs internet; the installed replay/API continues running offline.
    **Check and deploy FieldOps** on `main`. Future successful main pushes deploy
    automatically. Without this variable the check/artifact job runs and deploy skips.
 
-SSH access, ARM64 architecture, Python 3.12.3 and user systemd were verified on
-the GB10. The current collaborator account can push but is not a repository
-administrator; runner registration requires the owner. Registration and live
-deployment are still pending, including the handoff from the API already running
-in `/home/dell/hackathon-stack/fieldops-ai`.
+## Current setup (October 3)
+
+The repository is now `FieldOpsAIHackathon/fieldops-ai`. Admin access and workflow
+permission are configured. The [first hosted CI run passed](https://github.com/FieldOpsAIHackathon/fieldops-ai/actions/runs/37152063748).
+
+Runner **gb10-fieldops** (Linux ARM64, custom label `fieldops-gb10`) is registered
+and online. Its files are in `/home/dell/.local/share/fieldops-runner`; the enabled
+user service is `fieldops-runner.service`. User lingering is enabled so it survives
+logout. SSH, Python 3.12.3 and the user service manager were verified on the GB10.
+
+**Deployment is held with FIELDOPS_DEPLOY_ENABLED=false at Himanshu's request.**
+Rishabh's vision work has now been merged into main. The existing live API in
+`/home/dell/hackathon-stack/fieldops-ai` still needs a coordinated runtime handoff
+before the managed deployment service can replace it. Keep that API running
+until its owner confirms the handoff and current runtime state is preserved.
+
+A runtime snapshot is saved in
+`/home/dell/.local/share/fieldops/handoff-backups/20261003T203704Z` (SQLite backup,
+available alert/replay files, source revision). Refresh this backup and migrate
+the current runtime state before switching services; the snapshot is not a live
+mirror. Once the merged revision passes CI and the handoff is complete, set the
+variable to `true` and dispatch the workflow on `main` to activate deployments.
 
 ## What deployment changes
 
