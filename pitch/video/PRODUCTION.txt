@@ -3,7 +3,7 @@ FIELDOPS — THE RIGHT MOMENT
 Approved two-minute hackathon demo. Output: 1920x1080, 30fps, H.264/AAC.
 
 fieldops-demo.mp4 — main cut.
-fieldops-demo-backup.mp4 — complete independent cut with no Higgsfield footage.
+Only one MP4 is published. Local backups are outside the repository.
 index.html — local browser player and download links.
 fieldops-demo.srt — timed English captions (also burned into MP4).
 transcript.txt / storyboard.json — approved words and scene plan.
@@ -11,8 +11,8 @@ generation-prompts.json — exact approved orchard/drone concept prompts.
 poster.png — film poster.
 
 Production: actual browser recordings; Astra art direction rendered as HTML;
-ElevenLabs premade George voice, multilingual_v2; actual GB10 Kokoro assistant
-reply; original synthesized ambient music; FFmpeg composition and encoding.
+ElevenLabs premade Brian voice, multilingual_v2; actual GB10 Kokoro assistant
+reply; ElevenLabs-generated instrumental score with automatic speech ducking; FFmpeg composition and encoding.
 External providers are film-production tools, not FieldOps inference services.
 
 Truth in the demo: flight/captures are simulated. Trap lab uses a synthetic

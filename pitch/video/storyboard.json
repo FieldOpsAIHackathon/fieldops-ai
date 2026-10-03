@@ -112,11 +112,11 @@
     }
   ],
   "production": {
-    "narration": "ElevenLabs, warm clear restrained documentary voice; no voice cloning. Generate after approval, use timing alignment to fit narration and captions.",
+    "narration": "ElevenLabs premade Brian voice, multilingual_v2; controlled warm documentary delivery. Timed captions from provider alignment.",
     "agent_voice": "Record actual GB10 Kokoro output, not ElevenLabs, in the assistant segment.",
     "concept_footage": "Higgsfield, two six-second shots specified in generation-prompts.json; use available documented model duration closest to six seconds, trim in edit.",
     "composition": "Astra-directed HTML title cards, actual browser recordings, and FFmpeg 1080p composition with timed captions and normalized speech.",
-    "music": "Restrained instrumental pulse, quiet under speech, duck fully for actual agent reply. No music is acceptable if time or licensing is uncertain.",
+    "music": "Original instrumental score generated with ElevenLabs; normalized and automatically ducked under narration; GB10 reply preserved.",
     "recording_url": "http://127.0.0.1:8789/dashboard/?present=1&date=2026-06-04&focus=block-c&tab=overview",
     "telegram": "Use actual supplied screenshot. No real messages sent; label any added alert card as simulated.",
     "secrets": "Read provider credentials only at execution from hackathon-root .env. Never embed in HTML, repo, logs or exports."
