@@ -93,6 +93,10 @@ python -m fieldops.decide --csv                  # bypass the store and read the
 # ground-truth trap counts as test data. Use a scratch --db: these traps sit in block C on a
 # real season date, so loading them into the demo store spikes its flight curve.
 python -m fieldops.store --db data/test.db --load-traps data/traps/manifest.json
+
+# two seasons of multi-species history in its own store, for exercising queries and the
+# vision path. 4,665 readings, 30 traps, 10 species, irregular check times.
+python -m fieldops.history
 ```
 
 ## Repo map

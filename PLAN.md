@@ -96,6 +96,14 @@ unplug cannot both be live at the same moment. Order the demo so the phone buzze
 unplug; what the unplug then proves is that inference and the decision are local, which is the
 honest claim anyway.
 
+**Test data lives in its own store.** `fieldops/history.py` writes `data/history.csv` and
+`data/history.db`: 2025 and 2026, 30 traps, 10 species, checks every 2-7 days at an arbitrary
+hour, counts accumulating between checks. Deterministic from `--seed`. It is for exercising the
+store, its filters and the vision path — not the demo. `decide` cannot span it in one go, because
+`build_timeline` runs min..max of the codling moth dates and there is no winter weather; slice to
+one season first (`store.query(since="2025-04-01", until="2025-09-30")`), which both years pass
+`decide.validate()` on.
+
 **Don't load trap test data into the demo store.** `data/traps/manifest.json` uses `block-c-04`
 on 2026-05-12. That trap is not in the season, but `block_of()` maps it to block C, which is, so
 the counts land in the demo. Measured: no milestone date moves, but block C's 12 May count goes
