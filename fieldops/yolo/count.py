@@ -15,7 +15,8 @@ from pathlib import Path
 import torch
 from ultralytics import YOLO
 
-torch.backends.cudnn.enabled = False  # see train.py: the container's cuDNN is incomplete
+# see train.py: use cuDNN only when the image has its precompiled engines
+torch.backends.cudnn.enabled = Path("/usr/lib/aarch64-linux-gnu/libcudnn_engines_precompiled.so.9").exists()
 
 PESTS = ("codling_moth", "oriental_fruit_moth", "spotted_lanternfly")
 CONF, IOU, IMGSZ = 0.35, 0.5, 960
