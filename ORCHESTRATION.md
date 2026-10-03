@@ -93,8 +93,9 @@ the phone buzzes twice.
 - `/trigger` is deliberately outside the sandbox policy: only the dashboard, same machine, can fire
   a replay alert. OpenClaw *can* reach `POST /alert` (its skill says only when the user asks), so
   the agent can text the phone, but it cannot replay a decision event.
-- The dashboard opened from disk sends `Origin: null`; the API accepts that and `file://` and
-  nothing else.
+- The dashboard sends `Origin: null` when opened from disk (some browsers `file://`) or
+  `http://localhost:8787` / `http://127.0.0.1:8787` when served by the static server; `/trigger`
+  accepts those and nothing else. `/alert` and `/count` refuse any request that carries an `Origin`.
 - The agent phrases, it never computes. Numbers come from `decide`, and `agent.write_alert`
   falls back to the event's template if the model emits a digit absent from the facts.
 
