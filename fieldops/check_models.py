@@ -2,8 +2,9 @@
 
     python -m fieldops.check_models
 
-Needs an OpenAI-compatible server (Ollama, vLLM, llama.cpp). Configure with FIELDOPS_LLM_URL /
-FIELDOPS_LLM_MODEL (text, shared with agent.py) and FIELDOPS_VLM_URL / FIELDOPS_VLM_MODEL (vision).
+Needs an OpenAI-compatible server (vLLM, Ollama, llama.cpp). The LLM endpoint and model are the ones in
+agent.py. The vision model defaults to the same server and model; override with FIELDOPS_VLM_URL (the
+base, ending in /v1) and FIELDOPS_VLM_MODEL if it is a different one.
 The first call can be slow because the server loads the model.
 """
 import base64
@@ -18,8 +19,9 @@ from . import agent
 
 ROOT = Path(__file__).resolve().parent.parent
 IMAGE = ROOT / "data" / "traps" / "trap_03_codling012.jpg"
-VLM_URL = os.environ.get("FIELDOPS_VLM_URL", agent.LLM_URL)
-VLM_MODEL = os.environ.get("FIELDOPS_VLM_MODEL", "qwen2.5vl")
+LLM_BASE = agent.LLM_URL.rsplit("/chat/completions", 1)[0]
+VLM_URL = os.environ.get("FIELDOPS_VLM_URL", LLM_BASE)
+VLM_MODEL = os.environ.get("FIELDOPS_VLM_MODEL", agent.LLM_MODEL)
 TIMEOUT_S = 180
 
 
@@ -31,7 +33,8 @@ def _get(url: str) -> dict:
 def _chat(base: str, model: str, content) -> str:
     req = urllib.request.Request(
         f"{base}/chat/completions",
-        data=json.dumps({"model": model, "temperature": 0,
+        data=json.dumps({"model": model, "temperature": 0, "max_tokens": 300,
+                         "chat_template_kwargs": {"enable_thinking": False},
                          "messages": [{"role": "user", "content": content}]}).encode(),
         headers={"Content-Type": "application/json"},
     )
@@ -57,7 +60,7 @@ def _truth() -> str:
 
 
 def main() -> int:
-    for label, url in (("LLM", agent.LLM_URL), ("VLM", VLM_URL)):
+    for label, url in (("LLM", LLM_BASE), ("VLM", VLM_URL)):
         try:
             ids = [m["id"] for m in _get(f"{url}/models")["data"]]
             print(f"{label} server {url} lists: {', '.join(ids) or '(none)'}")
@@ -73,7 +76,7 @@ def main() -> int:
     print(f"\nground truth for {IMAGE.name}: {_truth()}\n")
 
     results = [
-        _run(f"LLM {agent.LLM_MODEL}", lambda: _chat(agent.LLM_URL, agent.LLM_MODEL, "Reply with the single word: ready")),
+        _run(f"LLM {agent.LLM_MODEL}", lambda: _chat(LLM_BASE, agent.LLM_MODEL, "Reply with the single word: ready")),
         _run(f"VLM {VLM_MODEL}", lambda: _chat(VLM_URL, VLM_MODEL, vision_prompt)),
     ]
     print("\nboth models answered" if all(results) else "\nat least one model did not answer")

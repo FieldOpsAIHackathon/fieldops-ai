@@ -1,38 +1,84 @@
-"""Phone alert. Telegram if configured, console otherwise; never raises.
+"""Phone alert over Telegram. Never raises: a failed send is logged, not fatal to the demo.
 
-    python -m fieldops.alert "Biofix reached on Block C."
+    python -m fieldops.alert "Biofix reached on block C."      # send one message
+    python -m fieldops.alert --dry-run "text"                   # log only
 
-Set FIELDOPS_TG_TOKEN and FIELDOPS_TG_CHAT_ID to send to a phone. Without them the text is printed,
-so a replay never dies because the alert channel is down.
+Credentials come from the environment, or from ~/.config/fieldops.env (KEY=VALUE lines),
+which lives outside the repo so the token is never committed:
+    FIELDOPS_TELEGRAM_TOKEN=123456:ABC...
+    FIELDOPS_TELEGRAM_CHAT_ID=123456789,987654321   # one or more, comma-separated
 """
+import argparse
 import json
 import os
-import sys
+import urllib.parse
 import urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
 
-TIMEOUT_S = 8
+ENV_FILE = Path.home() / ".config" / "fieldops.env"
+LOG = Path(__file__).resolve().parent.parent / "data" / "alerts.jsonl"
 
 
-def send(text: str) -> bool:
-    """Return True only if Telegram accepted the message."""
-    token, chat_id = os.environ.get("FIELDOPS_TG_TOKEN"), os.environ.get("FIELDOPS_TG_CHAT_ID")
-    if not (token and chat_id):
-        print(f"[alert, not sent: FIELDOPS_TG_TOKEN / FIELDOPS_TG_CHAT_ID unset] {text}")
+def _settings() -> dict:
+    env = {}
+    if ENV_FILE.exists():
+        for line in ENV_FILE.read_text().splitlines():
+            if "=" in line and not line.lstrip().startswith("#"):
+                key, value = line.split("=", 1)
+                env[key.strip()] = value.strip().strip('"').strip("'")
+    env.update({k: v for k, v in os.environ.items() if k.startswith("FIELDOPS_")})
+    return env
+
+
+def _log(entry: dict) -> None:
+    LOG.parent.mkdir(parents=True, exist_ok=True)
+    with LOG.open("a") as f:
+        f.write(json.dumps(entry) + "\n")
+
+
+def last(n: int = 1) -> list:
+    """The most recent n logged alerts, newest last."""
+    if not LOG.exists():
+        return []
+    return [json.loads(line) for line in LOG.read_text().splitlines()[-n:] if line.strip()]
+
+
+def send(text: str, dry_run: bool = False) -> bool:
+    """Send text to the grower's phone. Returns True if Telegram accepted it."""
+    entry = {"sent_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "text": text}
+    cfg = _settings()
+    token, chat = cfg.get("FIELDOPS_TELEGRAM_TOKEN"), cfg.get("FIELDOPS_TELEGRAM_CHAT_ID")
+    if dry_run or not (token and chat):
+        entry["delivered"] = False
+        entry["reason"] = "dry run" if dry_run else f"no Telegram credentials (set them in {ENV_FILE})"
+        _log(entry)
+        print(f"[alert not sent: {entry['reason']}] {text}")
         return False
 
-    req = urllib.request.Request(
-        f"https://api.telegram.org/bot{token}/sendMessage",
-        data=json.dumps({"chat_id": chat_id, "text": text}).encode(),
-        headers={"Content-Type": "application/json"},
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=TIMEOUT_S) as resp:
-            return resp.status == 200
-    except Exception as e:  # the token is in the URL, so report only the exception type
-        print(f"[alert failed: {type(e).__name__}] {text}")
-        return False
+    entry["delivered"], failures = False, []
+    for chat_id in [c.strip() for c in chat.split(",") if c.strip()]:
+        body = urllib.parse.urlencode({"chat_id": chat_id, "text": text}).encode()
+        try:
+            with urllib.request.urlopen(f"https://api.telegram.org/bot{token}/sendMessage", body, timeout=10) as r:
+                entry["delivered"] |= json.load(r).get("ok", False)
+        except Exception as e:  # offline, blocked, never pressed Start: log it and keep the demo running
+            failures.append(f"{chat_id}: {type(e).__name__}")
+    if failures:
+        entry["reason"] = "; ".join(failures)
+    _log(entry)
+    status = "sent" if entry["delivered"] else "FAILED"
+    print(f"[alert {status}{' (' + entry['reason'] + ')' if failures else ''}] {text}")
+    return entry["delivered"]
+
+
+def main() -> None:
+    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("text")
+    p.add_argument("--dry-run", action="store_true")
+    args = p.parse_args()
+    send(args.text, dry_run=args.dry_run)
 
 
 if __name__ == "__main__":
-    message = " ".join(sys.argv[1:]) or "FieldOps test alert"
-    print("sent" if send(message) else "not sent")
+    main()
