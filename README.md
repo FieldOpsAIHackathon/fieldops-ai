@@ -61,16 +61,19 @@ business. You can unplug the network cable and FieldOps keeps working.
 Working: season data and the decision engine. `fieldops/season.py` generates a season,
 `fieldops/store.py` loads it into SQLite, and `fieldops/decide.py` finds biofix, accumulates
 degree-days and calls the spray window. There's a synthetic trap-image generator with ground-truth
-counts (`fieldops/synth_traps.py`) and the pitch deck (`pitch/index.html`).
+counts (`fieldops/synth_traps.py`), the pitch deck (`pitch/index.html`), the season replay
+dashboard (`dashboard/index.html`) and the presenter runbook (`pitch/DEMO.md`).
 
-Still to come: the live vision layer, the agent and phone alert, and the dashboard — plus the
-emitter that writes the replay timeline the dashboard reads. See [PLAN.md](PLAN.md) for the order
-of work and the open items.
+Still to come: the live vision layer, the agent and phone alert, and the emitter that writes the
+real replay timeline the dashboard reads (until then the dashboard plays a committed sample). See
+[PLAN.md](PLAN.md) for the order of work and the open items.
 
 ```bash
 python -m fieldops.season                        # regenerate data/season.csv
 python -m fieldops.store --load data/season.csv  # load into SQLite
 python -m fieldops.decide                        # self-test, then replay the season
+open dashboard/index.html                        # the replay, straight from disk, no server
+open pitch/index.html                            # the deck; arrow keys to advance
 ```
 
 ## Repo map
