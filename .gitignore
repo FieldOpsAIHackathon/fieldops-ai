@@ -223,3 +223,7 @@ __marimo__/
 data/*.db
 data/alerts.jsonl
 data/replay_state.json
+
+# YOLO weights and runs
+*.pt
+yolo-runs/
