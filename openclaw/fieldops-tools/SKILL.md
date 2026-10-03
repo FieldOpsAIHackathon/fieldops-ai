@@ -22,7 +22,7 @@ Call the tools with `curl -s` (they return JSON):
 
 ## "How is my farm?"
 
-Any question about the farm as a whole — how things look, what needs attention, where the problems
+Only when the user **explicitly** asks about the farm as a whole (never in reply to a photo). Any such question — how things look, what needs attention, where the problems
 are — is one call to `/farm`. It returns blocks already sorted by urgency with a `line` for each.
 
 Reply with the `summary`, then one line per block that is at `act` or `prepare` level, then a
@@ -36,33 +36,21 @@ six blocks in full, do not restate the thresholds, and do not add advice of your
 
 ## When the user sends a photo
 
-A photo of a sticky trap means "count it". Do not describe the image yourself — the FieldOps
-detector (a YOLO26 model trained for these traps) counts it deterministically:
+The only inputs are **the photo** and **the section name the user gave with it**. Do not call
+`/farm`, `/status`, `/counts` or `/degree_days` for a photo, and never report on other blocks.
+The FieldOps detector (YOLO26) counts deterministically; never count by eye.
 
 ```sh
 curl -s --data-binary @"<photo path>" "http://172.18.0.1:8765/count?trap_id=<trap id>"
 ```
 
-- `<photo path>` is the file path of the attached photo. If you were not given one, use the newest
-  file: `ls -t /sandbox/.openclaw/media/*/* /sandbox/.openclaw/media/* 2>/dev/null | head -1`.
-- `<trap id>` is what the user named (e.g. `block-c-04`); if they named only a block, use
-  `block-<letter>-01`; if nothing, use `unknown-trap` and say so.
-- Reply with the `summary` and `total_pests` from the response, one short line per species.
-  Gnats and debris are detected and deliberately not counted. Never change the numbers.
-- The response also carries `block_report`: that block's current state and next step. **Always add
-  it**, because a count on its own is a number and the grower wants a decision. Two lines after the
-  count: the `headline`, then the `detail`. Nothing more.
-- **Always send back the annotated photo** (pests boxed), last. Download it into the workspace
-  using the `annotated_url` from the response, then end the reply with a Markdown image. Telegram
-  delivers it as a photo:
-
-  ```sh
-  mkdir -p /sandbox/.openclaw/workspace/fieldops
-  curl -s -o "/sandbox/.openclaw/workspace/fieldops/<annotated_file>" "http://172.18.0.1:8765<annotated_url>"
-  ```
-
+- `<trap id>`: section C → `block-c-01`; section C trap 4 → `block-c-04`; no section → `unknown-trap`.
+- Reply with one line per species and the total (`summary`, `total_pests`). Never change the numbers.
+- **Only if a section was given**, add that section's `block_report.headline` and `.detail` (two
+  lines). If none was given, ask which section the trap is in, in one line.
+- **Always end with the annotated photo**: download it with
+  `curl -s -o "/sandbox/.openclaw/workspace/fieldops/<annotated_file>" "http://172.18.0.1:8765<annotated_url>"`
   and end the reply with `![pests counted](/sandbox/.openclaw/workspace/fieldops/<annotated_file>)`.
-  Use the exact file name from the response, so every photo gets its own file.
 - If the response is an error, say the counter is unavailable; do not guess a count.
 
 ## Questions about the data
