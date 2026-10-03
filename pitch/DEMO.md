@@ -13,22 +13,27 @@ beside it at the existing relative path. This is the sole published MP4; the sha
 video URL remains unchanged. Video playback, the deck, and the committed dashboard
 replay do not need the GB10 or internet once the files are local.
 
-## Three-minute presenter path
+## Five-minute presenter path
 
-1. **Slide 1, 12 seconds:** explain the grower's problem: manual trap checks leave
+1. **Slide 1, 15 seconds:** introduce FieldOps and the team: Himanshu, Jen, Piyush
+   and Rishab.
+2. **Slide 2, 30 seconds:** explain the grower's problem: manual trap checks leave
    gaps while pest activity and treatment windows change.
-2. **Slide 2, 15 seconds:** state the value: which block needs attention, and when.
+3. **Slide 3, 30 seconds:** state the solution: which block needs attention, and when.
    The committed June 4 replay has Block C at 26 codling moths and 261 degree-days.
-3. **Slide 3, 117 seconds:** play the embedded film. Let its narration carry the demo.
+4. **Slide 4, 117 seconds:** play the embedded film. Let its narration carry the demo.
    The video is a recorded demonstration, with concept drone footage labeled.
-4. **Slide 4, 18 seconds:** explain the local GB10 architecture. Code computes the
-   timing. The agent explains facts. Telegram delivery uses a network connection.
-5. **Slide 5, 18 seconds:** close on the intended grower value and next step: a field
+5. **Slide 5, 35 seconds:** how it works. A detector counts, plain Python decides,
+   and the language model only explains. It never computes the date.
+6. **Slide 6, 35 seconds:** local by design. YOLO26s, Qwen3.6 and Kokoro all run on
+   the GB10. The Telegram agent is OpenClaw in a NemoClaw sandbox behind OpenShell.
+   Telegram delivery uses a network connection.
+7. **Slide 7, 38 seconds:** close on the intended grower value and next step: a field
    pilot to validate counts on real traps and measure time saved.
 
-Slide 6 is an evidence appendix for questions. Arrow/Page keys navigate, F toggles
+Slide 8 is an evidence appendix for questions. Arrow/Page keys navigate, F toggles
 fullscreen, and the deck's notes control reveals the speaker notes. Use the native
-video controls on slide 3; navigation does not steal keys while video has focus.
+video controls on slide 4; navigation does not steal keys while video has focus.
 
 ## Evidence to keep straight
 
