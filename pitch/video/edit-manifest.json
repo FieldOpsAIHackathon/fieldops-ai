@@ -1,0 +1,107 @@
+[
+  {
+    "id": "intro",
+    "source": "production-assets/art/intro.png",
+    "duration": 12,
+    "source_start": 0,
+    "start": 0
+  },
+  {
+    "id": "drone",
+    "source": "production-assets/captures/farm.webm",
+    "duration": 14,
+    "source_start": 11.3,
+    "start": 12
+  },
+  {
+    "id": "farm",
+    "source": "production-assets/captures/farm.webm",
+    "duration": 10,
+    "source_start": 25.5,
+    "start": 26
+  },
+  {
+    "id": "captures",
+    "source": "production-assets/captures/survey.png",
+    "duration": 4,
+    "source_start": 0,
+    "start": 36
+  },
+  {
+    "id": "overview",
+    "source": "production-assets/captures/overview.png",
+    "duration": 6,
+    "source_start": 0,
+    "start": 40
+  },
+  {
+    "id": "danger",
+    "source": "production-assets/captures/farm.png",
+    "duration": 5,
+    "source_start": 0,
+    "start": 46
+  },
+  {
+    "id": "window",
+    "source": "production-assets/captures/timing.png",
+    "duration": 6,
+    "source_start": 0,
+    "start": 51
+  },
+  {
+    "id": "traps",
+    "source": "production-assets/captures/traps.png",
+    "duration": 5,
+    "source_start": 0,
+    "start": 57
+  },
+  {
+    "id": "pests",
+    "source": "production-assets/captures/pests.png",
+    "duration": 6,
+    "source_start": 0,
+    "start": 62
+  },
+  {
+    "id": "weather",
+    "source": "production-assets/captures/timing.png",
+    "duration": 4,
+    "source_start": 0,
+    "start": 68
+  },
+  {
+    "id": "voice_intro",
+    "source": "production-assets/captures/voice.webm",
+    "duration": 7,
+    "source_start": 3.0,
+    "start": 72
+  },
+  {
+    "id": "voice_reply",
+    "source": "production-assets/captures/voice.webm",
+    "duration": 13,
+    "source_start": 10.6,
+    "start": 79
+  },
+  {
+    "id": "telegram",
+    "source": "production-assets/art/telegram.png",
+    "duration": 13,
+    "source_start": 0,
+    "start": 92
+  },
+  {
+    "id": "local",
+    "source": "production-assets/art/architecture.png",
+    "duration": 10,
+    "source_start": 0,
+    "start": 105
+  },
+  {
+    "id": "close",
+    "source": "production-assets/art/endcard.png",
+    "duration": 5,
+    "source_start": 0,
+    "start": 115
+  }
+]

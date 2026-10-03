@@ -1,0 +1,127 @@
+1
+00:00:00,738 --> 00:00:03,747
+An orchard can look healthy while the next harvest is
+
+2
+00:00:03,679 --> 00:00:07,012
+already at risk. The difference is catching the right
+
+3
+00:00:06,956 --> 00:00:09,334
+signal--and acting on it in time.
+
+4
+00:00:12,194 --> 00:00:15,894
+Meet FieldOps: orchard intelligence on a Dell Pro Max with
+
+5
+00:00:15,819 --> 00:00:19,362
+G B ten. Our vision starts with a drone collecting
+
+6
+00:00:19,298 --> 00:00:23,177
+visual samples: photographs of farm regions, connected to
+
+7
+00:00:23,135 --> 00:00:25,519
+insect observations from sticky traps.
+
+8
+00:00:26,226 --> 00:00:30,523
+Here, the simulated survey covers six growing blocks. Rotate
+
+9
+00:00:30,428 --> 00:00:34,345
+the farm, follow the flight, and open each virtual capture.
+
+10
+00:00:34,643 --> 00:00:38,307
+The dashboard connects the landscape to eighteen traps and the
+
+11
+00:00:38,239 --> 00:00:39,497
+season underneath.
+
+12
+00:00:40,188 --> 00:00:43,868
+On June fourth, Block C stands out in red. Its
+
+13
+00:00:43,801 --> 00:00:48,423
+traps recorded twenty-six codling moths. Its biological clock
+
+14
+00:00:48,354 --> 00:00:52,125
+has reached two hundred sixty-one degree-days--inside the
+
+15
+00:00:52,043 --> 00:00:53,724
+configured treatment window.
+
+16
+00:00:57,214 --> 00:01:01,346
+Follow the evidence: labeled trap images, pest activity, and
+
+17
+00:01:01,291 --> 00:01:05,990
+temperature history. Biofix starts the clock. Deterministic
+
+18
+00:01:05,947 --> 00:01:09,963
+code determines the window. The counting is impressive. The
+
+19
+00:01:09,907 --> 00:01:11,485
+decision is what matters.
+
+20
+00:01:12,183 --> 00:01:16,320
+Ask why. The assistant explains the season facts, with speech
+
+21
+00:01:16,267 --> 00:01:18,524
+generated locally on the G B ten.
+
+22
+00:01:20,000 --> 00:01:22,500
+Block C: Spray window open.
+
+23
+00:01:22,500 --> 00:01:26,099
+The authoritative timeline records biofix on May 8.
+
+24
+00:01:26,099 --> 00:01:31,450
+Block C has 261 degree-days since that recorded start.
+
+25
+00:01:32,214 --> 00:01:36,268
+Here is the real Telegram workflow. Send a trap photo;
+
+26
+00:01:36,342 --> 00:01:40,552
+FieldOps returns species counts, a marked-up image, and the
+
+27
+00:01:40,457 --> 00:01:44,098
+block status. The next action reaches the grower.
+
+28
+00:01:45,194 --> 00:01:48,809
+Nemo Claw, Open Claw, and Open Shell support the local
+
+29
+00:01:48,755 --> 00:01:52,718
+agent workflow. Inference and decisions stay on the farm;
+
+30
+00:01:52,832 --> 00:01:54,465
+Telegram delivers the message.
+
+31
+00:01:55,184 --> 00:01:58,741
+FieldOps. Count the moths. Start the clock. Act at the
+
+32
+00:01:58,667 --> 00:01:59,476
+right moment.
