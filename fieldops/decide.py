@@ -215,6 +215,11 @@ def _status(tl: dict, i: int, block_id: str) -> dict:
 
 
 # What to do about a block, by status. Deterministic: the agent phrases these, it never invents them.
+def _shown(state: dict, key: str):
+    """Prefer the reader-friendly date the agent adds ("Thursday Jun 4") over the raw ISO one."""
+    return state.get(key + "_weekday") or state.get(key)
+
+
 def next_step(state: dict, cfg: dict) -> dict:
     """One ranked, plain-language action for a block. A pure function of decide's own verdict."""
     status, dd = state["status"], state["dd"]
@@ -223,12 +228,12 @@ def next_step(state: dict, cfg: dict) -> dict:
     if status == "spray_window":
         closes = cfg["spray_close_dd"]
         return {"urgency": 0, "level": "act", "headline": "Spray now",
-                "detail": f"Window opened {state['opened_on']} at {dd:.0f} DD; "
+                "detail": f"Window opened {_shown(state, 'opened_on')} at {dd:.0f} DD; "
                           f"{closes - dd:.0f} degree-days of window left before it closes."}
 
     if status == "window_closed":
         return {"urgency": 4, "level": "done", "headline": "Window closed",
-                "detail": f"Closed {state['closed_on']} at {cfg['spray_close_dd']} DD. Nothing to "
+                "detail": f"Closed {_shown(state, 'closed_on')} at {cfg['spray_close_dd']} DD. Nothing to "
                           f"do for this generation; keep trapping for the next flight."}
 
     if status == "accumulating":
@@ -236,16 +241,18 @@ def next_step(state: dict, cfg: dict) -> dict:
         when = state.get("projected_open")
         days = (date.fromisoformat(when) - as_of).days if when else None
         soon = days is not None and days <= 3
+        when_shown = state.get("projected_open_approx") or when
         return {"urgency": 1 if soon else 2,
                 "level": "prepare" if soon else "watch",
                 "headline": "Get ready to spray" if soon else "Accumulating",
                 "detail": f"{dd:.0f} of {cfg['spray_open_dd']} degree-days since biofix "
-                          f"{state['biofix_date']}, {need:.0f} to go"
-                          + (f"; window expected around {when}." if when else ".")}
+                          f"{_shown(state, 'biofix_date')}, {need:.0f} to go"
+                          + (f"; window expected around {when_shown}." if when else ".")}
 
     return {"urgency": 3, "level": "watch", "headline": "No biofix yet",
-            "detail": f"No sustained catch yet. The clock starts at {cfg['biofix_min_count']} "
-                      f"moths on {cfg['biofix_consecutive_checks']} consecutive days."}
+            "detail": f"No sustained catch as of {_shown(state, 'as_of')}. The clock starts at "
+                      f"{cfg['biofix_min_count']} moths on "
+                      f"{cfg['biofix_consecutive_checks']} consecutive days."}
 
 
 def evaluate(records: list, weather: dict, as_of: date, config: dict = None, normals: dict = None) -> list:
