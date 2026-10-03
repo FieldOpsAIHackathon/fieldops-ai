@@ -15,7 +15,8 @@ from pathlib import Path
 from .. import synth_traps
 
 CLASSES = ["codling_moth", "oriental_fruit_moth", "spotted_lanternfly", "gnat", "debris"]
-SPLIT_SEED = {"train": 1_000_000, "val": 2_000_000}
+SPLIT_SEED = {"train": 1_000_000, "val": 2_000_000, "train_phone": 4_000_000, "val_phone": 5_000_000}
+# phone_test.py scores on seeds 3_000_000+, which no split here uses.
 
 
 def sample_counts(rng: random.Random) -> tuple:
@@ -29,12 +30,12 @@ def sample_counts(rng: random.Random) -> tuple:
     return counts, rng.randint(0, 25), rng.randint(2, 30)
 
 
-def yolo_line(box: dict) -> str:
+def yolo_line(box: dict, W: int = synth_traps.W, H: int = synth_traps.H) -> str:
     x0, y0, x1, y1 = box["bbox"]
     x0, y0 = max(x0, 0), max(y0, 0)
-    x1, y1 = min(x1, synth_traps.W), min(y1, synth_traps.H)
-    cx, cy = (x0 + x1) / 2 / synth_traps.W, (y0 + y1) / 2 / synth_traps.H
-    w, h = (x1 - x0) / synth_traps.W, (y1 - y0) / synth_traps.H
+    x1, y1 = min(x1, W), min(y1, H)
+    cx, cy = (x0 + x1) / 2 / W, (y0 + y1) / 2 / H
+    w, h = (x1 - x0) / W, (y1 - y0) / H
     return f"{CLASSES.index(box['label'])} {cx:.6f} {cy:.6f} {w:.6f} {h:.6f}"
 
 
@@ -43,9 +44,13 @@ def make_one(job: tuple) -> dict:
     rng = random.Random(SPLIT_SEED[split] + i)
     counts, gnats, debris = sample_counts(rng)
     img, boxes = synth_traps.render(counts, gnats, debris, rng)
+    if split.endswith("_phone"):  # same card, photographed badly: tilt, glare, blur, scale, JPEG
+        from .phone_test import phone_photo
+
+        img, boxes = phone_photo(img, rng, rng.uniform(0.3, 1.4), boxes)
     name = f"{split}_{i:05d}"
     img.save(out / "images" / split / f"{name}.jpg", quality=rng.randint(70, 95))
-    (out / "labels" / split / f"{name}.txt").write_text("\n".join(yolo_line(b) for b in boxes) + "\n")
+    (out / "labels" / split / f"{name}.txt").write_text("\n".join(yolo_line(b, *img.size) for b in boxes) + "\n")
     return {"file": f"{name}.jpg", "counts": {c: sum(b["label"] == c for b in boxes) for c in CLASSES}}
 
 
@@ -54,21 +59,26 @@ def main() -> None:
     p.add_argument("--train", type=int, default=2000)
     p.add_argument("--val", type=int, default=300)
     p.add_argument("--out", type=Path, default=Path.home() / "hackathon-stack" / "yolo-data")
+    p.add_argument("--phone", type=int, default=0, help="also write this many phone-style train images (and 15%% as many val)")
     p.add_argument("--workers", type=int, default=16)
     args = p.parse_args()
 
     out = args.out.expanduser().resolve()
-    for split in ("train", "val"):
+    sizes = {"train": args.train, "val": args.val, "train_phone": args.phone, "val_phone": int(args.phone * 0.15)}
+    sizes = {k: v for k, v in sizes.items() if v}
+    for split in sizes:
         (out / "images" / split).mkdir(parents=True, exist_ok=True)
         (out / "labels" / split).mkdir(parents=True, exist_ok=True)
 
-    jobs = [(out, "train", i) for i in range(args.train)] + [(out, "val", i) for i in range(args.val)]
+    jobs = [(out, split, i) for split, n in sizes.items() for i in range(n)]
     with Pool(args.workers) as pool:
         truth = pool.map(make_one, jobs, chunksize=8)
 
     (out / "ground_truth.json").write_text(json.dumps(truth) + "\n")
     (out / "data.yaml").write_text(
-        "path: /data\ntrain: images/train\nval: images/val\nnames:\n"
+        "path: /data\n"
+        + "train: [" + ", ".join(f"images/{k}" for k in sizes if k.startswith("train")) + "]\n"
+        + "val: [" + ", ".join(f"images/{k}" for k in sizes if k.startswith("val")) + "]\nnames:\n"
         + "".join(f"  {i}: {c}\n" for i, c in enumerate(CLASSES))
     )
     totals = {c: sum(t["counts"][c] for t in truth) for c in CLASSES}

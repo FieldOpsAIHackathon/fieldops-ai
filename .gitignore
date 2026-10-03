@@ -234,3 +234,4 @@ dashboard/data/live.tmp
 
 # vision lane output (photos, annotated copies, counts log)
 data/vision/
+!models/*.pt

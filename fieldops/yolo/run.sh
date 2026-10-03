@@ -12,14 +12,16 @@ DATA="${YOLO_DATA:-$HOME/hackathon-stack/yolo-data}"
 RUNS="${YOLO_RUNS:-$HOME/hackathon-stack/yolo-runs}"
 mkdir -p "$RUNS/.home" "$RUNS/.ultralytics"
 
-cmd="${1:?train | count | eval | serve | vision}"; shift
+cmd="${1:?train | count | eval | serve | vision | phone-test}"; shift
 net=()
 case "$cmd" in
   train) args=(python3 -m fieldops.yolo.train "$@") ;;
   count) args=(python3 -m fieldops.yolo.count "$@") ;;
   eval)  args=(python3 -m fieldops.yolo.count --eval data/traps/manifest.json "$@") ;;
-  serve) args=(python3 -m fieldops.vision --serve "$@"); net=(--network host) ;;
+  serve) args=(python3 -m fieldops.vision --serve "$@"); net=(--network host --name fieldops-vision)
+         docker rm -f fieldops-vision >/dev/null 2>&1 || true ;;  # replace a leftover; never collide on :8767
   vision) args=(python3 -m fieldops.vision "$@") ;;
+  phone-test) args=(python3 -m fieldops.yolo.phone_test "$@") ;;
   *) echo "unknown command: $cmd" >&2; exit 1 ;;
 esac
 
