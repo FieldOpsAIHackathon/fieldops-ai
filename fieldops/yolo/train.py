@@ -11,9 +11,9 @@ from pathlib import Path
 import torch
 from ultralytics import YOLO
 
-# The vLLM base image ships cuDNN without libcudnn_engines_precompiled, so many conv kernels are
-# missing ("unable to find an engine" / SUBLIBRARY_UNAVAILABLE). PyTorch's own CUDA convs work.
-torch.backends.cudnn.enabled = False
+# The vLLM base image ships cuDNN without libcudnn_engines_precompiled ("unable to find an engine",
+# SUBLIBRARY_UNAVAILABLE). The Dockerfile restores it; without it, fall back to PyTorch's own convs.
+torch.backends.cudnn.enabled = Path("/usr/lib/aarch64-linux-gnu/libcudnn_engines_precompiled.so.9").exists()
 
 
 def main() -> None:
