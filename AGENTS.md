@@ -76,10 +76,12 @@ dashboard/        # single page: trap map, flight curve, DD clock, alert log, re
 
 ## Rules by layer
 
-**vision** — Start with a local vision-language model prompted to return JSON. Zero training, fastest
-path. Only swap in a trained YOLO detector if someone already knows YOLO *and* the replay is already
-done. Always validate the model's JSON against the contract before it reaches the store; a VLM will
-occasionally return prose, a wrong key, or a float count — handle that, don't crash the demo.
+**vision** — A YOLO26 detector trained on synthetic cards (`fieldops/vision.py`, `fieldops/yolo/`,
+weights in `models/`). It runs in the `local/fieldops-yolo` GPU container. Counts leave the vision layer
+only as contract records; boxes and confidences stay inside it. Do not write photo counts into the store
+by default: the replay must not depend on live inference. Any change to the model must be re-scored
+with `run.sh eval` and `run.sh phone-test`. A high mAP on the generator's own validation set proved
+nothing in our first model. See [fieldops/yolo/README.md](fieldops/yolo/README.md).
 
 **decide** — This is **deterministic plain code, never an LLM.** It must be right on stage.
 - Biofix: first sustained catch — counts above threshold on consecutive checks.
