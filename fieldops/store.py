@@ -2,11 +2,13 @@
 
     python -m fieldops.store                       # what is in the store
     python -m fieldops.store --load data/season.csv
+    python -m fieldops.store --db data/test.db --load-traps data/traps/manifest.json
 
 The store is the single source of truth that decide reads. It is rebuilt from the committed
 season CSV, so a reload is deterministic and re-running it changes nothing.
 """
 import argparse
+import json
 import sqlite3
 from contextlib import closing
 from datetime import date, datetime
@@ -146,6 +148,16 @@ def load_season(csv_path, path: Path = DEFAULT_DB) -> tuple:
     return add(records, path), add_temps(weather, path)
 
 
+def load_traps(manifest_path, path: Path = DEFAULT_DB) -> int:
+    """Load the ground-truth counts from a synth_traps manifest: the records vision should produce.
+
+    These traps sit inside a real block on a real season date, so loading them into the demo store
+    spikes that block's flight curve. Point --db at a scratch store unless you mean to.
+    """
+    manifest = json.loads(Path(manifest_path).read_text())
+    return add([c for entry in manifest for c in entry["counts"]], path)
+
+
 def read(path: Path = DEFAULT_DB) -> tuple:
     """Return (records, weather) exactly as season.load_csv does, so decide cannot tell them apart."""
     return query(path), get_temps(path)
@@ -155,11 +167,14 @@ def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--db", type=Path, default=DEFAULT_DB)
     p.add_argument("--load", type=Path, help="season CSV to load")
+    p.add_argument("--load-traps", type=Path, help="synth_traps manifest.json of ground-truth counts")
     args = p.parse_args()
 
     if args.load:
         counts, days = load_season(args.load, args.db)
         print(f"loaded {counts} counts and {days} days of weather into {args.db}")
+    if args.load_traps:
+        print(f"loaded {load_traps(args.load_traps, args.db)} trap counts into {args.db}")
 
     totals = {}
     for row in query(args.db):

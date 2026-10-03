@@ -89,6 +89,10 @@ open dashboard/index.html                        # the replay, straight from dis
 open pitch/index.html                            # the deck; arrow keys to advance
 
 python -m fieldops.decide --csv                  # bypass the store and read the CSV directly
+
+# ground-truth trap counts as test data. Use a scratch --db: these traps sit in block C on a
+# real season date, so loading them into the demo store spikes its flight curve.
+python -m fieldops.store --db data/test.db --load-traps data/traps/manifest.json
 ```
 
 ## Repo map
