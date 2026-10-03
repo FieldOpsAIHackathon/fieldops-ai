@@ -20,7 +20,7 @@ user gave with it** (e.g. "block C", "section C trap 4"). Nothing else: do not c
    - one line per species with its count, and the total;
    - if a section was given: that section's headline and detail (two lines);
    - if no section was given: one line asking which section the trap is in;
-   - **end with** `![pests counted](/sandbox/.openclaw/workspace/fieldops/<annotated_file>)` — Telegram sends it as a photo.
+   - **end with** `![](/sandbox/.openclaw/workspace/fieldops/<annotated_file>)` — Telegram sends it as a photo.
 
 Never count insects by looking at the image yourself; the numbers come only from `/count`.
 

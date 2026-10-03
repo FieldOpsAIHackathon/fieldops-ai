@@ -50,7 +50,7 @@ curl -s --data-binary @"<photo path>" "http://172.18.0.1:8765/count?trap_id=<tra
   lines). If none was given, ask which section the trap is in, in one line.
 - **Always end with the annotated photo**: download it with
   `curl -s -o "/sandbox/.openclaw/workspace/fieldops/<annotated_file>" "http://172.18.0.1:8765<annotated_url>"`
-  and end the reply with `![pests counted](/sandbox/.openclaw/workspace/fieldops/<annotated_file>)`.
+  and end the reply with `![](/sandbox/.openclaw/workspace/fieldops/<annotated_file>)`.
 - If the response is an error, say the counter is unavailable; do not guess a count.
 
 ## Questions about the data
