@@ -19,29 +19,50 @@ Phases are written as hours from kickoff (**H+0**), not wall-clock, so they surv
 - `dashboard/tools/make_sample_timeline.py` + `dashboard/data/sample_timeline.{json,js}` — the
   stand-in timeline, so the dashboard is unblocked.
 - `fieldops/season.py` + `data/season.csv` — season generator and committed output
-  (`date,tmax_f,tmin_f,trap_id,species,count`).
+  (`date,tmin_f,tmax_f,trap_id,species,count`): six blocks of three traps, Apr 15 to Aug 31, two flight
+  peaks, and a one-day blip on Apr 28 that must not set biofix.
 - `fieldops/store.py` — validate / add / query over SQLite, `--load` a season CSV.
-- `fieldops/decide.py` — degree-days, biofix, spray window, per-(species, block) status, plus
-  `replay()` and a self-test.
-- `fieldops/species.json` + `species.py` — crop and pest config.
+- `fieldops/decide.py` — degree-days, biofix, spray window and the contract-shaped timeline.
+  `python -m fieldops.decide --replay` writes `dashboard/data/timeline.{json,js}`; a self-test
+  runs first.
+- `fieldops/species.json` + `species.py` — crop, blocks and pest thresholds, using the contract's
+  key names.
+- `dashboard/index.html` — the replay dashboard. It loads `timeline.js` after the sample, so the
+  real timeline wins. Not yet checked in a browser against real data.
+- `pitch/DEMO.md` — the presenter runbook.
 - `pitch/index.html` — the five-beat deck, single offline file.
 
-## ⚠ Open divergences — resolve before wiring the dashboard
+## Open gaps and decisions
 
-`decide.py` and `TIMELINE_CONTRACT.md` do not currently agree. These are cheap to fix now and
-expensive to fix at H+8. One person should pick a side for each and make both files match.
+`decide.py` and `TIMELINE_CONTRACT.md` now agree: same thresholds, status names, accumulation
+rule and output shape, and the real timeline matches `sample_timeline.json` field for field.
+What is still open:
 
-| | Contract | `decide.py` / `species.json` |
-|---|---|---|
-| Biofix threshold | `min_count` 2, `consecutive` 2 | 3 and 3 |
-| Status names | `watching`, `accumulating` | `no_biofix`, `biofix` |
-| DD accumulation starts | the day **after** `biofix_date` | on `biofix_date` itself |
-| Config keys | `dd_base_f`, `spray_open_dd` … | `degree_days.lower_f`, `spray_open` … |
-| Output | one timeline document, `days[]` | flat list of event dicts |
+**Not started.** `ingest.py`, `vision.py`, `agent.py` and `alert.py` do not exist yet. Nobody has
+confirmed that the VLM and the LLM load on the GB10. Do that first.
 
-**The timeline emitter does not exist yet.** `decide.py` has `replay()` returning events, but
-nothing writes `dashboard/data/timeline.json` or its JS twin — so the dashboard still cannot consume
-real output. That is the critical-path gap; see [1d](#1d-timeline-emitter--owner-b).
+**Nothing triggers the phone from the dashboard.** The dashboard is static HTML from `file://`
+and makes no network calls, so it cannot tell Python to send a message when the spray banner
+fires. Pick one before C starts:
+
+- **A (recommended):** a tiny stdlib localhost listener the dashboard POSTs to when a
+  `spray_window_open` event fires. Works offline. Use a plain `text/plain` POST so there is no CORS
+  preflight.
+- **B:** `python -m fieldops.alert --replay` run in a second terminal while clicking Play. Simpler,
+  but the two can drift on stage.
+
+**The agent needs a fallback.** Every timeline event already carries a templated `message`. If the
+LLM fails or is slow, `alert.send` that text, so the phone still buzzes.
+
+**"Why Thursday?" has no home.** The runbook answers it by clicking the degree-day clock. A spoken
+or typed Q&A through `agent.answer` is should-have, not must-have.
+
+**Decisions needed from the team:** which local runtimes for the VLM and LLM; Telegram or SMS;
+trigger option A or B; whether the organizers require OpenClaw or NemoClaw (`agent.py` is the
+plug-in point).
+
+**Check before relying on it:** open `dashboard/index.html` against the real `timeline.js` and
+confirm it behaves like the sample.
 
 ---
 
@@ -63,8 +84,8 @@ Everyone in the room, one conversation, then we split and don't block each other
 - [ ] Agree both contracts out loud: the counts shape in [AGENTS.md](AGENTS.md) and the replay
       timeline in [dashboard/TIMELINE_CONTRACT.md](dashboard/TIMELINE_CONTRACT.md). Freeze them.
       They do not change after this meeting.
-- [x] Scaffold `fieldops/` with modules: `ingest.py`, `vision.py`, `store.py`, `decide.py`,
-      `agent.py`, `alert.py`. Each gets a `if __name__ == "__main__":` from the start.
+- [ ] Scaffold the remaining `fieldops/` modules: `ingest.py`, `vision.py`, `agent.py`, `alert.py`
+      (`store.py` and `decide.py` have landed). Each gets a `if __name__ == "__main__":` from the start.
 - [x] `fieldops/species.json` with apple / codling moth filled in.
 - [x] Create the SQLite schema and commit it.
 - [ ] Confirm the local VLM and the local LLM both load on the GB10 and return *something*. **Do this
@@ -108,27 +129,28 @@ the timeline.
 
 ### Config shape
 
-Landed as `fieldops/species.json`:
+Landed as `fieldops/species.json`, with the contract's key names. Besides `species` it holds the
+`farm` and the six `blocks` (id, name, variety, acres, grid position) that the timeline carries:
 
 ```json
 {
   "crop": "apple",
   "species": {
     "codling_moth": {
-      "display": "Codling moth",
-      "biofix": {"min_count": 3, "consecutive_days": 3},
-      "degree_days": {"lower_f": 50, "upper_f": 88, "spray_open": 250, "spray_close": 350}
+      "display_name": "Codling moth",
+      "dd_base_f": 50, "dd_upper_f": 88,
+      "biofix_min_count": 2, "biofix_consecutive_checks": 2,
+      "spray_open_dd": 250, "spray_close_dd": 350
     }
   }
 }
 ```
 
-Only species carrying a `biofix` block get evaluated, so the other two pests can sit in the config
-as display entries for the platform beat without breaking anything.
+`decide` evaluates the first species that carries all six thresholds, so the other two pests can sit
+in the config as display entries for the platform beat without breaking anything.
 
 Base 50 °F, upper 88 °F and 250/350 DD follow the UC IPM codling moth model. Treat them as demo
-values — **say so if a judge asks, and don't present them as agronomic advice.** The biofix
-threshold still disagrees with the contract; see the divergence table above.
+values — **say so if a judge asks, and don't present them as agronomic advice.**
 
 ---
 
@@ -140,10 +162,10 @@ Three people in parallel. This is the phase that must not slip.
 
 - [x] `fieldops/season.py` generates one season of daily records: date, per-trap catch, tmin_f,
       tmax_f. Trap IDs and block grouping must match the `blocks` list the timeline will carry.
-- [ ] Flight curve is a realistic shape, not noise: near-zero through early spring, a sharp first-flight
+- [x] Flight curve is a realistic shape, not noise: near-zero through early spring, a sharp first-flight
       rise in late May, a dip, then a smaller second flight in July. Add per-trap variation so the
       traps don't move in lockstep.
-- [ ] Temperatures warm through the season with day-to-day jitter, consistent with the flight timing.
+- [x] Temperatures warm through the season with day-to-day jitter, consistent with the flight timing.
 - [x] **Ran once, `data/season.csv` committed.** The demo reads the committed file. Generating data
       live on stage is a failure mode.
 
@@ -188,13 +210,13 @@ running DD total and spray window — and the dates are defensible when someone 
 The dashboard never computes anything; it plays back one JSON document that `decide` writes. Pacing
 is the dashboard's job, not a stream's.
 
-- [ ] `python -m fieldops.decide --replay` writes `dashboard/data/timeline.json` **and** its JS twin
+- [x] `python -m fieldops.decide --replay` writes `dashboard/data/timeline.json` **and** its JS twin
       `dashboard/data/timeline.js` (`window.FIELDOPS_TIMELINE = {...};`), so the page runs from
       `file://` with no server and no fetch.
-- [ ] Shape must validate against [TIMELINE_CONTRACT.md](dashboard/TIMELINE_CONTRACT.md): `days`
+- [x] Shape must validate against [TIMELINE_CONTRACT.md](dashboard/TIMELINE_CONTRACT.md): `days`
       ascending, one entry per calendar day, no gaps, every block present every day.
-- [ ] D's stand-in `dashboard/tools/make_sample_timeline.py` already emits the same shape — diff
-      against its output to confirm the real emitter matches before wiring the dashboard over.
+- [x] D's stand-in `dashboard/tools/make_sample_timeline.py` already emits the same shape — diffed
+      against it: same fields and types, same 139 days, same thresholds.
 
 **Done when:** the dashboard, pointed at the real `timeline.js` instead of the sample, behaves
 identically.
