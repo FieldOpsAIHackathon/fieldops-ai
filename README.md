@@ -17,7 +17,9 @@ signal, and nobody wants a subscription per trap.
 
 ## What FieldOps does
 
-- **Counts insects on a sticky trap** from a camera frame, by species.
+- **Counts insects on a sticky trap** from a photo, by species. Send the Telegram bot a picture of
+  a trap card and a YOLO26 detector on the box counts codling moths, oriental fruit moths and
+  spotted lanternflies, ignoring gnats and debris.
 - **Tracks the flight curve** across the season and detects **biofix** — the first sustained catch,
   the moment the pest clock starts.
 - **Accumulates degree-days** from daily high/low temperatures once biofix is set.
@@ -30,8 +32,8 @@ The counting is the party trick. The decision is the product.
 ## How it works
 
 ```
- camera frame ──▶ vision ──▶ { trap_id, timestamp, species, count } ──▶ store (SQLite)
-                   (VLM)                                                    │
+ trap photo ──▶ vision ──▶ { trap_id, timestamp, species, count } ──▶ store (SQLite)
+              (YOLO26, GPU)                                                 │
                                                                             ▼
  daily temps ──────────────────────────────────────────────────────▶    decide
                                                        biofix · degree-days · threshold
@@ -44,7 +46,8 @@ The counting is the party trick. The decision is the product.
 The store is the single source of truth `decide` reads, and it holds both halves of the
 decision: trap counts and the daily temperatures the degree-day clock runs on. It is rebuilt from
 the committed `data/season.csv`, so a reload is deterministic and the replay comes out identical
-every time. Live counts from the vision layer append to the same store. With no store present,
+every time. Live counts from the vision layer can append to the same store (opt-in, so a demo
+photo never moves the spray dates). With no store present,
 `decide` falls back to reading the CSV directly.
 
 Two deliberate splits:
@@ -73,9 +76,17 @@ here: a synthetic trap-image generator with ground-truth counts
 (`fieldops/synth_traps.py`), the deck (`pitch/index.html`) and the presenter runbook
 (`pitch/DEMO.md`).
 
-Still to come: the live vision layer (`ingest.py`, `vision.py`). No local model has been confirmed
-to load on the GB10 yet — run `python -m fieldops.check_models` first; until then the agent runs on
-its template fallback. See [PLAN.md](PLAN.md) for the order of work and the open decisions.
+**Vision has landed.** `fieldops/vision.py` counts pests in a trap photo with a YOLO26 detector
+trained on synthetic cards (`models/fieldops-yolo26s-v2.pt`). The OpenClaw agent on Telegram sends
+photos to it through `POST /count` on the tools API. How it was trained, how accurate it is, and
+the overfitting we caught and fixed are in [fieldops/yolo/README.md](fieldops/yolo/README.md).
+
+**Models on the GB10:** the agent's LLM is Qwen3.6-35B-A3B (NVFP4) on the local vLLM server at
+`127.0.0.1:8000`, and counting is YOLO26s in a GPU container. Both run offline.
+
+**On the GB10 everything starts at boot:** `bash deploy/install.sh` installs `fieldops.target`
+(OpenClaw sandbox + Telegram, vision service, tools API) as systemd user services. See
+[deploy/README.md](deploy/README.md). See [PLAN.md](PLAN.md) for the order of work and open decisions.
 
 ```bash
 python -m fieldops.check_models                  # do the local LLM and VLM load? run this first
@@ -85,7 +96,13 @@ python -m fieldops.store --load data/season.csv  # build the store: counts + tem
 python -m fieldops.decide                        # self-test, then print each block's milestones
 python -m fieldops.decide --replay               # ...and write the dashboard timeline
 python -m fieldops.agent --status                # what the agent's tools return right now
-python -m fieldops.api                           # tool server: dashboard buzz + OpenClaw tools
+python -m fieldops.api                           # tool server: dashboard buzz + OpenClaw tools + /count
+
+# vision (GPU container; details in fieldops/yolo/README.md)
+bash fieldops/yolo/run.sh serve                  # YOLO counting service on 127.0.0.1:8767
+curl --data-binary @data/traps/trap_05_codling050.jpg "localhost:8765/count?trap_id=block-c-04"
+bash fieldops/yolo/run.sh eval                   # score the 6 reference cards
+bash fieldops/yolo/run.sh phone-test --n 200     # accuracy on phone-style photos (overfitting check)
 open dashboard/index.html                        # the replay, straight from disk, no server
 open pitch/index.html                            # the deck; arrow keys to advance
 
@@ -110,11 +127,17 @@ python -m fieldops.history
 | [FieldOps_Hackathon_Plan.md](FieldOps_Hackathon_Plan.md) | The pitch: story beats, demo script, scope calls. |
 | [dashboard/TIMELINE_CONTRACT.md](dashboard/TIMELINE_CONTRACT.md) | The `decide → dashboard` timeline shape and the decision rules. Frozen. |
 | [fieldops/synth_traps.py](fieldops/synth_traps.py) | Generates synthetic trap photos with ground-truth counts into [data/traps/](data/traps/). |
+| [fieldops/vision.py](fieldops/vision.py) | The vision lane: YOLO counting service and CLI, contract records out. |
+| [fieldops/yolo/](fieldops/yolo/README.md) | Dataset generator, training, counting, phone-photo stress test, GPU container. |
+| [models/](models/README.md) | Trained detector weights and their model card. |
+| [openclaw/](openclaw/) | The OpenClaw skill (tools + photo routing) and the sandbox network policy. |
+| [deploy/](deploy/README.md) | systemd units for the GB10, plus the CI deploy unit. |
 
 ## Stack
 
-Python on a Dell/NVIDIA GB10. A local vision-language model for counting, a local LLM for the
-agent layer, SQLite for counts and weather, and a single-page dashboard. No cloud services anywhere in the path.
+Python on a Dell/NVIDIA GB10. A YOLO26 detector for counting, Qwen3.6 on vLLM for the agent
+layer, NemoClaw + OpenClaw + OpenShell for the sandboxed Telegram agent, SQLite for counts and
+weather, and a single-page dashboard. No cloud services anywhere in the path.
 
 ## License
 

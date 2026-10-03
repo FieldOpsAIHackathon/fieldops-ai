@@ -1,0 +1,11 @@
+[Unit]
+Description=FieldOps YOLO26 vision service (GPU container, 127.0.0.1:8767)
+PartOf=fieldops.target
+
+[Service]
+WorkingDirectory=%h/hackathon-stack/fieldops-ai
+ExecStart=/usr/bin/sg docker -c 'bash fieldops/yolo/run.sh serve'
+ExecStop=/usr/bin/sg docker -c 'docker stop fieldops-vision'
+Restart=on-failure
+RestartSec=10
+TimeoutStartSec=300

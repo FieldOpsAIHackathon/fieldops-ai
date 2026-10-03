@@ -61,7 +61,7 @@ def evaluate(model: YOLO, manifest: Path) -> None:
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("images", nargs="*", type=Path)
-    p.add_argument("--weights", default="/runs/traps/weights/best.pt")
+    p.add_argument("--weights", default="/work/models/fieldops-yolo26s-v2.pt")
     p.add_argument("--trap-id", default="block-c-04")
     p.add_argument("--eval", type=Path, help="manifest.json with ground-truth counts")
     args = p.parse_args()

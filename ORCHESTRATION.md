@@ -35,7 +35,7 @@ replay to depend on live inference.
 | **Deck** | browser tab on `pitch/index.html` | — | yes |
 
 On the GB10 the first three run as systemd user units under `fieldops.target`, ordered after the
-NemoClaw gateway. *(Units live on the `rishab` branch and are not yet merged to main.)*
+NemoClaw gateway (`bash deploy/install.sh`; see [deploy/README.md](deploy/README.md)).
 
 ## Data flow
 
@@ -88,8 +88,9 @@ the phone buzzes twice.
 ## Trust boundaries
 
 - The API binds loopback and the OpenShell docker bridge only — **never the venue network.**
-- `/trigger` is deliberately outside the sandbox policy, so OpenClaw cannot make the phone buzz.
-  Only the dashboard, same machine, can.
+- `/trigger` is deliberately outside the sandbox policy: only the dashboard, same machine, can fire
+  a replay alert. OpenClaw *can* reach `POST /alert` (its skill says only when the user asks), so
+  the agent can text the phone, but it cannot replay a decision event.
 - The dashboard opened from disk sends `Origin: null`; the API accepts that and `file://` and
   nothing else.
 - The agent phrases, it never computes. Numbers come from `decide`, and `agent.write_alert`
