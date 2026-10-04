@@ -4,6 +4,75 @@ Repository-grounded answers to likely technical judging questions. Be clear abou
 synthetic, what has been demonstrated, and what remains unvalidated. Do not claim RAG,
 embeddings, field accuracy, or agronomic validation.
 
+## What is FieldOps, who is it for, and what is the real data story?
+
+### 0. What is FieldOps in basic terms?
+
+FieldOps is a mobile decision tool for fruit growers. A grower photographs a sticky trap in their
+orchard with their phone, sends the photo to a Telegram bot, and receives two things: an insect
+count (codling moths, oriental fruit moths, or spotted lanternflies) and a decision aid that answers
+"Is it time to consider treatment based on the temperature and pest development so far?"
+
+The product does not tell the grower whether to spray—that is a farming decision. It answers the
+mechanical question: given the bugs caught and the heat accumulated since the first sustained catch,
+do the conditions align with the configured treatment window?
+
+### 0b. Who is it for?
+
+Fruit growers managing orchards, especially those growing stone fruit or apples where seasonal pest
+pressure is high and precision matters. Today, a grower walks the orchard every few days, counts
+moths by eye on cardboard traps, mentally combines that count with local weather, and decides whether
+to spray. That process is labor-intensive, gappy (you only know what you saw on the day you checked),
+error-prone (counting insects in the sun is hard), and slow (hand-counting 10 traps takes time).
+FieldOps removes the counting work and makes the decision logic visible and repeatable.
+
+### 0c. What is the grounded story behind the demo?
+
+The demo runs on a committed synthetic season with real seasonal logic. Here is what happened:
+
+- **May 8, 2026 (Biofix):** Block C's trap shows 2 codling moths. The next day, May 9, it shows 2
+  again. That is the trigger—two moths, two consecutive days—that marks biofix: the start of the
+  pest's lifecycle clock for the year.
+- **May 8 to June 4:** The system adds degree-days every day using local high and low temperatures.
+  Codling moths develop in predictable steps based on accumulated heat, not calendar days.
+- **June 4, 2026 (Decision point):** Block C has caught 26 codling moths across three traps and
+  accumulated 261 degree-days since biofix. The configured spray window for the first generation is
+  250–350 degree-days. June 4 falls in the window. The system sends: *"Biofix reached on Block C.
+  Spray window opens Thursday."*
+
+The grower receives that message on their phone in plain language, with a reason they can verify
+against their own temperature records. No guessing. No hallucination.
+
+### 0d. How does it work at a high level?
+
+Three pieces working together:
+
+1. **Vision model** (YOLO26, GPU, local): Counts insects in a trap photo. Trained on 3,000
+   synthetic trap images, fine-tuned on 2,000 phone-photo versions. On 200 held-out photos, it
+   counted codling moths perfectly (or within 1) 94.5% of the time.
+
+2. **Decision engine** (plain Python, auditable, deterministic): Computes biofix from trap counts,
+   accumulates degree-days from weather, and determines when the spray window opens. No machine
+   learning, no hallucination risk. The logic is explicitly coded and testable.
+
+3. **Language layer** (Qwen 3.6B LLM, local): Takes the decision (e.g., "261 DD on Block C, window
+   opens") and writes it as a text message. Checks that any numbers in the message come from actual
+   data; falls back to a template if the LLM makes up a date.
+
+All inference and decision-making run locally on a Dell/NVIDIA GB10. Telegram photo transport
+requires internet, but the decision does not.
+
+### 0e. What is FieldOps not?
+
+- **Not crop advice:** FieldOps does not say "spray." It says "the conditions align with your
+  chosen threshold." Spraying is the grower's call.
+- **Not field-proven:** The demo uses synthetic data and a single committed season. Real-world
+  accuracy on actual trap photos and grower workflows have not been validated yet.
+- **Not cloud-dependent:** All models and computation run on the box. Telegram delivery needs the
+  network, but the decision itself does not.
+
+---
+
 ## Model training, fine-tuning, and data
 
 ### 1. Did you train, fine-tune, or prompt-engineer foundation models?
