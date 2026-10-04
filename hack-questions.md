@@ -117,6 +117,15 @@ deterministic and auditable for biofix, degree-day accumulation, and threshold c
 language model turns those results into concise explanations and answers grower questions; it does
 not decide whether to spray.
 
+### 16. How do the biofix thresholds and degree-day tracking work?
+
+Imagine the grower checking a sticky trap in one orchard block. One moth—or a one-day spike—gets
+noticed, but it doesn't start the treatment clock. When the trap shows at least two codling moths on
+two consecutive daily checks, FieldOps marks biofix: that's the signal to start tracking conditions.
+Then it uses temperature-based degree-days—not just the bug count—to identify when the demo's spray
+window opens at 250 degree-days. So the short version is: two moths, two days to start the clock; the
+temperature timeline determines the response window. Those are demo thresholds, not spraying advice.
+
 ## Evidence in this repository
 
 - [Detector training and evaluation](fieldops/yolo/README.md)
